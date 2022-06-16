@@ -1,0 +1,384 @@
+:root { 
+    --bahama-blue: #005c98;
+    --black: #000000;
+    --black-2: #030000;
+    --blue-haze: #bac6da;
+    --blueberry: #538cf4;
+    --catskill-white: #eff3fb;
+    --chicago: #585858;
+    --chicago-2: #595959;
+    --dove-gray: #707070;
+    --gravel: #464749;
+    --lily-white: #e6efff;
+    --link-water: #d7e5f2;
+    --matisse: #1c6ba1;
+    --pale-sky: #6e727e;
+    --san-marino: #4865ac;
+    --ship-cove: #788fb6;
+    --sonic-silver: #757571;
+    --tropical-blue: #bdd2f9;
+    --tropical-blue-2: #bfd4fb;
+    --tropical-blue-3: #c5d8fa;
+    --white: #ffffff;
+    --wild-blue-yonder: #7088b3;
+    --zircon: #f4f8ff;
+   
+    --font-size-l: 18px;
+    --font-size-m: 16px;
+    --font-size-s: 15px;
+    --font-size-xl: 20px;
+    --font-size-xs: 14px;
+    --font-size-xxs: 11px;
+    --font-size-xxxs: 9px;
+   
+    --font-family-roboto: "Roboto", Helvetica;
+    --font-family-segoeui-regular: "SegoeUI-Regular", Helvetica;
+  }
+  .roboto-normal-black-14px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xs);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-normal-black-16px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-light-black-20px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xl);
+    font-style: normal;
+    font-weight: 300;
+  }
+  
+  .roboto-normal-black-9px {
+    color: var(--black-2);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xxxs);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-medium-black-14px {
+    color: var(--gravel);
+    font-family: var(--font-family-roboto);
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+  }
+  
+  .segoeui-regular-normal-black-20px {
+    color: var(--black);
+    font-family: var(--font-family-segoeui-regular);
+    font-size: var(--font-size-xl);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-normal-chicago-16px {
+    color: var(--chicago);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-medium-pale-sky-15px {
+    color: var(--pale-sky);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-s);
+    font-style: normal;
+    font-weight: 500;
+  }
+  
+  .roboto-normal-black-11px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xxs);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-normal-chicago-20px {
+    color: var(--chicago);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xl);
+  }
+  
+  .roboto-normal-chicago-16px-2 {
+    color: var(--chicago-2);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-normal-black-15px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-s);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .segoeui-regular-normal-black-14px {
+    color: var(--black);
+    font-family: var(--font-family-segoeui-regular);
+    font-size: var(--font-size-xs);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-normal-black-9px-2 {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-bold-black-16px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 700;
+  }
+  
+  .roboto-bold-black-16px-22 {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+  }
+  
+  .roboto-normal-pale-sky-15px {
+    color: var(--pale-sky);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-s);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-bold-black-20px2 {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xl);
+  }
+  
+  .roboto-normal-sonic-silver-9px {
+    color: var(--sonic-silver);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xxxs);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-medium-black-9px {
+    color: var(--black-2);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xxxs);
+    font-style: normal;
+    font-weight: 500;
+  }
+  
+  .roboto-normal-black-18px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-bold-black-20px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xl);
+  }
+  
+  .roboto-normal-matisse-16px {
+    color: var(--matisse);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-medium-black-9px-2 {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xxxs);
+    font-style: normal;
+    font-weight: 500;
+  }
+  
+  .segoeui-regular-normal-black-18px {
+    color: var(--black);
+    font-family: var(--font-family-segoeui-regular);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-normal-matisse-20px {
+    color: var(--matisse);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xl);
+  }
+  
+  .roboto-normal-white-16px {
+    color: var(--white);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-medium-black-16px {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 500;
+  }
+  
+  .roboto-normal-matisse-9px {
+    color: var(--matisse);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xxxs);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-medium-chicago-17px {
+    color: var(--chicago-2);
+    font-family: var(--font-family-roboto);
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 500;
+  }
+  
+  .roboto-normal-wild-blue-yonder-18px {
+    color: var(--wild-blue-yonder);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-normal-bahama-blue-9px {
+    color: var(--bahama-blue);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xxxs);
+  }
+  
+  .roboto-normal-bahama-blue-9px-2 {
+    color: #4966ae;
+    font-family: var(--font-family-roboto);
+    font-size: 14px;
+    font-weight: 400;
+    left: 360px;
+    letter-spacing: 0;
+    line-height: 47px;
+    text-decoration: underline;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  
+  .roboto-bold-matisse-18px {
+    color: var(--matisse);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-l);
+    font-style: normal;
+    font-weight: 700;
+  }
+  
+  .roboto-normal-white-15px {
+    color: var(--white);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-s);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .roboto-normal-gravel-16px {
+    color: var(--gravel);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 400;
+  }
+  
+  .segoeui-regular-normal-white-15px {
+    color: var(--white);
+    font-family: var(--font-family-segoeui-regular);
+    font-size: var(--font-size-s);
+    font-style: normal;
+    font-weight: 400;
+    background-color: var(--bahama-blue) !important;
+  }
+  
+  .roboto-medium-white-9px {
+    color: var(--white);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-xxxs);
+    font-style: normal;
+    font-weight: 500;
+  }
+  
+  .roboto-bold-black-16px-2 {
+    color: var(--black);
+    font-family: var(--font-family-roboto);
+    font-size: var(--font-size-m);
+  }
+  
+  .border-1px-dove-gray {
+    border: 1px solid var(--dove-gray);
+  }
+  
+  .border-1px-wild-blue-yonder {
+    border: 1px solid var(--wild-blue-yonder);
+  }
+  
+  .border-0-5px-blueberry {
+    border: 0.5px solid var(--blueberry);
+  }
+  
+  .border-1px-blueberry {
+    border: 1px solid var(--blueberry);
+  }
+  
+  .border-1px-blue-haze {
+    border: 1px solid var(--blue-haze);
+  }
+  
+  .border-0-2px-wild-blue-yonder {
+    border: 0.2px solid var(--wild-blue-yonder);
+  }
+  
+  .border-2px-chicago-2 {
+    border: 2px solid var(--chicago-2);
+  }
+  
+  .border-1px-black {
+    border: 1px solid var(--black);
+  }
+  
+  .border-1px-ship-cove {
+    border: 1px solid var(--ship-cove);
+  }
+  
+  .border-0-8px-tropical-blue-3 {
+    border: 0.8px solid var(--tropical-blue-3);
+  }
+  
+  .border-1px-zircon {
+    border: 1px solid var(--zircon);
+  }
+    

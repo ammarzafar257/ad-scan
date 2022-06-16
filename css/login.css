@@ -1,0 +1,249 @@
+html, body {
+    height: 100vh;
+}
+
+
+body{
+    background-color: #e6efff !important;
+}
+
+
+.form-control {
+    height: 50px !important;
+}
+
+
+main.container {
+    min-height: 100vh;
+    margin-bottom: -56px; /* size of the footer */
+    padding-bottom: 56px;
+}
+.row {
+    position: relative;
+    top: 25vh;
+}
+footer {
+    color: white;
+    background-color: #0a81c4;
+    padding: 1em;
+    width: 100%;
+    position: fixed;
+}
+footer a {
+    color: white;
+    font-family: Raleway, sans-serif;
+    font-weight: 500 !important;
+}
+footer a:hover {
+    color: white;
+    font-family: Raleway, sans-serif;
+    font-weight: 500 !important;
+}
+
+#new-login-form-container {
+    border-top-left-radius: 28px;
+    border-bottom-left-radius: 28px;
+    background-color: white;
+    padding-top: 5%;
+    padding-left: 7%;
+    padding-right: 7%;
+}
+
+#login-logo-img {
+    height: 23%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+button, #signup-link {
+    background-color: #0a81c4 !important;
+    color: white !important;
+    font-weight: 500 !important;
+}
+#login-form-container {
+    border-left: solid 2px #b7b7b7;
+}
+#login-form-container h1 {
+    font-size: 24px;
+    font-weight: 500;
+}
+#signup-main {
+    height: 680px;
+    width: 500px;
+    background-color: #0a81c4;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    border: 2px solid #707070;
+    border-radius: 8px;
+}
+#signup-header {
+    width: 500px;
+    height: 80px;
+}
+#signup-header > img {
+    width: 150px;
+    display: block;
+    margin-left: 16px;
+    margin-top: 16px;
+}
+#signup-main > form {
+    background-color: white;
+    border: 2px solid #707070;
+    height: 500px;
+    width: 500px;
+    position: relative;
+    left: 100px;
+    padding: 1em;
+    border-radius: 8px;
+}
+#signup-main > form label {
+    color: #0a81c4;
+    font-weight: bold;
+    font-family: Raleway, sans-serif;
+}
+#signup-main > form input, select{
+    border-top: none !important;
+    border-right: none !important;
+    border-radius: 0 !important;
+}
+#signup-form {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+/* init for dynamic elements */
+#form-back-btn {
+    display: none;
+}
+#forgot-form {
+    position: absolute;
+    top: 30%;
+    right: 30%;
+    left: 30%;
+    width: 40%;
+    border: 2px solid #707070;
+    border-radius: 10px;
+    z-index: 1;
+    background-color: white;
+    padding: 2em;
+}
+
+/*For when shrunk to 1 column*/
+@media screen and (max-width: 768px) {
+    .row {
+        margin-top: 100px !important;
+    }
+    #logo-container {
+        height: 200px;
+    }
+    #login-logo-img {
+        height: 80px !important;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    #login-form-container {
+        border-left: none;
+    }
+    h1 {
+        border-bottom: solid 2px #b7b7b7;
+        padding-bottom: 8px;
+    }
+    #forgot-form {
+        width: 75% !important;
+        right: 0;
+        left: 12.5%;
+    }
+}
+
+/* Styles for new password */
+#form-container {
+    background-color: white;
+    margin: 50vh auto auto;
+    transform: translateY(-50%);
+    width: 40%;
+    min-width: 320px;
+    padding: 3em;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+#form-container > form > h1 {
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.8rem;
+}
+#form-container label {
+    font-weight: 500;
+}
+
+@media screen and (max-width: 738px) {
+    #signup-main {
+        margin-left: 50px;
+        width: 360px;
+    }
+    #signup-main > form {
+        width: 360px;
+    }
+}
+
+@media screen and (max-width: 530px) {
+    #signup-main {
+        margin-left: 1em;
+        width: 300px;
+    }
+    #signup-main > form {
+        width: 300px;
+        left: 50px;
+    }
+}
+
+@media screen and (max-width: 530px) {
+    #signup-main {
+        margin-left: 1em;
+        width: 300px;
+    }
+    #signup-main > form {
+        width: 275px;
+        left: 0;
+    }
+}
+
+/* New CSS */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,700,500");
+@font-face {
+  font-family: "SegoeUI-Regular";
+  font-style: normal;
+  font-weight: 400;
+  src: url("https://fonts.animaapp.com/SegoeUI-Regular") format("truetype");
+}
+
+.screen a {
+  display: contents;
+  text-decoration: none;
+}
+
+.container-center-horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  pointer-events: none;
+  width: 100%;
+}
+
+.container-center-horizontal > * {
+  flex-shrink: 0;
+  pointer-events: auto;
+}
+
+* {
+  box-sizing: border-box;
+}

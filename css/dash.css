@@ -1,0 +1,838 @@
+:root {
+    --text-dark-blue: #242056;
+    --text-light-blue: #0a78c2;
+    /*--text-light-blue: #0a81c4;*/
+    --text-dark-grey: #515661;
+    --border-grey: #515661;
+    --background-grey: #f2f2f2;
+    --background-blue: #e6f2f9;
+    --header-font: omnes-pro,sans-serif;
+}
+.row {
+    margin: 0 !important;
+}
+html {
+    background-color: var(--background-grey);
+    overflow: auto;
+    overscroll-behavior-y: none;
+}
+body {
+    background-color: var(--background-grey);
+    height: 100% !important;
+}
+a {
+    color: var(--text-light-blue) !important;
+}
+header img{
+    display: inline-block;
+    height: 55px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 1em;
+    margin-left: 1em;
+    /*border-right: 1px solid var(--border-grey);*/
+}
+#page-title {
+    color: var(--text-light-blue);
+    font-family: var(--header-font);
+    display: inline-block;
+    margin: 0;
+    position: relative;
+    top: 8px;
+    right: 8px;
+}
+#client-name {
+    display: inline-block;
+    margin-left: 1em;
+    margin-bottom: 0;
+    font-size: 21px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+}
+#client-title {
+    background-color: #484444;
+    color: white;
+}
+#client-title h1 {
+    margin: 0 0 0 50px;
+    font-weight: bold;
+}
+#user-controls-container {
+    text-align: right;
+    padding-top: 6px;
+}
+.dropdown-users {
+    display: none;
+    text-align: center;
+    width : 100px !important;
+    position: relative;
+    left: calc(100% - 158px);
+}
+.swal2-popup {
+    width: 25rem !important;
+}
+#scan-ua {
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Raleway', sans-serif;
+}
+#selector-row {
+    background-color: var(--background-grey);
+}
+.dash-card {
+    margin: 1em;
+    background-color: white;
+    /*border: 1px solid var(--border-grey);*/
+    -webkit-box-shadow: 6px 6px 6px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 6px 6px 6px 0px rgba(0,0,0,0.5);
+    box-shadow: 6px 6px 6px 0px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    padding: 1em;
+}
+.lite-dash-card {
+    margin: 1em;
+    background-color: white;
+    /*border: 1px solid var(--border-grey);*/
+    -webkit-box-shadow: 6px 6px 6px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 6px 6px 6px 0px rgba(0,0,0,0.5);
+    box-shadow: 6px 6px 6px 0px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    padding: 1em;
+}
+.btn-light {
+    background-color: inherit !important;
+    border: none !important;
+}
+button i {
+    font-size: 22px !important;
+    color: var(--text-light-blue);
+}
+.fa-caret-right {
+    pointer-events: none;
+}
+.fa-caret-down {
+    pointer-events: none;
+}
+aside {
+    float: left;
+    width: fit-content !important;
+    border-top: 1px solid var(--border-grey);
+    display: none;
+    position : absolute;
+    top: 79px;
+    left: 0;
+    z-index: 100;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin-right: 2em;
+    background-color: var(--text-dark-blue);
+    margin-bottom: 0;
+    overflow-y: scroll;
+    max-width: 75vw !important; /* important so the user can still close the nav */
+}
+.nav-active {
+    background-color: #494588;
+    border: 1px solid #494588;
+    border-radius: 50px 0 0 50px;
+}
+nav ul li {
+    font-size: 16px;
+    color: white;
+    margin-top: 4px;
+    margin-bottom: 0;
+    overflow-x: hidden;
+    padding-left: 1em;
+    padding-right: 2em;
+    line-height: 2.5em;
+}
+nav ul li a {
+    color: white !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+nav > ul > li:nth-child(1) {
+    margin-top: 0 !important;
+}
+#aside-tab {
+    height: 80px;
+    width: 40px;
+    z-index: 5;
+    background-color: var(--text-dark-blue);
+    border-top: 2px solid var(--text-light-blue);
+    border-bottom: 2px solid var(--text-light-blue);
+    border-right: 2px solid var(--text-light-blue);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    color: white;
+    position: fixed;
+    top: 50%;
+    text-align: center;
+    padding-top: 28px;
+    -webkit-box-shadow: 7px 2px 16px -1px var(--text-light-blue);
+    -moz-box-shadow: 7px 2px 16px -1px var(--text-light-blue);
+    box-shadow: 7px 2px 16px -1px var(--text-light-blue);
+}
+#proscan {
+    margin: 0;
+    float: right;
+    width: calc(100% - 50px);
+}
+#litescan {
+    background-color: var(--background-grey);
+    float: right;
+    width: 95%;
+}
+#lite-crawl-info-container {
+    margin-left: 0;
+}
+#crawl-info-wrapper, #overall-compliance-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+}
+#crawl-info {
+    height: calc(100% - 32px);
+}
+#crawl-info p {
+    font-family: 'Raleway', sans-serif;
+    line-height: 2;
+    margin: 0;
+    font-size: 1rem;
+    white-space: pre-line;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#pro-exportCSV-btn {
+    margin: 2em;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+#litescan * :not(.e-icons) {
+    font-family: 'Raleway', sans-serif !important;
+}
+.num-col-lite, .num-col-pro {
+    text-align: right;
+}
+.error {
+    color: darkred;
+    font-weight: bold;
+}
+#files-table-pro {  /* forces the files table to always have a width of all available space */
+    width: 100% !important;
+}
+#filesTable > tbody > tr > td.table-b-table-default.b-table-sticky-column.filename-lite-col {
+    white-space: pre-line;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: normal;
+    min-width: 450px !important;
+    width: 450px !important;
+}
+.title-lite-col {
+    min-width: 600px !important;
+    width : 600px !important;
+    white-space: pre-line;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#lite-header {
+    margin: 0;
+    background: var(--background-grey);
+}
+#lite-header p {
+    margin: 0;
+    line-height: 2;
+}
+#exportCSV-lite {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 1em;
+}
+#lite-fileCounts > div > div {
+    border: 0.5px solid var(--border-grey)
+}
+.filename-lite-col {
+    min-width: 250px !important;
+    max-width: 400px !important;
+    font-weight: bold;
+}
+#filesTable tbody tr {
+    border-top: 1px rgb(222, 226, 230) solid;
+}
+#fileview-dash-btn {
+    color: white;
+    margin-top: 1em;
+    margin-left: 1em;
+}
+#fileview-dash-btn:hover {
+    color: white !important;
+}
+#filesTable > thead th .b-table-sort-icon-left {
+    color: white;
+}
+#top-scroll-wrapper, #top-scroll-wrapper-pro {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y:hidden;
+}
+#top-scroll, #top-scroll-pro {
+    width: 100%;
+    height: 20px;
+}
+.content-header {
+    font-family: 'Montserrat', sans-serif;
+    background-color: white;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 8px;
+}
+.content-header p {
+    margin-bottom: 0;
+}
+#document-counter > div > div {
+    border: 0.5px solid var(--border-grey);
+    font-family: 'Raleway', sans-serif;
+}
+#document-counter > div:nth-child(1) > a {  /*show all files link*/
+    margin-bottom: 16px;
+}
+#data-row {
+    padding-bottom: 1em;
+    padding-top: 1em;
+    margin-top: 30px;
+    background-color: white;
+}
+#new-scan-btn {
+    background-color: var(--text-dark-blue);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: white !important;
+    display: inline-block;
+    float: right;
+    margin-right: 6px;
+}
+#scan-result-chart {
+    margin-top: 2em;
+    margin-bottom: auto;
+}
+.color-legend {
+    width: 12px;
+    height: 100%;
+    display: inline-block;
+}
+.legend-data > div {
+    padding-left: 0;
+}
+.legend-data p:not(.pdf-counter) {
+    display: inline-block;
+    font-weight: bold;
+    position: relative;
+    bottom: 40%;
+    font-size: 14px;
+    font-size: 1vw;
+}
+.pdf-counter {
+    margin-right: 4px;
+    font-size: 32px;
+    font-weight: normal !important;
+    color: var(--text-dark-grey);
+}
+
+/* Bottom half of dashboard */
+.page-item.active .page-link {
+    background-color: var(--text-dark-blue) !important;
+    color: #FFFFFF !important;
+}
+.page-link {
+    color: #0065D1 !important;
+}
+
+
+#file-table, #file-table > body {
+    max-height: 684px !important;
+    font-family: 'Raleway', sans-serif;
+}
+#file-table {
+    overflow-x: scroll;
+}
+#file-table .b-table-row-selected, #file-table td {
+    background-color: white;
+}
+.selectCol { /* Fixed width for select column */
+    width: 50px;
+}
+.filenameCol { /* Fixed width for filename column */
+    width: 230px !important;
+    max-width: 230px !important;
+    overflow: hidden;  /* makes the link have an ellipsis if too long */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.UaCol { /* Fixed width for UA index column */
+    width: 50px !important;
+}
+#file-table > thead > tr > th:nth-child(1) {
+    width: 50px;
+    text-align: center;
+}
+#bottom-data-section > div {
+    padding-left: 0;
+    padding-right: 0;
+}
+#performers-data {
+    font-family: 'Raleway', sans-serif;
+    background-color: white;
+    padding: 8px;
+    width: 100%;
+}
+#performers-data > .col-6 p {
+    margin-bottom: 0;
+}
+#fileShowingStatus {
+    position: relative;
+    top: 8px;   /*same as padding on top*/
+    background-color: var(--text-light-blue);
+    color: white;
+    padding: 8px;
+    margin: 4px;
+    border: 1px solid var(--border-grey);
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+}
+#comp-history-chart {
+    margin-top: 1em
+}
+#scan-history-table tbody {
+    display: block;
+    max-height: 150px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+#scan-history-table tbody tr td {
+    font-family: 'Raleway', sans-serif;
+    width: 38% !important;
+}
+
+/* Styles for fileview.php */
+
+.skip-to-content-link {
+    background-color: var(--text-light-blue);
+    color: white !important;
+    border: 1px solid var(--text-light-blue);
+    left: 50%;
+    padding: 8px;
+    position: absolute;
+    transform: translateY(-100%);
+    transition: transform 0.3s;
+}
+
+.skip-to-content-link:focus {
+    transform: translateY(0%);
+}
+
+/**:focus {
+    border: 1px solid red !important;
+    border-radius: 2px;
+}*/
+#pdf-viewer p, span {
+    font-family: 'Raleway', sans-serif;
+}
+#errorsTable {
+    font-family: 'Raleway', sans-serif;
+}
+#next-page, #prev-page {
+    margin: 8px 16px;
+    background-color: var(--text-light-blue);
+    padding: 4px;
+}
+#next-page > i, #prev-page > i {
+    color: white
+}
+#next-page > span, #prev-page > span {
+    color: white
+}
+.page-info {
+    font-weight: bold;
+    padding-bottom: 8px;
+    position: relative;
+    left: 50px;
+    bottom: 2px;
+}
+#file-viewer {
+    display: none;
+    width: 100% !important;
+}
+#file-viewer > div {
+    width: calc(100% - 32px) !important; /* 32px is the padding + margin */
+}
+#file-viewer > div > div:nth-child(1) > div:nth-child(3) > div > button {
+    position: relative;
+    top: 100%;
+    margin: 8px 0;
+}
+#pdf-view-content-wrapper > div {
+    margin-top: 0 !important;
+}
+.section-header {
+    border-bottom: 0.5px solid var(--border-grey);
+    background-color: var(--background-grey);
+    margin-top: 0 !important;
+}
+#pdf-view-content-wrapper > div.col-lg-7 > div {
+    border-right: 0.5px solid var(--border-grey);
+}
+.section-header h2 {
+    font-size: 1.3rem;
+    padding: 4px;
+}
+.b-table-sticky-header {
+    max-height: 684px !important;
+}
+#file-title {
+    border-left: 1px solid var(--border-grey);
+}
+#file-title > h1 {
+    display: inline-block;
+    margin: 0;
+    position: absolute;
+    top: 25%;
+    font-size: 1.5rem;
+}
+#file-title > a {
+    display: inline-block;
+    margin: 15px 15px 15px 0;
+    background-color: var(--text-light-blue);
+    color: white !important;
+}
+#url-indicator-row > div > p {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin: 0;
+}
+#copyURLBtn {
+    padding-left: 1px;
+    padding-right: 1px;
+    color: var(--text-light-blue);
+}
+#pdf-view-content-wrapper div {
+    padding: 0;
+    margin-top: 8px;
+}
+.top-bar {
+    background-color: var(--background-grey);
+    margin-top: 0 !important;
+}
+.top-bar > button {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.pdf-count-checks {
+    font-weight: lighter;
+    font-size: 26px;
+}
+#errorsTable > thead {
+    background-color: white;
+}
+.issue {
+    padding-left: 3em !important;
+}
+.table-section-header {
+    background-color: var(--dark);
+    color: white;
+    font-weight: bolder;
+    font-size: 20px;
+}
+.table-section-subhead {
+    background-color: lightgray !important;
+    font-weight: 500;
+}
+
+#file-preformance-container {
+    height: 900px;
+    overflow-y: scroll;
+}
+#pdf-render {
+    display: none;
+    width: 90%;
+    margin-left: 1em;
+    border: 1px solid black !important;
+}
+#loading-pdf-indicator {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 5em;
+}
+
+/* Dropdown Button */
+#pdf-viewer > div:nth-child(1) > div.col-2 > div > button, #pdf-viewer > div:nth-child(1) > div.col-2 > div > div > a {
+    width: 250px;
+}
+.dropbtn {
+    background-color: var(--text-light-blue);
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+    float: right;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--text-light-blue);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+.dropdown-content a {
+    color: white !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content a:hover {
+    background-color: #095e97
+}
+#fileview-chooseAction {
+    margin: 6px 0;
+}
+.show {
+    display: block;
+}
+btn-group-vertical button {
+    margin-bottom: 4px;
+}
+#hamburger-menu {
+    display: inline-block;
+}
+
+.dash-card {
+    display: none;
+}
+aside {
+    display: none;
+}
+
+/* syncfusion components, note: needs important tag to override material theme for syncfusion */
+.e-dropdown-btn { /* colours the 'choose an action dropdown and makes it more readable' */
+    background-color: var(--text-light-blue) !important;
+    color: white !important;
+    font-size: 16px !important;
+    padding: 8px !important;
+}
+.e-dropdown-btn:hover { /* darkens the 'choose an action dropdown when hovered over' */
+    background-color: #0767a4 !important;
+}
+.e-dropdown-popup { /* Makes the options in the dropdown more readable */
+    font-size: 16px !important;
+}
+
+div.e-gridheader.e-lib.e-droppable > div > table > thead > tr.e-columnheader > th{ /* Dark theme for the headers */
+    background-color: black;
+}
+.e-grid .e-headertext { /* Makes the headers in the grid more readable */
+    font-size: 14px !important;
+    color: white !important;
+}
+#url, .dropdownFilter { /* styles for the url domain filter */
+    width: 100% !important;
+    padding: 2px !important;
+    margin: 2px !important;
+    border: none !important;
+    border-bottom: 1px solid black !important;
+}
+.filterNumberInput, .e-date-range-wrapper {
+    border: none !important;
+    border-bottom: 1px solid black !important;
+    margin-bottom: 2px;
+}
+#url:hover, #url:focus, .dropdownFilter:hover, .dropdownFilter:focus { /* styles for the url domain filter */
+    border-color: var(--text-light-blue);
+}
+.filterNumberInput {
+    padding: 2px !important;
+    margin-top: 2px !important;
+}
+.filterNumberInput:focus, .dropdownFilter:focus {
+    border: 1px var(--text-light-blue) solid !important;
+}
+.e-checkbox-wrapper:hover .e-frame.e-check, .e-css.e-checkbox-wrapper .e-frame.e-check { /* colour of the checkboxes for selecting files */
+    background-color: var(--text-light-blue) !important;
+}
+.e-grid .e-filterbarcell .e-input-group.e-input-focus::after,
+.e-grid .e-filterbarcell .e-input-group.e-input-focus::before{ /* underline that appears when clicking on a filter */
+    background-color: var(--text-light-blue) !important;
+}
+.e-pager .e-currentitem, .e-pager .e-currentitem {  /* Pagination numbers */
+    background-color: var(--text-light-blue) !important;
+    color: white !important;
+}
+.e-grid .e-icon-ascending::before { /* Makes the sorting icon show */
+    content: '\e306' !important;
+    color: white !important;
+}
+.e-grid .e-icon-descending::before {
+    content: '\e304' !important;
+    color: white !important;
+}
+.e-grid .e-gridheader .e-icons:not(.e-icon-hide):not(.e-check):not(.e-stop) {
+    color: white !important;
+}
+.e-grid .e-filtered::before { /* icons for filtering after a filter has been set */
+    color: #169BF3 !important; /* slightly different then AD blue for color contrast purposes */
+    font-weight: 900 !important;
+}
+.e-btn.e-flat.e-primary, .e-css.e-btn.e-flat.e-primary {
+    color: var(--text-light-blue) !important;
+}
+/* used to find selectors for MultiSelects in syncfusion: https://ej2.syncfusion.com/vue/documentation/multi-select/style/ */
+.e-input {
+    border-color: var(--text-light-blue) !important;
+}
+.e-multiselect.e-input-group.e-control-wrapper.e-input-focus::before, .e-multiselect.e-input-group.e-control-wrapper.e-input-focus::after {
+    background: var(--text-light-blue) !important;
+}
+.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,.e-float-input.e-control-wrapper.e-input-group:not(.e-float-icon-left) .e-float-line::before,.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,.e-float-input.e-control-wrapper.e-input-group:not(.e-float-icon-left) .e-float-line::after {
+    background-color: var(--text-light-blue) !important;
+}
+.e-input-group.e-control-wrapper.e-date-range-wrapper.e-input-focus:before, .e-input-group.e-control-wrapper.e-date-range-wrapper.e-input-focus:after {
+    border-color: var(--text-light-blue) !important;
+    background: var(--text-light-blue) !important;
+}
+.e-input-group.e-control-wrapper.e-input-focus:before, .e-input-group.e-control-wrapper.e-input-focus:after {
+    border-color: var(--text-light-blue) !important;
+    background: var(--text-light-blue) !important;
+}
+.e-popup-open:not(#e-dropdown-btn_0-popup) {
+    color: var(--text-light-blue) !important;
+}
+.e-list-item.e-active {
+    color: var(--text-light-blue) !important;
+}
+.e-grid .e-headercelldiv {
+    font-size: 15px !important;
+    color: white !important;
+}
+
+
+/*Media Queries*/
+
+@media screen and (max-width: 1274px) {
+    #url-indicator-row, #url-indicator-row button, #url-indicator-row a {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 1050px){
+    #scan-result-chart {
+        zoom: 1.2;
+    }
+}
+
+@media screen and (max-width: 991px){
+    #lite-fileCounts {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 940px){
+    #file-viewer > div > div:nth-child(1) > div:nth-child(3) > div > button {
+        margin-top: 50px;
+    }
+    .legend-data p:not(.pdf-counter) {
+        font-size: 12px;
+    }
+}
+
+/* Tablet size */
+@media screen and (max-width: 768px) {
+    @media screen and (max-width: 940px){
+        #file-viewer > div > div:nth-child(1) > div:nth-child(3) > div > button {
+            margin-top: 8px;
+        }
+    }
+
+    .legend-data p:not(.pdf-counter) {
+        font-size: 14px;
+    }
+    #document-counter {
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+    }
+    .site-selector {
+        width: 50%;
+    }
+    header > div:nth-child(3) > button {
+        width: 100%;
+    }
+    #scan-result-chart {
+        zoom: 0.6;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .dropbtn {
+        font-size: 14px;
+        width: 200px !important;
+    }
+    #dropdown-content a {
+        font-size: 14px;
+        width: 200px !important;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    #file-viewer > div > div:nth-child(1) > div:nth-child(2) {
+        padding: 10px 0;
+    }
+}
+
+@media screen and (max-width: 470px) {
+    .legend-data p:not(.pdf-counter) {
+        font-size: 10px;
+    }
+    #pie-chart-container {
+        margin-right: 30px;
+        margin-left: 30px;
+    }
+    .pdf-counter {
+        font-size: 24px;
+    }
+    #scan-history-table tbody tr td {
+        font-size: 12px;
+    }
+    #performers-data {
+        font-size: 12px;
+    }
+}
+
+/*Phone size*/
+@media screen and (max-width: 425px) {
+    header > div > div {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+    header img {
+        margin-left: 0.1em;
+        height: 36px;
+    }
+    button i {
+        font-size: 16px !important;
+    }
+    header button {
+        padding: 6px 3px !important;
+    }
+}
