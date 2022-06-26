@@ -23,7 +23,7 @@ function openOptionMenu() {
  */
 function writeCSV(array, name) {
     // Fix up values to be user friendly
-    for (let x=0;x<array.length;x++) {
+    for (let x = 0; x < array.length; x++) {
         // convert UA to two decimal number
         try {
             if (isNaN(parseFloat(array[x].UA_Index))) {
@@ -39,10 +39,10 @@ function writeCSV(array, name) {
         * For Future Use If We Add Any Other Language Having A Decimal Operator "."
         * if(currentLang == "da" || currentLang == "fr" || currentLang == "it" || currentLang == "es" || currentLang == "nl")
     */
-    if(currentLang != "en"){
-        for (let element of array){
+    if (currentLang != "en") {
+        for (let element of array) {
             let value = element.UA_Index.toString();
-            if(value.includes(".")) {
+            if (value.includes(".")) {
                 value = value.replace(".", ",")
                 element.UA_Index = value;
             }
@@ -63,9 +63,9 @@ function writeCSV(array, name) {
         });
 
         let new_fields = [];
-        for(let field of fields){
+        for (let field of fields) {
             let new_value = changeCSVHeader(field, currentLang);
-            if(new_value){
+            if (new_value) {
                 new_fields.push(new_value);
             } else {
                 new_fields.push(field);
@@ -85,7 +85,7 @@ function writeCSV(array, name) {
     const a = document.createElement("a");
     document.body.appendChild(a);
     a.style = "display: none";
-    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv; charset=utf-18"}),
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv; charset=utf-18" }),
         url = window.URL.createObjectURL(blob);
     a.href = url;
     a.download = name;
@@ -234,22 +234,22 @@ function downloadSinglePDF(url, name) {
     fetch(url, {
         method: 'GET',
         headers: {
-            'Content-Type' : 'application/pdf'
+            'Content-Type': 'application/pdf'
         }
     })
-    // Get blob
-    .then(async res => ({
-        blob: await res.blob()
-    }))
-    .then(resObj => {
-        // build the pdf
-        const newBlob = new Blob([resObj.blob], { type: 'application/pdf' });
-        downloadFile(newBlob, name);
-    })
-    .catch(err => {
-        console.error(err);
-        alert("An error occurred while trying to get the file\n" + err);
-    });
+        // Get blob
+        .then(async res => ({
+            blob: await res.blob()
+        }))
+        .then(resObj => {
+            // build the pdf
+            const newBlob = new Blob([resObj.blob], { type: 'application/pdf' });
+            downloadFile(newBlob, name);
+        })
+        .catch(err => {
+            console.error(err);
+            alert("An error occurred while trying to get the file\n" + err);
+        });
 }
 
 /**
@@ -276,24 +276,24 @@ function downloadMultiplePDF(files) {
         html: "<label for=\"file\">" + arrLang[currentLang]["downloading"] + "</label><br><progress id='file'></progress>",
         showCancelButton: false,
         showConfirmButton: false,
-        onOpen: function() {
+        onOpen: function () {
             let errors = [];
             let zip = new JSZip();
             let pdfs = zip.folder("pdfs");
 
             // get each url and tag on the cors proxy
             let urls = files.map(f => f.url);
-            for (let i=0;i < urls.length; i++) {
+            for (let i = 0; i < urls.length; i++) {
                 urls[i] = 'https://abledocs-cors-anywhere.herokuapp.com/' + urls[i];
             }
 
             // fetch each url
-            Promise.all(urls.map(url => fetch(url, {method: 'GET', headers: { 'Content-Type': 'application/pdf' }})
+            Promise.all(urls.map(url => fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/pdf' } })
                 // check that response is a PDF
                 .then((res) => {
                     let resCopy = res.clone();
                     resCopy.text()
-                        .then( (resText) => {
+                        .then((resText) => {
                             if (resText.substring(0, 4) !== "%PDF") {
                                 errors.push(url);
                                 throw new Error("Not a PDF file");
@@ -330,50 +330,50 @@ function downloadMultiplePDF(files) {
                     console.error(err);
                 })
             ))
-            .then(value => {
-                try {
-                    if (errors.length === files.length) {  // display error to user if files can't be found
-                        Swal.fire(arrLang[currentLang]["error"], arrLang[currentLang]["pdfDownloadFail"], "error");
-                    } else { // zip if there are some to be added
-                        zip.generateAsync({type: "blob"})
-                            .then(function (content) {
-                                downloadFile(content, "scannedFiles.zip");
-                                Swal.close();
-                                // send alert if errors
-                                if (errors.length > 0) {
-                                    let list = '<ul>';
-                                    errors.forEach(err => {
-                                        list += "<li>" + err.substring(45) + "</li>"  // removes the cors-proxy part of the url
-                                    });
-                                    list += "</ul>"
-                                    Swal.fire({
-                                        title: errors.length + " " + arrLang[currentLang]["cantDownloadCount"],
-                                        icon: 'error',
-                                        html: list
-                                    });
+                .then(value => {
+                    try {
+                        if (errors.length === files.length) {  // display error to user if files can't be found
+                            Swal.fire(arrLang[currentLang]["error"], arrLang[currentLang]["pdfDownloadFail"], "error");
+                        } else { // zip if there are some to be added
+                            zip.generateAsync({ type: "blob" })
+                                .then(function (content) {
+                                    downloadFile(content, "scannedFiles.zip");
+                                    Swal.close();
+                                    // send alert if errors
+                                    if (errors.length > 0) {
+                                        let list = '<ul>';
+                                        errors.forEach(err => {
+                                            list += "<li>" + err.substring(45) + "</li>"  // removes the cors-proxy part of the url
+                                        });
+                                        list += "</ul>"
+                                        Swal.fire({
+                                            title: errors.length + " " + arrLang[currentLang]["cantDownloadCount"],
+                                            icon: 'error',
+                                            html: list
+                                        });
+                                    }
+                                    return true;
                                 }
-                                return true;
-                            }
-                        );
+                                );
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        Swal.fire({
+                            title: arrLang[currentLang]["errorBundle"],
+                            icon: 'error',
+                        });
                     }
-                } catch (err) {
+                })
+                .catch(err => {
                     console.error(err);
-                    Swal.fire({
-                        title: arrLang[currentLang]["errorBundle"],
-                        icon: 'error',
-                    });
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                return false;
-            });
+                    return false;
+                });
         }
     });
 }
 
 async function changePassword() {
-    const {value: formValues} = await Swal.fire({
+    const { value: formValues } = await Swal.fire({
         title: arrLang[currentLang]["changePass"],
         html:
             '<label for="password">' + arrLang[currentLang]["password"] + ':</label>' +
@@ -402,7 +402,7 @@ async function changePassword() {
         $.post('includes/changePassword.php', {
             password: formValues[0],
             user: client.userID
-        }, function(response) {
+        }, function (response) {
             console.log(response);
             if (response === "1") {
                 Swal.fire(arrLang[currentLang]["success"], arrLang[currentLang]["passChange"], "success");
@@ -427,38 +427,38 @@ function sendForRemediation(files, client) {
     }
 
     // grab the urls for the files that are being sent
-    let urls = files.map( a => a.urls );
+    let urls = files.map(a => a.urls);
 
     // send a post request with those urls + client information to generate a quote
     $.post('includes/sendRemediation.php', {
         urls: urls,
-        userID : parseInt(client.userID),
+        userID: parseInt(client.userID),
         clientID: parseInt(client.clientId),
         clientFirst: client.firstName,
         clientLast: client.lastName,
         clientEmail: client.email,
-        adoContactID : (client.adoContactID === "") ? null : client.adoContactID,
+        adoContactID: (client.adoContactID === "") ? null : client.adoContactID,
         lang: client.lang
     })
 
-    // check if the quote was created and give the appropriate response
-    .done(function(msg){
-        if (msg === "job created") {
-            swal.fire({icon: 'success',  title: arrLang[currentLang]['sentforQuote']});
-        } else {
-            swal.fire({icon: 'error',  title: arrLang[currentLang]['errorSending'], text: arrLang[currentLang]['tryAgainLater']});
-            console.error(msg);
-        }
-    })
+        // check if the quote was created and give the appropriate response
+        .done(function (msg) {
+            if (msg === "job created") {
+                swal.fire({ icon: 'success', title: arrLang[currentLang]['sentforQuote'] });
+            } else {
+                swal.fire({ icon: 'error', title: arrLang[currentLang]['errorSending'], text: arrLang[currentLang]['tryAgainLater'] });
+                console.error(msg);
+            }
+        })
 
-    // if the request fails, send an error saying to try again later
-    .fail(function(xhr, status, error) {
-        swal.fire({icon: 'error',  title: arrLang[currentLang]['errorSending'], text: arrLang[currentLang]['tryAgainLater']});
-    });
+        // if the request fails, send an error saying to try again later
+        .fail(function (xhr, status, error) {
+            swal.fire({ icon: 'error', title: arrLang[currentLang]['errorSending'], text: arrLang[currentLang]['tryAgainLater'] });
+        });
 }
 
 async function inviteNewUser() {
-    const {value: formValues} = await Swal.fire({
+    const { value: formValues } = await Swal.fire({
         title: arrLang[currentLang]["inviteUser"],
         html:
             '<label for="invite-fname">' + arrLang[currentLang]["fName"] + ':</label>' +
@@ -506,42 +506,48 @@ async function inviteNewUser() {
     }
 }
 
+function backToAdmin() {
+    const params = new URLSearchParams(window.location.search)
+    let currentLanguage = params.get('lang') ? params.get('lang') : "en";
+    window.location.href = `master.php`;
+}
+
 /**
  * Opens up a popup looking for the new language
  * @returns {Promise<void> || string}
  */
 async function getnewLang() {
-    const {value: newlang} = await Swal.fire({
+    const { value: newlang } = await Swal.fire({
         title: '',
         html: "<input type='radio' id='en-swap' name='lang-swap' value='en'/>" +
-              "<label style='margin-left: 8px' for='en-swap'>English</label><br />" +
+            "<label style='margin-left: 8px' for='en-swap'>English</label><br />" +
 
-              "<input type='radio' id='fr-swap' name='lang-swap' value='fr'/>" +
-              "<label style='margin-left: 8px' for='fr-swap'>Français</label><br />" +
+            "<input type='radio' id='fr-swap' name='lang-swap' value='fr'/>" +
+            "<label style='margin-left: 8px' for='fr-swap'>Français</label><br />" +
 
-              "<input type='radio' id='da-swap' name='lang-swap' value='da'/>" +
-              "<label style='margin-left: 8px' for=''>Dansk</label><br />" +
+            "<input type='radio' id='da-swap' name='lang-swap' value='da'/>" +
+            "<label style='margin-left: 8px' for=''>Dansk</label><br />" +
 
-              "<input type='radio' id='de-swap' name='lang-swap' value='de'/>" +
-              "<label style='margin-left: 8px' for='de-swap'>Deutsch</label><br />" +
+            "<input type='radio' id='de-swap' name='lang-swap' value='de'/>" +
+            "<label style='margin-left: 8px' for='de-swap'>Deutsch</label><br />" +
 
-              "<input type='radio' id='nl-swap' name='lang-swap' value='nl'/>" +
-              "<label style='margin-left: 8px' for='nl-swap'>Nederlands</label><br />" +
+            "<input type='radio' id='nl-swap' name='lang-swap' value='nl'/>" +
+            "<label style='margin-left: 8px' for='nl-swap'>Nederlands</label><br />" +
 
-              "<input type='radio' id='it-swap' name='lang-swap' value='it'/>" +
-              "<label style='margin-left: 8px' for='it-swap'>Italiano</label><br />" +
+            "<input type='radio' id='it-swap' name='lang-swap' value='it'/>" +
+            "<label style='margin-left: 8px' for='it-swap'>Italiano</label><br />" +
 
-              "<input type='radio' id='es-swap' name='lang-swap' value='es'/>" +
-              "<label style='margin-left: 8px' for='es-swap'>Español</label><br />",
+            "<input type='radio' id='es-swap' name='lang-swap' value='es'/>" +
+            "<label style='margin-left: 8px' for='es-swap'>Español</label><br />",
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
         // select the current language when the list opens
-        onRender : () => {
-          $("input[name='lang-swap'][value='" + currentLang + "']").prop("checked", true);
+        onRender: () => {
+            $("input[name='lang-swap'][value='" + currentLang + "']").prop("checked", true);
         },
         // grab the selected value and return that only when confirmed
-        preConfirm : () => {
+        preConfirm: () => {
             let newLang = document.querySelector('input[name="lang-swap"]:checked').value;
             currentLang = newLang;
             return newLang;

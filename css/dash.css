@@ -124,21 +124,12 @@ aside {
     z-index: 100;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin-right: 2em;
-    background-color: var(--text-dark-blue);
-    margin-bottom: 0;
-    overflow-y: scroll;
-    max-width: 75vw !important; /* important so the user can still close the nav */
-}
 .nav-active {
     background-color: #494588;
     border: 1px solid #494588;
     border-radius: 50px 0 0 50px;
 }
-nav ul li {
+/* nav ul li {
     font-size: 16px;
     color: white;
     margin-top: 4px;
@@ -156,7 +147,7 @@ nav ul li a {
 }
 nav > ul > li:nth-child(1) {
     margin-top: 0 !important;
-}
+} */
 #aside-tab {
     height: 80px;
     width: 40px;
@@ -179,7 +170,7 @@ nav > ul > li:nth-child(1) {
 #proscan {
     margin: 0;
     float: right;
-    width: calc(100% - 50px);
+    /* width: calc(100% - 50px); */
 }
 #litescan {
     background-color: var(--background-grey);

@@ -77,12 +77,22 @@ session_start();
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             setTimeout(backToLogin, 60000);
+            checkParams();
         });
 
         function backToLogin() {
             const params = new URLSearchParams(window.location.search)
             let currentLanguage = params.get('lang') ? params.get('lang') : "en";
             window.location.href = `login.php?lang=${currentLanguage}`
+        }
+
+        function checkParams() {
+            const params = new URLSearchParams(window.location.search)
+            let sent = params.get('success');
+            let currentLanguage = params.get('lang') ? params.get('lang') : "en";
+            if (!sent) {
+                window.location.href = `login.php?lang=${currentLanguage}`
+            }
         }
     </script>
 </head>
@@ -99,16 +109,16 @@ session_start();
                 </div>
 
                 <div>
-                    <span data-key="forgotPass" class="translate forgot-your-password page-title">Email sent successfully!</span>
+                    <span data-key="request-received" class="translate forgot-your-password page-title">Request Received</span>
                 </div>
                 <div style="margin-top:10px">
                     <p class="conformation-text roboto-normal-black-16px">
                         Thank you. If you have an ADScan account for this <br /> email address, you&#39;ll receive an email
-                        shortly with instructions to <br /> reset your ADScan account password.<br /> Please be sure to check your spam folder in your email <br />if you don't receive this soon. <br /> If you need to contact our support team for help,
+                        shortly with instructions <br /> to reset your ADScan account password.<br /> Please be sure to check your spam folder in your email <br />if you don't receive this soon. <br /> If you need to contact our support team for help,
                         <br /> please email us at support@abledocs.com or <br /> contact your account representative.
                     </p>
                 </div>
-                <button data-key="forgotSend" name="passwordForgotSubmit" style="height:50px !important" type="submit" class="translate btn btn-block segoeui-regular-normal-white-15px" id="loginbutton">Back to Login</button>
+                <button onclick="backToLogin()" data-key="backToLogin" name="backToLogin" style="height:50px !important" type="submit" class="translate btn btn-block segoeui-regular-normal-white-15px" id="backToLogin">Back to Login</button>
             </div>
 
             <div class="col-lg-6" style="display: flex; align-items: center">

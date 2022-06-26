@@ -8,15 +8,16 @@ use PHPMailer\PHPMailer\Exception;
 if (isset($_POST["passwordForgotSubmit"])) {
 
     // get the language, english default
-    $lang = $_POST["lang"] ?? 'en';
+    $lang = $_COOKIE["lang"] ?? 'en';
 
     /**
      * returns to the forgot password page with an error
      */
-    function returnError($error) {
-        $lang = $_POST["lang"] ?? 'en';
+    function returnError($error)
+    {
+        $lang = $_COOKIE["lang"] ?? 'en';
         http_response_code(400);
-        header("Location: ../login/forgot.php?lang=".$lang."&error=".$error);
+        header("Location: ../login/forgot.php?lang=" . $lang . "&error=" . $error);
         die();
     }
 
@@ -44,7 +45,7 @@ if (isset($_POST["passwordForgotSubmit"])) {
     }
 
     // url for email link
-    $url = "https://".$_SERVER['SERVER_NAME']."/login/newPassword.php?lang=".$lang."&selector=" . $selector . "&validator=" . bin2hex($token);
+    $url = "https://" . $_SERVER['SERVER_NAME'] . "/login/newPassword.php?lang=" . $lang . "&selector=" . $selector . "&validator=" . bin2hex($token);
     // expiry time for password reset, set to 1 hour later
     $expires = date("U") + 1800;
 
@@ -65,7 +66,9 @@ if (isset($_POST["passwordForgotSubmit"])) {
         $emailCheckStmt->execute([$_POST["forgot-email"]]);
         $row = $emailCheckStmt->fetch(PDO::FETCH_ASSOC);
         if (!$row) {
-            returnError('noAccount');
+            // returnError('noAccount');
+            header("location: ../login/confirmation.php?lang=" . $lang. "&success=sent");
+            exit();
         }
     } catch (PDOException $e) {
         http_response_code(500); // throw error when cannot check
@@ -83,7 +86,7 @@ if (isset($_POST["passwordForgotSubmit"])) {
         }
 
         // insert the token in the db
-        if(!insertToken($_POST["forgot-email"], $selector, $token, $expires, $db)) {
+        if (!insertToken($_POST["forgot-email"], $selector, $token, $expires, $db)) {
             // send error when failed
             http_response_code(500);
             echo "An error sending request";
@@ -98,7 +101,7 @@ if (isset($_POST["passwordForgotSubmit"])) {
     // Get everything needed to send an email
     $to = $_POST["forgot-email"];
     $subject = "";
-    switch ($_POST["lang"]) {
+    switch ($lang) {
         case 'fr':
             $subject = "ADscan - Réinitialisez votre mot de passe";
             break;
@@ -119,7 +122,7 @@ if (isset($_POST["passwordForgotSubmit"])) {
             $subject = "ADscan - Reset your password";
             break;
     }
-    $message = "<a href='".$url."'>".$url."</a>";
+    $message = "<a href='" . $url . "'>" . $url . "</a>";
 
     // load in PHPMailer
     require 'PHPMailer/src/Exception.php';
@@ -144,15 +147,14 @@ if (isset($_POST["passwordForgotSubmit"])) {
     $mail->Subject = $subject;
     $mail->Body = $message;
 
-    if(!$mail->send()) {
+    if (!$mail->send()) {
         http_response_code(500);
         echo 'Message could not be sent.';
         echo 'Mailer Error: ' . $mail->ErrorInfo;
         exit();
     } else {  // all good and email has been sent
-        header("location: ../login/conformation.php?lang=" . $_POST["lang"] . "&success=sent");
+        header("location: ../login/confirmation.php?lang=" . $lang. "&success=sent");
     }
-
 } else {
     // if not from submit button, send back to login page
     header("location: ../login/login.php");
@@ -163,14 +165,14 @@ if (isset($_POST["passwordForgotSubmit"])) {
  * @return PDO PDO connection
  * @throws PDOException when cannot connect to db
  */
-function makeDbConnection() {
+function makeDbConnection()
+{
     try {
-        $db = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8', DB_USER, DB_PASS);
-        $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+        $db = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         return $db;
-    }
-    catch(PDOException $e) {
+    } catch (PDOException $e) {
         throw $e;
     }
 }
@@ -182,7 +184,8 @@ function makeDbConnection() {
  * @return bool - true if successful
  * @throws PDOException
  */
-function deleteTokensFromEmail(string $email, $db) {
+function deleteTokensFromEmail(string $email, $db)
+{
     // delete any token this email already has
     $deleteTokenSQL = "DELETE FROM adscan_pwdreset WHERE email = ?;";
     $deleteTokenSTMT = $db->prepare($deleteTokenSQL);
@@ -199,7 +202,8 @@ function deleteTokensFromEmail(string $email, $db) {
  * @return bool - true if successful
  * @throws PDOException
  */
-function insertToken(string $email, string $selector, string $token, $expiry, PDO $db) {
+function insertToken(string $email, string $selector, string $token, $expiry, PDO $db)
+{
     // make a hash for the token
     $hashedToken = password_hash($token, PASSWORD_DEFAULT);
     // insert into DB

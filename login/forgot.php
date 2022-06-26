@@ -175,7 +175,7 @@ session_start();
                 </div>
                 <div style="margin-top:10px">
                     <p class="if-youve-lost-your roboto-normal-black-16px">
-                        If you&#39;ve lost your password or wish to reset it, <br />enter your username or email and send your
+                        If you&#39;ve lost your password or wish to reset it, <br />enter your email and send your
                         request below.<br />A new password will be send to your email.
                     </p>
                 </div>

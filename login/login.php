@@ -73,6 +73,12 @@ session_start();
     </script>
 </head>
 
+<style>
+    .btn {
+        text-transform: none !important;
+    }
+</style>
+
 <body>
 
     <?php

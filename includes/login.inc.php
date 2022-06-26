@@ -5,7 +5,7 @@ if (isset($_POST['login-submit'])) {
     require '../config.php';
 
     // get the language, english default
-    $lang = $_POST["lang"] ?? 'en';
+    $lang = $_COOKIE["lang"] ?? 'en';
 
     // get the email and password used to sign in
     $email = $_POST['email'];

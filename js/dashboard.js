@@ -297,7 +297,7 @@ let filesNewestScan = files.filter(file => {
  * @type {Vue}
  */
 let sideNav = new Vue({
-    el: "#sideNav",
+    el: "#sidebar",
     data: {
         companyName: client.companyName,
         username: client.firstName + " " + client.lastName,
