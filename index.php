@@ -41,8 +41,7 @@ if (
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway&display=swap" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="css/dash.css" type="text/css" /> -->
-    <link rel="stylesheet" type="text/css" href="css/main-dashboard/side-menu.css" />
+    <link rel="stylesheet" href="css/dash.css" type="text/css" />
 
     <script src="js/jquery.min.js"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -69,6 +68,9 @@ if (
     <script>
         function logout() {
             window.location.href = "login/login.php";
+        }
+        function backToAdmin(){
+            window.location.href = "master.php"
         }
     </script>
 
@@ -379,9 +381,10 @@ if (
     </script>
 </head>
 
-<body style="margin: 0;">
+<body>
+    <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-2" style="padding-left: 0px !important; padding-right: 0px !important">
+        <div class="col-lg-1" style="margin-left:-15px; padding-left: 0px !important; padding-right: 0px !important">
             <div class="sidenav">
                 <div class=" wrapper">
                     <!-- Sidebar  -->
@@ -402,7 +405,7 @@ if (
                         </div>
                         <div class="list-unstyled">
                             <div class="collapse-outer">
-                                <div class="collapse-head head-active" onclick="SwitchOverallDash()">
+                                <div class="collapse-head" onclick="SwitchOverallDash()">
                                     <div class="side-icon">
                                         <img src="images/Group1101.png" alt="">
                                     </div>
@@ -447,15 +450,6 @@ if (
                                 <div class="collapse" id="settingcollapse">
                                     <div class="collapse-body">
                                         <div class="my-profile">
-                                            <div class="box2" onclick="logout()">
-                                                <div class="box">
-                                                    <i class="fa fa-arrow-right-from-bracket"></i>Logout
-                                                </div>
-                                                <div class="box">
-                                                    <img src="images/Path2390.png" alt="">
-                                                </div>
-                                            </div>
-
                                             <div class="box2" data-toggle="collapse" data-target="#change_language">
                                                 <div class="box">
                                                     <i class="fa fa-envelope"></i>Change Language
@@ -505,17 +499,6 @@ if (
                                                     </ul>
                                                 </div>
                                             </div>
-
-                                            <div class="box2">
-                                                <div class="box">
-                                                    <i class="fa fa-user"></i>Change Password
-                                                </div>
-                                                <div class="box">
-                                                    <img src="images/Path2390.png" alt="">
-                                                </div>
-                                            </div>
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -534,7 +517,7 @@ if (
                                 <div class="collapse" id="my_profile_collapse">
                                     <div class="collapse-body">
                                         <div class="my-profile">
-                                            <div class="box2" onclick="inviteNewUser()">
+                                            <div class="box2" v-if="client && client.isOwner" onclick="inviteNewUser()">
                                                 <div class="box">
                                                     <i class="fa fa-user"></i>Invite User
                                                 </div>
@@ -542,9 +525,17 @@ if (
                                                     <img src="images/Path2390.png" alt="">
                                                 </div>
                                             </div>
-                                            <div class="box2" onclick="backToAdmin()">
+                                            <div class="box2" v-if="client && client.companyName === 'AbleDocs'"  onclick="backToAdmin()">
                                                 <div class="box">
                                                     <i class="fa fa-home"></i>Back to Admin
+                                                </div>
+                                                <div class="box">
+                                                    <img src="images/Path2390.png" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="box2" onclick="changePassword()">
+                                                <div class="box">
+                                                    <i class="fa fa-user"></i>Change Password
                                                 </div>
                                                 <div class="box">
                                                     <img src="images/Path2390.png" alt="">
@@ -575,37 +566,50 @@ if (
         </div>
 
         <!-- Main Content -->
-        <div class="col-lg-10">
-            <div style="padding:20px 20px">
+        <div class="col-lg-11">
                 <div class="top-nav">
-                    <div class="title">
-                        Main Dashboard
+                    <div class="topbar">
+                        <img src="images/esbjerg.png" alt="">
+                        <div class="dropdown">
+                            <div class=" dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Esbjerg.dk
+                            </div>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="nav">
-                        <div class="group-1765">
-                            <div class="component-142-2">
-                                <div class="component-2-33">
-                                    <div class="nav-main-dashboard nav-menu">Main Dashboard</div>
-                                </div>
+                    <nav class="navbar navbar-expand-lg navbar-light ">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="#">Main Dashboard</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="#">Main Dashboard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Scan History
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Help</a>
+                                    </li>
+                                    <li class="nav-item" onclick="logout()">
+                                        <a class="nav-link" href="#">Logout</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-
-                        <div class="nav-menu-scan-history nav-menu">Scan History</div>
-                        <div class="nav-menu-help nav-menu">Help</div>
-                        <div class="nav-menu-logout nav-menu" onclick="logout()">Logout</div>
-                        <div class="nav-menu">
-                            <div class="group-1763">
-                                <img alt="" alt="" class="ek_byvaaben250px" src="https://anima-uploads.s3.amazonaws.com/projects/6284d6017c7b361162940774/releases/6284e30edde33983418a7487/img/ek-byvaaben250px@1x.png" />
-                                <div class="esbjergdk roboto-bold-gravel-18px">Esbjerg.dk</div>
-                                <img alt="" alt="" class="path-2390-1" src="https://anima-uploads.s3.amazonaws.com/projects/6284d6017c7b361162940774/releases/6284e30edde33983418a7487/img/path-2390-3@1x.png" />
-                            </div>
-                        </div>
-
-                    </div>
+                    </nav>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12" style="padding-left: 0px !important; padding-right: 0px !important">
+
+
+                <div>
                     <main id="proscan">
                         <div class="row">
                             <div id="crawl-info-wrapper" class="col-md-3">
@@ -907,7 +911,6 @@ if (
 
                     </section>
                 </div>
-            </div>
         </div>
     </div>
     </div>

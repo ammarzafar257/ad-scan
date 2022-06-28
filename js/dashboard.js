@@ -301,7 +301,7 @@ let sideNav = new Vue({
     data: {
         companyName: client.companyName,
         username: client.firstName + " " + client.lastName,
-        urls : scanURLS
+        urls : scanURLS,
     },
     methods: {
         clickedDomain(event , url) {

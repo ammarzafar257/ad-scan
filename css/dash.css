@@ -168,8 +168,8 @@ nav > ul > li:nth-child(1) {
     box-shadow: 7px 2px 16px -1px var(--text-light-blue);
 }
 #proscan {
-    margin: 0;
-    float: right;
+    /* margin: 0; */
+    /* float: right; */
     /* width: calc(100% - 50px); */
 }
 #litescan {

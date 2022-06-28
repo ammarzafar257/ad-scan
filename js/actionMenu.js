@@ -506,12 +506,6 @@ async function inviteNewUser() {
     }
 }
 
-function backToAdmin() {
-    const params = new URLSearchParams(window.location.search)
-    let currentLanguage = params.get('lang') ? params.get('lang') : "en";
-    window.location.href = `master.php`;
-}
-
 /**
  * Opens up a popup looking for the new language
  * @returns {Promise<void> || string}
