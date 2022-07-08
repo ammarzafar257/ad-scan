@@ -185,7 +185,7 @@ session_start();
 
                 <form method="post" onsubmit="return checkEmail()" action="../includes/forgotPassword.php">
                     <div class="form-group">
-                        <label data-key="userName-email" for="forgot-email" class="translate enter-user-name-or-email roboto-normal-black-15px">Enter Email</label>
+                        <label data-key="enterEmail" for="forgot-email" class="translate enter-user-name-or-email roboto-normal-black-15px">Enter Email</label>
                         <input id="forgot-email" name="forgot-email" class="translate form-control border-1px-wild-blue-yonder" type="email">
                     </div>
                     <button data-key="forgotSend" name="passwordForgotSubmit" style="height:50px !important" type="submit" class="translate btn btn-block segoeui-regular-normal-white-15px" id="loginbutton">Send my password</button>

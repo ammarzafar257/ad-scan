@@ -506,49 +506,11 @@ async function inviteNewUser() {
     }
 }
 
-/**
- * Opens up a popup looking for the new language
- * @returns {Promise<void> || string}
- */
-async function getnewLang() {
-    const { value: newlang } = await Swal.fire({
-        title: '',
-        html: "<input type='radio' id='en-swap' name='lang-swap' value='en'/>" +
-            "<label style='margin-left: 8px' for='en-swap'>English</label><br />" +
+function updateLang(lang) {
+    const newLang = lang;
 
-            "<input type='radio' id='fr-swap' name='lang-swap' value='fr'/>" +
-            "<label style='margin-left: 8px' for='fr-swap'>Français</label><br />" +
-
-            "<input type='radio' id='da-swap' name='lang-swap' value='da'/>" +
-            "<label style='margin-left: 8px' for=''>Dansk</label><br />" +
-
-            "<input type='radio' id='de-swap' name='lang-swap' value='de'/>" +
-            "<label style='margin-left: 8px' for='de-swap'>Deutsch</label><br />" +
-
-            "<input type='radio' id='nl-swap' name='lang-swap' value='nl'/>" +
-            "<label style='margin-left: 8px' for='nl-swap'>Nederlands</label><br />" +
-
-            "<input type='radio' id='it-swap' name='lang-swap' value='it'/>" +
-            "<label style='margin-left: 8px' for='it-swap'>Italiano</label><br />" +
-
-            "<input type='radio' id='es-swap' name='lang-swap' value='es'/>" +
-            "<label style='margin-left: 8px' for='es-swap'>Español</label><br />",
-        showCloseButton: true,
-        showCancelButton: true,
-        focusConfirm: false,
-        // select the current language when the list opens
-        onRender: () => {
-            $("input[name='lang-swap'][value='" + currentLang + "']").prop("checked", true);
-        },
-        // grab the selected value and return that only when confirmed
-        preConfirm: () => {
-            let newLang = document.querySelector('input[name="lang-swap"]:checked').value;
-            currentLang = newLang;
-            return newLang;
-        }
-    });
     // change the lang to the new one
-    if (newlang) {
-        changeLang(newlang);
+    if (newLang) {
+        changeLang(newLang);
     }
 }
