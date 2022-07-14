@@ -47,12 +47,10 @@ if (
 
     <!-- Chert.js is for creating the charts in dashboard and patternomaly creates the pattern on the colours -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/patternomaly@1.3.2/dist/patternomaly.min.js"></script>-->
 
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- production version, optimized for size and speed -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>-->
 
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
@@ -85,7 +83,7 @@ if (
 
                 <div class="container-fluid">
                     <div class="container scan-search-outer" id="scan-history-page">
-                        <div class="top-filter">
+                        <!-- <div class="top-filter">
                             <div class="filter-box">
                                 <button class="btn filter-btn">
                                     <i class="fa fa-plus"></i> Add filter
@@ -102,7 +100,7 @@ if (
                                     Export results <i class="fa fa-download"></i>
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="heading">
                             <h5>Latest Scan History: </h5>
                         </div>
@@ -114,7 +112,7 @@ if (
                                         <h6>{{ scanHistoryDate(scan) }}</h6> <a href="">{{ getURL(scan) }}</a>
                                     </div>
                                     <div class="right-content">
-                                        <a style="color: #006ADB" href="#" @click="viewResults(scan)"><span class="translate" data-key="viewResults">{{ langLabel }}</span></a>
+                                        <a style="color: #006ADB" href="#"><span class="translate" data-key="viewResults">View Results</span></a>
                                     </div>
                                 </div>
                                 <div class="collapse coll-table" :id="`collapse_${index}`">
@@ -145,13 +143,6 @@ if (
                             </div>
                         </div>
                     </div>
-
-                    <div id="overall-header"></div>
-                    <div id="crawl-info"></div>
-                    <div id="data-row"></div>
-                    <div id="file-viewer"></div>
-                    <div id="litescan"></div>
-
                 </div>
             </div>
         </div>
@@ -165,9 +156,6 @@ if (
          */
         let scanHistoryPage = new Vue({
             el: "#scan-history-page",
-            data: {
-                langLabel: "View Results",
-            },
             methods: {
                 getSacnAgainstCRAWL: () => {
                     return JSON.parse(sessionStorage.getItem('scanHistoryPage')) ? JSON.parse(sessionStorage.getItem('scanHistoryPage')) : [];

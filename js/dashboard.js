@@ -3,44 +3,14 @@
  * @author Colin Taylor
  */
 
+ 
 /**
- * Handels the the dropdown for the users menu
- * @global
+ * Stores the average UA score for each scan
+ * @type {object}
  */
-function usersDropdown() {
-    let userOptions = $(".dropdown-users");
-    let userBtn = $("#users-btn")
-    if (userOptions.css('display') === 'none') {
-        userOptions.show();
-        userBtn.attr('aria-expanded', true);
-        document.querySelector("#user-controls-container > div > a:nth-child(1)").focus(); // puts focus on logout option
-    } else {
-        userOptions.hide();
-        userBtn.attr('aria-expanded', false);
-    }
-}
+let avgUaList = null;
 
-/**
- * Closes the dropdown menus when clicked outside of them
- * @param event
- */
-window.onclick = function (event) {
-    // close the user dropdown menu
-    if (!event.target.matches('#users-btn')) {
-        let userOptions = $(".dropdown-users");
-        let userBtn = $("#users-btn")
-        if (userOptions.css('display') !== 'none') {
-            userOptions.hide();
-            userBtn.attr('aria-expanded', false);
-        }
-    }
-    // close the action menu dropdown (the one that says 'Choose an action')
-    if (!event.target.matches('#action-menu-btn')) {
-        if ($("#dropdown-content").hasClass('show')) {
-            $("#dropdown-content").removeClass('show').attr('aria-expanded', false);
-        }
-    }
-}
+let listenersSet = false;
 
 let viewStatus = null;
 if (sessionStorage.getItem('viewStatus') !== null) {
@@ -73,8 +43,7 @@ $(document).ready(function () {
 
         // show the dashboard if Pro scan is first
         if (viewStatus.isPro) {
-            $(".dash-card").show();
-            $("aside").show();
+            $(".details").show();
         }
 
         // Hide the main dashboard if scan is lite
@@ -88,12 +57,10 @@ $(document).ready(function () {
         if (liteScans > 0 && proScans === 0) {
             $("#litescan").show();
             $("#dashboardLink").hide();
-            $("#overviewLink").hide();
         } else if (proScans > 0 && liteScans === 0) {  // if all pro scans
             $("#litescan").hide();
         } else {    // if both
             $("#dashboardLink").hide();
-            $("#overviewLink").hide();
             if (startingScan.ScanType === "Pro") {
                 $("#litescan").hide();
             } else {
@@ -104,11 +71,6 @@ $(document).ready(function () {
             function waitForUAList() {
                 if (avgUaList !== null) {
                     showScanData(startingScan.starturl, 0);
-                    // remove the active link from old spot
-                    for (let i = 0; i < document.querySelector("#sideNav > nav > ul").children.length; i++) {
-                        document.querySelector("#sideNav > nav > ul").children[i].classList.remove("nav-active");
-                    }
-                    $("#sidenav-0").parent().addClass("nav-active");
                 }
                 else {
                     setTimeout(waitForUAList, 100);
@@ -140,7 +102,6 @@ $(document).ready(function () {
                             fileViewer.showNonCompAndUntagged();
                             // hide the other sections and show the file table
                             $("#history-graph-container").css('display', 'none');
-                            $("#bottom-data-right-side").css('display', 'none');
                             $("#file-viewer").css('display', 'flex');
                         } else {
                             topData.showFiles(viewStatus.fileCategory);
@@ -187,12 +148,6 @@ function loadFromMaster() {
                     // open that scan, 0 means most recent for that url
                     showScanData(clickedCrawl.starturl, index);
 
-                    // show that has been selected in the menu
-                    for (let i = 0; i < document.querySelector("#sideNav > nav > ul").children.length; i++) {
-                        document.querySelector("#sideNav > nav > ul").children[i].classList.remove("nav-active");
-                    }
-                    let navItem = $("a:contains('" + clickedCrawl.starturl.split('//')[1] + "')").parent();
-                    $(navItem[0]).addClass("nav-active");
                 } catch (err) {
                     // write error to console if that fails
                     console.error(err);
@@ -309,7 +264,6 @@ let sideNav = new Vue({
             // show the data for said crawl
             if (url === "Overview") {
                 SwitchOverallDash();
-
                 changeViewStatus('url', 'overview');
 
             } else {
@@ -424,7 +378,6 @@ let topData = new Vue({
             }
             // hide the other sections and show the file table
             $("#history-graph-container").css('display', 'none');
-            $("#bottom-data-right-side").css('display', 'none');
             $("#file-viewer").css('display', 'flex');
             // update the viewStatus
             changeViewStatus('isShowingFiles', true);
@@ -466,18 +419,12 @@ let scanHistoryTable = new Vue({
         },
         viewResults: (scan) => {
             // TODO: needs updated
-            $("#url-select").val(scan.starturl);
+            // $("#url-select").val(scan.starturl);
             let index = 0;
             for (let i = 0; i < scansHash[scan.starturl].length; i++) {
                 if (scansHash[scan.starturl][i].ID === scan.ID) { index = i; }
             }
             showScanData(scan.starturl, index);
-        },
-        getSacnAgainstCRAWL: () => {
-            return JSON.parse(sessionStorage.getItem('scanHistoryPage')) ? JSON.parse(sessionStorage.getItem('scanHistoryPage')) : [];
-        },
-        scanHistoryDate: (scan) => {
-            return scan.crawl_time_end.split('T')[0];
         },
     }
 });
@@ -1012,8 +959,7 @@ function showScanData(url, index) {
     changeViewStatus('url', url);
 
     // ensure the scans are shown again
-    $(".dash-card").show();
-    $("aside").show();
+    $(".details").show();
     $("#litescan").hide();
 
     // hide all showfiles links
@@ -1021,7 +967,6 @@ function showScanData(url, index) {
 
     // show the crawl info card
     $("#crawl-info-wrapper").show();
-    $("#overall-compliance-wrapper").removeClass('col-12').addClass('col-md-9');
 
     // update the files browser
     let newfiles = [];
@@ -1073,11 +1018,6 @@ function showScanData(url, index) {
             }
             // update & correct the files table
             fileViewer.urlFilter.ui.update()
-            /*fileViewer.applicationTemplateOptions.update()
-            fileViewer.producerTemplateOptions.update()
-            fileViewer.languageTemplateOptions.update()
-            document.querySelector("#offsiteFilter > option:nth-child(2)").innerHTML = "Yes";
-            document.querySelector("#offsiteFilter > option:nth-child(3)").innerHTML = "No";*/
         }
         if (this.readyState === 4 && this.status !== 200) {
             console.error('Error: something went wrong getting files for crawl ' + thisScan.ID + '. HTTP Status: ' + this.status);
@@ -1105,10 +1045,6 @@ function showScanData(url, index) {
     // update the doughnut chart
     resChart.data.datasets[0].data = [topData.compliant, topData.nonCompliant, topData.untagged];
     resChart.update();
-    // hide the performance range section
-    $("#preformance-ranges").css('display', 'none');
-    // $("#scan-history-table-container").css('height', '475px');
-    $("#scan-history-table tbody").css('max-height', '375px');
     // have the scan history change to  so show scans under that url
     scanHistoryTable.scans = scansHash[url];
     sessionStorage.setItem('scanHistoryPage', JSON.stringify(scansHash[url]));
@@ -1134,7 +1070,6 @@ function showScanData(url, index) {
     historyChart.data.datasets[2].data = compliantBar;
     historyChart.data.labels = labels;
     historyChart.update();
-    $("#historyGraphURL").text(" - " + thisScan.starturl);
 }
 
 // check if coming from crawls list, if so start with that scan instead
@@ -1208,8 +1143,7 @@ let liteScan = new Vue({
  */
 function showLiteScan(url, index) {
     // hide the dashboard
-    $(".dash-card").hide();
-    $("aside").hide();
+    $("#proscan").hide();
     $("#litescan").show();
 
     // get the current showScan
@@ -1236,17 +1170,11 @@ function showLiteScan(url, index) {
                 }
             }
             liteScan.files = filesLite
-            setInterval(() => {
-                $("#top-scroll").css('width', $("#filesTable").width() + 16);
-            }, 1000);
         }
         if (this.readyState === 4 && this.status !== 200) {
             console.error('Error: something went wrong getting files for crawl ' + thisScan.ID + '. HTTP Status: ' + this.status);
             filesLite = [];
             liteScan.files = filesLite
-            setInterval(() => {
-                $("#top-scroll").css('width', $("#filesTable").width() + 16);
-            }, 1000);
         }
     };
     filesReqLite.send();
@@ -1273,13 +1201,6 @@ function showLiteScan(url, index) {
      * @type {int}
      */
     const liteTableHeight = 1290
-
-    topwrapper.onscroll = function () {
-        filestable.scrollLeft = topwrapper.scrollLeft;
-    };
-    filestable.onscroll = function () {
-        topwrapper.scrollLeft = filestable.scrollLeft;
-    };
     $("#top-scroll").css('width', liteTableHeight);
 }
 
@@ -1290,24 +1211,18 @@ function showLiteScan(url, index) {
 function SwitchOverallDash() {
 
     // make sure dash is showing
-    $(".dash-card").show();
-    $("aside").show();
-
-    // select overview in url-selector
-    $("#url-select").val("Overview");
+    $(".details").show(); 
 
     // hide the crawl info card
     $("#crawl-info-wrapper").hide();
-    $("#overall-compliance-wrapper").removeClass('col-md-9').addClass('col-12');
+    // $("#overall-compliance-wrapper").removeClass('col-md-9').addClass('col-12');
 
     // change the date in the overall stats header
     overallStatHeader.date = allScanByDate[0].crawl_time_end.toISOString().split('T')[0]
 
     // show the correct elements
     $("#history-graph-container").css('display', 'block');
-    $("#bottom-data-right-side").css('display', 'block');
     $("#file-viewer").css('display', 'none');
-    $("#preformance-ranges").css('display', 'block');
 
     // update the top-data
     topData.compliant = overviewStats.compliant;
@@ -1397,42 +1312,6 @@ function uaListCallback(avgUaList) {
             worstScan = allScanMostRecent[i];
         }
     }
-
-    /**
-     * Preformance range instance
-     * @type {Vue}
-     */
-    prefRanges = new Vue({
-        el: "#preformance-ranges",
-        data: {
-            overallStats: overviewStats,
-            bestScanURL: bestScan.starturl.split("/")[2],
-            bestScanPreformance: bestScanPrecent,
-            bestScanUA: getAvgUaForCrawl(bestScan.ID),
-            bestScanComp: bestScan.compliant,
-            bestScanNonComp: bestScan.nonCompliant,
-            bestScanUntagged: bestScan.untagged,
-            bestScanOffsite: bestScan.offsite,
-            worstScanURL: worstScan.starturl.split("/")[2],
-            worstScanPreformance: worstScanPrecent,
-            worstScanUA: getAvgUaForCrawl(worstScan.ID),
-            worstScanComp: worstScan.compliant,
-            worstScanNonComp: worstScan.nonCompliant,
-            worstScanUntagged: worstScan.untagged,
-            worstScanOffsite: worstScan.offsite,
-        },
-        methods: {
-            showThisScan(isBest) {
-                if (isBest) {
-                    showScanData(bestScan.starturl, 0);
-                    $("#url-select").val(bestScan.starturl);
-                } else {
-                    showScanData(worstScan.starturl, 0);
-                    $("#url-select").val(worstScan.starturl);
-                }
-            }
-        }
-    });
 }
 
 /**
@@ -1519,7 +1398,7 @@ function showOverallHistory() {
     historyChart.data.datasets[2].data = compliantBar;
     historyChart.data.labels = labels;
     historyChart.update();
-    $("#historyGraphURL").text("");
+    // $("#historyGraphURL").text("");
 }
 
 /**
@@ -1549,8 +1428,6 @@ function getDomainsForCrawl(includeOffsite) {
     return domains;
 }
 
-let listenersSet = false;
-
 /**
  * Resizes the scroll bar for the pro files table
  */
@@ -1568,27 +1445,7 @@ function resizeScrollPro() {
         outerScroll.style.display = 'block';
     }
 
-    setTimeout(() => {
-        // set the width of the inner div to the width of the table
-        $('#top-scroll-pro').css('width', tableWidth + 16); // 16 for 1em of spacing
-        // set the listeners for scrolling if needed
-        if (!listenersSet) {
-            outerScroll.onscroll = function () {
-                filesTablePro.scrollLeft = outerScroll.scrollLeft;
-            }
-            filesTablePro.onscroll = function () {
-                outerScroll.scrollLeft = filesTablePro.scrollLeft;
-            }
-            listenersSet = true;
-        }
-    }, 500);
 }
-
-/**
- * Stores the average UA score for each scan
- * @type {object}
- */
-let avgUaList = null
 
 getAverageUAforCrawls();
 

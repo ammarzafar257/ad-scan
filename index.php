@@ -29,6 +29,7 @@ if (
     <!-- Our Custom CSS -->
 
     <link rel="stylesheet" href="css/sidebar/style.css">
+    <link rel="stylesheet" href="css/main-dashboard/style.css">
 
     <!-- Font Awesome JS -->
     <link media="all" type="text/css" rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
@@ -41,19 +42,15 @@ if (
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/dash.css" type="text/css" />
 
     <script src="js/jquery.min.js"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- Chert.js is for creating the charts in dashboard and patternomaly creates the pattern on the colours -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/patternomaly@1.3.2/dist/patternomaly.min.js"></script>-->
 
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!-- production version, optimized for size and speed -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>-->
 
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
@@ -65,14 +62,6 @@ if (
     <script src="https://cdn.syncfusion.com/ej2/19.2.46/ej2-vue-es5/dist/ej2-vue.min.js"></script>
     <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css">
 
-    <script>
-        function logout() {
-            window.location.href = "login/login.php";
-        }
-        function backToAdmin(){
-            window.location.href = "master.php"
-        }
-    </script>
 
     <?php
     echo '<script>';
@@ -84,18 +73,16 @@ if (
     } else {
         // if lang cant be found in a cookie or session use the system default, english if that fails
         echo "let currentLang = 'en' // default
-                    try {
-                        currentLang = window.navigator.userLanguage || window.navigator.language;
-                        currentLang = currentLang.split('-')[0];  // removes the country code
-                    } catch (err) {
-                        console.error('problem determining language, defaulting to english');
-                        let currentLang = 'en';
-                    }";
+            try {
+                currentLang = window.navigator.userLanguage || window.navigator.language;
+                currentLang = currentLang.split('-')[0];  // removes the country code
+            } catch (err) {
+                console.error('problem determining language, defaulting to english');
+                let currentLang = 'en';
+            }";
     }
     echo '</script>';
     ?>
-
-
 
     <script>
         let resChart = null;
@@ -122,8 +109,6 @@ if (
         if (client.clientId === 1 && client.companyName === "AbleDocs") {
             window.location.href = 'master.php';
         }
-
-        // sessionStorage.removeItem("clientID");
 
         // get the scan and files from scans
         let scans = [];
@@ -157,6 +142,7 @@ if (
         let scanURLS = [];
         let scansHash = [];
         let allScanMostRecent = [];
+        let scanHistory = [];
 
         // go through every scan
         for (let i = 0; i < scans.length; i++) {
@@ -195,102 +181,25 @@ if (
             }
             // add the most recent scan to allScanMostRecent
             allScanMostRecent.push(scansHash[scanURLS[i]][0]);
+
+            if (sessionStorage.getItem('fromMaster') !== null) {
+                scanHistory = scans.find(c => c.ID === parseInt(sessionStorage.getItem('fromMaster')));
+            }
         }
 
         // get the files from scans
         let files = [];
-        /*let filesReq = new XMLHttpRequest()
-        filesReq.open("GET", "scanAPI.php?action=getFiles&crawl=" + scansHash[scanURLS[0]][0].ID, true);
-        filesReq.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                files = JSON.parse(this.responseText);
-                for (let i = 0; i < files.length; i++) {
-                    if (files[i].Tagged === "1") {
-                        files[i].Tagged = "true";
-                    }
-                    if (files[i].Tagged === "0") {
-                        files[i].Tagged = "false";
-                    }
-                }
-            }
-            if (this.readyState === 4 && this.status !== 200) {
-                files = [];
-                console.error('Error: Something went wrong getting files data for crawl ' + scansHash[scanURLS[0]][0].ID + '. HTTP status ' + this.status);
-            }
-        };
-        filesReq.send();*/
-        window.setInterval(function() {
-
-            if ($("#litescan").css('display') === 'none') {
-                if ($('#sideNav-ul').height() < $("#proscan").height()) {
-                    $('#sideNav-ul').height($("#proscan").height());
-                }
-            } else {
-                if ($('#sideNav-ul').height() < $("#litescan").height()) {
-                    $('#sideNav-ul').height($("#litescan").height());
-                }
-            }
-        }, 500);
     </script>
     <script id="charts">
         $(document).ready(function() {
 
-            // listener for menu button when in mobile
-            let timer = 350;
-            $("#aside-tab").on('mouseover click focus', (e) => {
-                if ($("#sideNav").css('display') === 'none') {
-                    $("#sideNav").show("slide", {
-                        direction: "left"
-                    }, timer);
-                } else {
-                    if (e.type === "mouseover") {
-                        $("#sideNav").hide("slide", {
-                            direction: "left"
-                        }, timer);
-                    }
-                }
-            });
-
-            $("main").on('mouseover click', () => {
-                if ($("#sideNav").css('display') !== 'none') {
-                    $("#sideNav").hide("slide", {
-                        direction: "left"
-                    }, timer);
-                }
-            });
-
-            $("#litescan").on('mouseover click', () => {
-                if ($("#sideNav").css('display') !== 'none') {
-                    $("#sideNav").hide("slide", {
-                        direction: "left"
-                    }, timer);
-                }
-            });
-
-            $("#hamburger-menu").on('click', () => {
-                if ($("#sideNav").css('display') === 'none') {
-                    $("#sideNav").show("slide", {
-                        direction: "left"
-                    }, timer);
-                } else {
-                    $("#sideNav").hide("slide", {
-                        direction: "left"
-                    }, timer);
-                }
-            });
-
-            $("aside").css('height', $("main").height() + "px");
-
             let scanResultChart = document.querySelector("#scan-result-chart").getContext('2d');
 
             // colours for the charts w/ patter
-            /*let untaggedColor = pattern.draw('line', "rgba(255, 0, 0, 0.7)");
-            let taggedColor = pattern.draw('line-vertical', "rgba(255,153,0,0.7)");
-            let compliantColor = pattern.draw('weave', "rgba(0, 255, 0, 0.7)");*/
 
-            let untaggedColor = "#FA483A";
+            let untaggedColor = "#55afc7";
             let taggedColor = "#FFC64C";
-            let compliantColor = "#3CC945";
+            let compliantColor = "#ba0068";
 
             resChart = new Chart(scanResultChart, {
                 type: 'doughnut',
@@ -379,314 +288,225 @@ if (
 
         });
     </script>
+
 </head>
 
 <body>
     <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-1" style="margin-left:-15px; padding-left: 0px !important; padding-right: 0px !important">
-            <div class="sidenav">
-                <div class=" wrapper">
-                    <!-- Sidebar  -->
-                    <nav id="sidebar" style="z-index: 1;">
-                        <div class="sidebar-header">
-                            <h3>
-                                <img src="images/logo.png" alt="">
-                            </h3>
-                            <strong>
-                                <img src="images/fav.png" alt="">
-                            </strong>
-                        </div>
-                        <div class="line"></div>
-                        <div class="close-btn">
-                            <div class="icon" id="sidebarCollapse">
-                                <img src="images/Group1401.png" alt="">
-                            </div>
-                        </div>
-                        <div class="list-unstyled">
-                            <div class="collapse-outer">
-                                <div class="collapse-head" onclick="SwitchOverallDash()">
-                                    <div class="side-icon">
-                                        <img src="images/Group1101.png" alt="">
-                                    </div>
-                                    <div class="titel-box">
-                                        <span>My Dashboard</span>
-                                        <img src="images/Path2390.png" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="collapse-outer">
-                                <div class="collapse-head" data-toggle="collapse" data-target="#collapseExample2">
-                                    <div class="side-icon">
-                                        <img src="images/Group1113.png" alt="">
-                                    </div>
-                                    <div class="titel-box">
-                                        <span>My URL List </span>
-                                        <img src="images/Path2390.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="collapse" id="collapseExample2">
-                                    <div class="collapse-body">
-                                        <ul>
-                                            <li v-for="(url, index) in urls">
-                                                <a v-on:click="clickedDomain($event, url)" v-bind:id="'sidenav-' + index" href="javascript:void(0);">{{ url.split("//")[1] }}</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Settings -->
-                            <div class="collapse-outer">
-                                <div class="collapse-head" data-toggle="collapse" data-target="#settingcollapse">
-                                    <div class="side-icon">
-                                        <img src="images/Group1100.png" alt="">
-                                    </div>
-                                    <div class="titel-box">
-                                        <span>Settings </span>
-                                        <img src="images/Path2390.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="collapse" id="settingcollapse">
-                                    <div class="collapse-body">
-                                        <div class="my-profile">
-                                            <div class="box2" data-toggle="collapse" data-target="#change_language">
-                                                <div class="box">
-                                                    <i class="fa fa-envelope"></i>Change Language
-                                                </div>
-                                                <div class="box">
-                                                    <img src="images/Path2390.png" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="collapse" id="change_language">
-                                                <div class="collapse-body">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="#">
-                                                                Dansk
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                Italino
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                English
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                Deutsch
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                Français
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                Nederlands
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                Español
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- My Profile -->
-                            <div class="collapse-outer">
-                                <div class="collapse-head" data-toggle="collapse" data-target="#my_profile_collapse">
-                                    <div class="side-icon">
-                                        <img src="images/Group1132.png" alt="">
-                                    </div>
-                                    <div class="titel-box">
-                                        <span>My Profile</span>
-                                        <img src="images/Path2390.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="collapse" id="my_profile_collapse">
-                                    <div class="collapse-body">
-                                        <div class="my-profile">
-                                            <div class="box2" v-if="client && client.isOwner" onclick="inviteNewUser()">
-                                                <div class="box">
-                                                    <i class="fa fa-user"></i>Invite User
-                                                </div>
-                                                <div class="box">
-                                                    <img src="images/Path2390.png" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="box2" v-if="client && client.companyName === 'AbleDocs'"  onclick="backToAdmin()">
-                                                <div class="box">
-                                                    <i class="fa fa-home"></i>Back to Admin
-                                                </div>
-                                                <div class="box">
-                                                    <img src="images/Path2390.png" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="box2" onclick="changePassword()">
-                                                <div class="box">
-                                                    <i class="fa fa-user"></i>Change Password
-                                                </div>
-                                                <div class="box">
-                                                    <img src="images/Path2390.png" alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Dividr -->
-                            <div class="line"></div>
-                            <!-- Logout -->
-                            <div class="collapse-outer" onclick="logout()">
-                                <div class="collapse-head">
-                                    <div class="side-icon">
-                                        <img src="images/logout.png" alt="">
-                                    </div>
-                                    <div class="titel-box">
-                                        <span>Log Out</span>
-                                        <img src="images/Path2390.png" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
+        <div class="row">
+            <div class="col-lg-1" style="margin-left:-15px; padding-left: 0px !important; padding-right: 0px !important">
+                <div class="sidenav">
+                    <div class=" wrapper">
+                        <!-- Sidebar  -->
+                        <?php
+                        include 'menu/sidebar.php';
+                        ?>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Main Content -->
-        <div class="col-lg-11">
-                <div class="top-nav">
-                    <div class="topbar">
-                        <img src="images/esbjerg.png" alt="">
-                        <div class="dropdown">
-                            <div class=" dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                Esbjerg.dk
-                            </div>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <nav class="navbar navbar-expand-lg navbar-light ">
-                        <div class="container-fluid">
-                            <a class="navbar-brand" href="#">Main Dashboard</a>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="#">Main Dashboard</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Scan History
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Help</a>
-                                    </li>
-                                    <li class="nav-item" onclick="logout()">
-                                        <a class="nav-link" href="#">Logout</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
+            <!-- Main Content -->
+            <div class="col-lg-11">
+                <?php
+                include 'menu/topnav.php';
+                ?>
 
-
-                <div>
-                    <main id="proscan">
-                        <div class="row">
-                            <div id="crawl-info-wrapper" class="col-md-3">
-                                <div id="crawl-info" class="dash-card">
-                                    <p><span class="translate" data-key="crawlID">Crawl ID</span>: {{ ID }}</p>
-                                    <p><span class="translate" data-key="startURL">Starting URL</span>: {{ start }}</p>
-                                    <p><span class="translate" data-key="ScanInit">Scan initiated</span>: {{ date }}</p>
-                                    <p><span class="translate" data-key="pdfFilesFound">PDF files scanned</span>: {{ total }}</p>
-                                    <button id="pro-exportCSV-btn" onclick="exportCsv(crawlInfo.ID)" data-key="Exportcsv" class="translate btn btn-outline-dark">Export CSV</button>
-                                </div>
-                            </div>
-                            <div id="overall-compliance-wrapper" class="col-md-9">
-                                <div class="dash-card">
-                                    <div id="overall-header" class="content-header row">
-                                        <p><span class="translate" data-key="overallComp">Overall Compliance Statistics as of</span>&nbsp;<span>{{ date }}</span></p>
-                                    </div>
-                                    <div id="data-row" class="row">
-                                        <div id="pie-chart-container" class="col-md-4">
-                                            <canvas id="scan-result-chart"></canvas>
-                                            <p v-if="averageUA !== null" id="scan-ua"><span class="translate" data-key="index">UA Index</span>: {{ averageUA }}</p>
-                                            <p v-else id="scan-ua">UA <span class="translate" data-key="index">Index</span>: N/A</p>
+                <!-- ProScan Start -->
+                <div class="container" id="proscan">
+                    <div class="row">
+                        <!-- CRAWLS Details -->
+                        <div class="col-lg-12">
+                            <div class="main-dash-card">
+                                <div class="card-top">
+                                    <div class="row">
+                                        <div class="col-lg-4" id="crawl-info-wrapper">
+                                            <div class="details" id="crawl-info">
+                                                <h5>
+                                                    <span class="translate" data-key="crawlID">Crawl ID</span>: {{ ID }}
+                                                </h5>
+                                                <h6><span class="translate" data-key="startURL">Starting URL</span>: {{ start }}</h6>
+                                                <h6>
+                                                    <span class="translate" data-key="ScanInit">Scan initiated</span>: {{ date }}
+                                                </h6>
+                                                <h6>
+                                                    <span class="translate" data-key="pdfFilesFound">PDF files scanned</span>: {{ total }}
+                                                </h6>
+                                            </div>
                                         </div>
-                                        <div id="document-counter" class="col-md-8">
-                                            <div class="row showFiles">
-                                                <a href="javascript:;" id="showallfiles" @click="showFiles('all')"><span class="translate" data-key="showFiles">Show all files</span> ({{ compliant + nonCompliant + untagged + offsite }})</a>
-                                            </div>
-                                            <div class="row legend-data">
-                                                <div class="col-4">
-                                                    <div class="color-legend" style="background-color: #3CC945"></div>
-                                                    <!--<div class="color-legend" style="background-color: #9ed0f6"></div>-->
-                                                    <p class="translate" data-key="compliant">Compliant</p>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="color-legend" style="background-color: #FFC64C"></div>
-                                                    <!--<div class="color-legend" style="background-color: #0a78c2"></div>-->
-                                                    <p class="translate" data-key="nonComp">Non&#8209;Compliant</p>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="color-legend" style="background-color: #FA483A"></div>
-                                                    <!--<div class="color-legend" style="background-color: #242056"></div>-->
-                                                    <p class="translate" data-key="untagged">Untagged</p>
+                                        <div class="col-lg-8">
+                                            <br>
+                                            <h5>
+                                                Search results for:
+                                            </h5>
+                                            <div class="show-urls">
+                                                <select name="" id="" class="form-control">
+                                                    <option value="">xn--brnepasning-ggb.esbjerg.dk</option>
+                                                </select>
+                                                <div class="dropdoen-btn">
+                                                    Show all URL'S
+                                                    <i class="fa fa-arrow-right"></i>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="result-section" id="data-row">
+                                    <div class="result-top" id="overall-header">
+                                        <div>
+                                            <h5>
+                                                <b> Compliance results:</b> {{ date }} <a href=""> Show full scan history</a>
+                                            </h5>
+                                        </div>
+                                        <div>
+                                            <button class="translate btn btn-export" onclick="exportCsv(crawlInfo.ID)">
+                                                <span data-key="Exportcsv">Export results</span> <i class="fa fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="graph">
+                                                <canvas id="scan-result-chart"></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-9">
                                             <div class="row">
-                                                <div class="col-4">
-                                                    <p v-if="compliant !== null" class="pdf-counter">{{ compliant }}</p>
-                                                    <p v-else class="pdf-counter">0</p>
-                                                    <a href="javascript:;" aria-label="Show compliant files" class="translate showFiles" id="showcompfiles" data-key="showFiles" @click="showFiles('compliant')">Show files</a>
+                                                <div class="col-lg-2">
+                                                    <div class="total">
+                                                        <div class="content">
+                                                            <h5>
+                                                                Files in total
+                                                            </h5>
+                                                            <h1>
+                                                                ({{ compliant + nonCompliant + untagged + offsite }})
+                                                            </h1>
+                                                            <button class="translate btn" id="showallfiles" @click="showFiles('all')" data-key="showFiles">
+                                                                Show Files
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-4">
-                                                    <p v-if="nonCompliant !== null" class="pdf-counter">{{ nonCompliant }}</p>
-                                                    <p v-else class="pdf-counter">0</p>
-                                                    <a href="javascript:;" aria-label="Show non compliant files" class="translate showFiles" id="shownoncompfiles" data-key="showFiles" @click="showFiles('nonCompliant')">Show files</a>
+                                                <div class="col-lg-6">
+                                                    <div class="Compliant">
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="content">
+                                                                    <h5>
+                                                                        <div class="dott" style="background-color:#00568E;">
+                                                                        </div>
+                                                                        <span class="translate" data-key="compliant">
+                                                                            Compliant
+                                                                        </span>
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ compliant ? compliant : 0 }}
+                                                                    </h1>
+                                                                    <button class="translate btn" id="showcompfiles" data-key="showFiles" @click="showFiles('compliant')">
+                                                                        Show Files
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="content">
+                                                                    <h5>
+                                                                        <div class="dott" style="background-color:#BA0068;">
+                                                                        </div>
+                                                                        <span class="translate" data-key="nonComp">
+                                                                            Non-Compliant
+                                                                        </span>
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ nonCompliant ? nonCompliant : 0 }}
+                                                                    </h1>
+                                                                    <button class="translate btn" id="shownoncompfiles" data-key="showFiles" @click="showFiles('nonCompliant')">
+                                                                        Show Files
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="content">
+                                                                    <h5>
+                                                                        <div class="dott" style="background-color:#55AFC7;">
+                                                                        </div>
+                                                                        <span class="translate" data-key="untagged">
+                                                                            Untagged
+                                                                        </span>
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ untagged ? untagged : 0 }}
+                                                                    </h1>
+                                                                    <button class="translate btn" id="showuntaggedfiles" data-key="showFiles" @click="showFiles('untagged')">
+                                                                        Show Files
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-4">
-                                                    <p v-if="untagged !== null" class="pdf-counter">{{ untagged }}</p>
-                                                    <p v-else class="pdf-counter">0</p>
-                                                    <a href="javascript:;" aria-label="Show untagged files" class="translate showFiles" id="showuntaggedfiles" data-key="showFiles" @click="showFiles('untagged')">Show files</a>
+                                                <div class="col-lg-4">
+                                                    <div class="Errors">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <div class="content">
+                                                                    <h5 class="translate" data-key="offsite">
+                                                                        Off Side Files
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ offsite ? offsite : 0 }}
+                                                                    </h1>
+                                                                    <button class="translate btn" id="showoffsitefiles" data-key="showFiles" @click="showFiles('offsite')">
+                                                                        Show Files
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="content">
+                                                                    <h5 class="translate" data-key="fileErrors">
+                                                                        File Errors
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ errors }}
+                                                                    </h1>
+                                                                    <button class="translate btn" id="showerrorfiles" data-key="showFiles" @click="showFiles('errors')">
+                                                                        Show Files
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="row legend-data">
-                                                <div class="col-3">
-                                                    <div class="color-legend" style="background-color: black"></div>
-                                                    <p class="translate" data-key="offsite">Off Site</p>
+                                        </div>
+                                    </div>
+                                    <div class="result-footer">
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="footer-link">
+                                                    <a href="">
+                                                        What is the UA index?
+                                                    </a>
                                                 </div>
-                                                <div class="col-3" style="padding-left: 15px !important;">
-                                                    <p v-if="offsite !== null" class="pdf-counter">{{ offsite }}</p>
-                                                    <p v-else class="pdf-counter">0</p>
-                                                    <a href="javascript:;" @click="showFiles('offsite')" class="translate showFiles" id="showoffsitefiles" data-key="showFiles">Show files</a>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="color-legend" style="background-color: white"></div>
-                                                    <p class="translate" data-key="fileErrors">File Errors</p>
-                                                </div>
-                                                <div class="col-3" style="padding-left: 15px !important;">
-                                                    <p class="pdf-counter">{{ errors }}</p>
-                                                    <a href="javascript:;" @click="showFiles('errors')" class="translate showFiles" id="showerrorfiles" data-key="showFiles">Show files</a>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <div class="footer-groth">
+                                                    <div class="f-content">
+                                                        <h5>
+                                                            <div class="dott" style="background-color:#00568E;"></div>
+                                                            <span class="translate" data-key="compliant">Compliant</span> <!-- <b>48%</b> -->
+                                                        </h5>
+                                                    </div>
+                                                    <div class="f-content">
+                                                        <h5>
+                                                            <div class="dott" style="background-color:#BA0068;"></div>
+                                                            <span class="translate" data-key="nonComp">Non-Compliant</span> <!-- <b>23%</b> -->
+                                                        </h5>
+                                                    </div>
+                                                    <div class="f-content">
+                                                        <h5>
+                                                            <div class="dott" style="background-color:#55AFC7;"></div>
+                                                            <span class="translate" data-key="untagged">Untagged</span> <!-- <b>39%</b> -->
+                                                        </h5>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -694,252 +514,356 @@ if (
                                 </div>
                             </div>
                         </div>
-                        <div id="bottom-data-section" class="row">
-                            <div id="history-graph-container" class="col-md-7">
-                                <!-- compliance history graph -->
-                                <div class="dash-card">
-                                    <div class="row content-header">
-                                        <p class="translate" data-key="compHistory">Compliance History</p><span id="historyGraphURL"></span>
+                        <!-- CRAWLS Details -->
+
+                        <!-- Table -->
+                        <div class="col-lg-12" id="file-viewer">
+                            <div class="latest-scan-card">
+                                <div class="result-top">
+                                    <div>
+                                        <h5>
+                                            <b class="translate" data-key="results">Results: </b>{{ status }}
+                                        </h5>
                                     </div>
+                                </div>
+                                <div class="top-filter">
+                                    <div class="filter-box">
+                                        <!-- <button class="btn filter-btn">
+                                            <i class="fa fa-plus"></i> Add filter
+                                        </button>
+                                        <button class="btn pills-btn">
+                                            Date <i class="fa fa-close"></i>
+                                        </button>
+                                        <button class="btn pills-btn">
+                                            Compliant <i class="fa fa-close"></i>
+                                        </button> -->
+                                    </div>
+                                    <div class="right-btns">
+                                        <div class="dropdown">
+                                            <button data-key="chooseAction" class="translate btn btn-export dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Choose an action
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a role="button" tabindex="1" class="dropdown-item translate" data-key="sendToAble" onclick="sendForRemediation(fileViewer.$refs.grid.getSelectedRecords(), client)" href="javascript:void(0);">Send to AbleDocs</a>
+                                                <a role="button" tabindex="1" data-key="downloadSelect" class="dropdown-item translate" onclick="downloadMultiplePDF(fileViewer.$refs.grid.getSelectedRecords())">Download Selected Files</a>
+                                                <a role="button" tabindex="1" data-key="Exportcsv" class="dropdown-item translate" onclick="exportCsv(topData.scanID)">Export to .csv</a>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-export" onclick="exportCsv(crawlInfo.ID)">
+                                            <span class="translate" data-key="Exportcsv"> Export results </span> <i class="fa fa-download"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="col-lg-3" style="display: flex; margin-bottom: 5px; padding: 0px !important">
+                                        <b-button style="max-width: 115px !important; margin-right: 5px" size="sm" id="selectall" data-key="selectAll" class="translate" variant="outline-secondary w-50" @click="selectAllRows">Select all</b-button>
+                                        <b-button style="max-width: 115px !important;" size="sm" id="clearall" data-key="clearAll" class="translate" variant="outline-secondary w-50" @click="clearSelected">Clear selected</b-button>
+                                    </div>
+                                    <template>
+                                        <ejs-grid id="files-table-pro" :data-source="files" :allow-paging="true" :page-settings='pageSettings' ref='grid' :allow-sorting="true" :allow-selection="true" :selection-settings='selectionOptions' :allow-resizing='true' :resize-stop="resizeColumn" :show-column-chooser='true' :toolbar='toolbarOptions' :allow-filtering="true" :filter-settings='filterOptions' :action-begin="dataStateChange" :header-cell-info="headerCellInfoEvent" :locale='lang'>
+                                            <e-columns>
+                                                <e-column type='checkbox' width='50'></e-column>
+                                                <e-column field='ID' header-text='ID' :show-in-column-chooser=false :visible=false :is-primary-key='true'></e-column>
+                                                <e-column field='filename' header-text='Name' type="string" :template="nameTemplate" width="450"></e-column>
+                                                <e-column field='UA_Index' header-text='UA Index' :sort-comparer='sortNullAtBottom' text-align='Right' type="number" :template='uaTemplate' width="180"></e-column>
+                                                <e-column field='url' header-text='URL' :filter="urlFilter" width="350"></e-column>
+                                                <e-column field='NumPages' header-text='Page Count' text-align='Right' type="number" :sort-comparer='sortNullAtBottom' width="200"></e-column>
+                                                <e-column field='Tagged' header-text='Tagged' :template="taggedTemplate" :filter="taggedFilter" width="170"></e-column>
+                                                <e-column field='Title' header-text='Title' type="string" :sort-comparer='sortNullAtBottom' width="200"></e-column>
+                                                <e-column field='Creator' header-text='Application' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                <e-column field='Producer' header-text='Producer' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                <e-column field='CreationDate' header-text='Creation Date' :format='dateFormat' :filter="createdDateFilter" width="150"></e-column>
+                                                <e-column field='ModDate' header-text='Last Modified' :format='dateFormat' :filter="modDateFilter" width="200"></e-column>
+                                                <e-column field='Lang' header-text='Language' width="190" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                <e-column field='FileSize' header-text='File Size' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                <e-column field='offsite' header-text='Off Site' text-align='Right' :filter="offsiteFilter" :template="offsiteTemplate" width="150"></e-column>
+                                                <e-column field='passed' header-text='Passed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                <e-column field='Warnings' header-text='Warnings' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                <e-column field='failed' header-text='Failed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                            </e-columns>
+                                        </ejs-grid>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Table -->
+
+                        <!-- History Graph -->
+                        <div class="col-lg-5" id="history-graph-container">
+                            <div class="Compliance-card">
+                                <div class="result-top">
+                                    <div>
+                                        <h5>
+                                            <b>Compliance History:</b><a href=""> Show full Compliance History</a>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="graph-box">
                                     <canvas id="comp-history-chart"></canvas>
                                 </div>
-                            </div>
-                            <div id="bottom-data-right-side" class="col-md-5">
-                                <div class="row">
-                                    <!-- performance ranges -->
-                                    <div id="preformance-ranges" style="width: 100%;" class="dash-card">
-                                        <div style="width:100%" class="content-header">
-                                            <p class="translate" data-key="prefRange">Performance Ranges</p>
+                                <div class="result-footer">
+                                    <div class="footer-groth">
+                                        <div class="f-content">
+                                            <h5>
+                                                <div class="dott" style="background-color:#00568E;"></div>
+                                                Compliant
+                                            </h5>
                                         </div>
-                                        <div class="row" id="performers-data">
-                                            <div class="col-6">
-                                                <p style="text-decoration: underline;font-weight: bold" class="translate" data-key="bestPref">Best Performer</p>
-                                                <p tabindex="0" v-on:click="showThisScan(true)" style="color: #6161FF;cursor: pointer;">{{ bestScanURL }}</p>
-                                                <!--<p class="pdf-counter">{{ bestScanPreformance }}%</p>-->
-                                                <br />
-
-                                                <p v-if="bestScanUA !== null" style="font-weight: bold"><span class="translate" data-key="index">Index</span>: {{ bestScanUA }}</p>
-                                                <p v-else style="font-weight: bold"><span class="translate" data-key="index">Index</span>: 0</p>
-
-                                                <p><span class="translate" data-key="compliant">Compliant</span>: {{ bestScanComp }}</p>
-                                                <p><span class="translate" data-key="nonComp">Non Compliant</span>: {{ bestScanNonComp }}</p>
-                                                <p><span class="translate" data-key="untagged">Untagged</span>: {{ bestScanUntagged }}</p>
-                                                <!--<p><span class="translate" data-key="offsite">Offsite</span>: {{ bestScanOffsite }}</p>-->
-                                            </div>
-                                            <div class="col-6">
-                                                <p style="text-decoration: underline;font-weight: bold" class="translate" data-key="worstPref">Worst Performer</p>
-                                                <p tabindex="0" v-on:click="showThisScan(false)" style="color: #6161FF; cursor: pointer;">{{ worstScanURL }}</p>
-                                                <br />
-                                                <!--<p class="pdf-counter">{{ worstScanPreformance }}%</p>-->
-
-                                                <p v-if="worstScanUA !== null" style="font-weight: bold"><span class="translate" data-key="index">Index</span>: {{ worstScanUA }}</p>
-                                                <p v-else style="font-weight: bold"><span class="translate" data-key="index">Index</span>: 0</p>
-
-                                                <p><span class="translate" data-key="compliant">Compliant</span>: {{ worstScanComp }}</p>
-                                                <p><span class="translate" data-key="nonComp">Non Compliant</span>: {{ worstScanNonComp }}</p>
-                                                <p><span class="translate" data-key="untagged">Untagged</span>: {{ worstScanUntagged }}</p>
-                                                <!--  <p><span class="translate" data-key="offsite">Offsite</span>: {{ worstScanOffsite }}</p>-->
-                                            </div>
+                                        <div class="f-content">
+                                            <h5>
+                                                <div class="dott" style="background-color:#BA0068;"></div>
+                                                Non-Compliant
+                                            </h5>
+                                        </div>
+                                        <div class="f-content">
+                                            <h5>
+                                                <div class="dott" style="background-color:#55AFC7;"></div>
+                                                Untagged
+                                            </h5>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="scan-history-table-container" class="row">
-                                    <!-- Scan history -->
-                                    <div style="width: 100%" class="dash-card">
-                                        <div class="content-header">
-                                            <p class="translate" data-key="scanHist" style="display: inline-block !important;">Scan History</p>
-                                            <!--<a id="new-scan-btn" class="btn btn-sm" href="#">New Scan</a>-->
-                                        </div>
-                                        <table id="scan-history-table" class="table table-hover">
+                            </div>
+                        </div>
+
+                        <!-- Scan History Table -->
+                        <div class="col-lg-7" id="scan-history-table-container">
+                            <div class="latest-scan-card">
+                                <div class="result-top">
+                                    <div>
+                                        <h5>
+                                            <b>Latest Scan History:</b><a href=""> Show full Scan History</a>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="table-box">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Url's</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             <tr v-for="scan in scans">
                                                 <td>{{ getDate(scan) }}</td>
                                                 <td>{{ getURL(scan) }}</td>
                                                 <td><a style="color: #006ADB" href="#" @click="viewResults(scan)"><span class="translate" data-key="viewResults">{{ langLabel }}</span></a></td>
                                             </tr>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
-                            <div id="file-viewer" class="row">
-                                <div class="dash-card">
-                                    <div class="row" style="padding-top: 8px;">
-                                        <div class="col-md-4" style="padding: 8px;">
-                                            <div class="btn-group btn-block">
-                                                <b-button size="sm" id="selectall" data-key="selectAll" class="translate" variant="outline-secondary w-50" @click="selectAllRows">Select all</b-button>
-                                                <b-button size="sm" id="clearall" data-key="clearAll" class="translate" variant="outline-secondary w-50" @click="clearSelected">Clear selected</b-button>
-                                            </div>
-                                            <div class="btn-group btn-block">
-                                                <b-button size="sm" variant="outline-secondary w-50" @click="clearFilters">Clear Filters</b-button>
-                                                <b-button size="sm" data-key="showNon" class="translate w-50" variant="outline-secondary" @click="showNonCompAndUntagged">Show Non-compliant and Untagged</b-button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <span id="fileShowingStatus"><span class="translate" data-key="showing">Showing</span>: {{ status }}</span>
-                                            <br />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <!--<div class="dropdown">
-                            <button id="action-menu-btn" onclick="openOptionMenu()" data-key="chooseAction" class="translate dropbtn">Choose an Action</button>
-                            <div id="dropdown-content" class="dropdown-content" aria-expanded="false">
-                                <a role="button" tabindex="1" class="translate" data-key="sendToAble" onclick="sendForRemediation(fileViewer.$refs.grid.getSelectedRecords(), client)" href="javascript:void(0);">Send to AbleDocs</a>
-                                <a role="button" tabindex="1" data-key="downloadSelect" class="translate" onclick="downloadMultiplePDF(fileViewer.$refs.grid.getSelectedRecords())">Download Selected Files</a>
-                                <a role="button" tabindex="1" data-key="Exportcsv" class="translate" onclick="exportCsv(topData.scanID)">Export to .csv</a>
-                            </div>
-                        </div>-->
 
-                                            <template>
-                                                <ejs-dropdownbutton ref="chooseActionDropdown" :items='dropdownItems' :select="actionSelect"><span class="translate" data-key="chooseAction">Choose an Action</span></ejs-dropdownbutton>
-                                            </template>
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div id="top-scroll-wrapper-pro">
-                                            <div id="top-scroll-pro"></div>
-                                        </div>
-                                        <template>
-                                            <ejs-grid id="files-table-pro" :data-source="files" :allow-paging="true" :page-settings='pageSettings' ref='grid' :allow-sorting="true" :allow-selection="true" :selection-settings='selectionOptions' :allow-resizing='true' :resize-stop="resizeColumn" :show-column-chooser='true' :toolbar='toolbarOptions' :allow-filtering="true" :filter-settings='filterOptions' :action-begin="dataStateChange" :header-cell-info="headerCellInfoEvent" :locale='lang'>
-                                                <e-columns>
-                                                    <e-column type='checkbox' width='50'></e-column>
-                                                    <e-column field='ID' header-text='ID' :show-in-column-chooser=false :visible=false :is-primary-key='true'></e-column>
-                                                    <e-column field='filename' header-text='Name' type="string" :template="nameTemplate" width="450"></e-column>
-                                                    <e-column field='UA_Index' header-text='UA Index' :sort-comparer='sortNullAtBottom' text-align='Right' type="number" :template='uaTemplate' width="180"></e-column>
-                                                    <e-column field='url' header-text='URL' :filter="urlFilter" width="350"></e-column>
-                                                    <e-column field='NumPages' header-text='Page Count' text-align='Right' type="number" :sort-comparer='sortNullAtBottom' width="200"></e-column>
-                                                    <e-column field='Tagged' header-text='Tagged' :template="taggedTemplate" :filter="taggedFilter" width="170"></e-column>
-                                                    <e-column field='Title' header-text='Title' type="string" :sort-comparer='sortNullAtBottom' width="200"></e-column>
-                                                    <e-column field='Creator' header-text='Application' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                    <e-column field='Producer' header-text='Producer' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                    <e-column field='CreationDate' header-text='Creation Date' :format='dateFormat' :filter="createdDateFilter" width="150"></e-column>
-                                                    <e-column field='ModDate' header-text='Last Modified' :format='dateFormat' :filter="modDateFilter" width="200"></e-column>
-                                                    <e-column field='Lang' header-text='Language' width="190" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                    <e-column field='FileSize' header-text='File Size' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                    <e-column field='offsite' header-text='Off Site' text-align='Right' :filter="offsiteFilter" :template="offsiteTemplate" width="150"></e-column>
-                                                    <e-column field='passed' header-text='Passed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                    <e-column field='Warnings' header-text='Warnings' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                    <e-column field='failed' header-text='Failed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                </e-columns>
-                                            </ejs-grid>
-                                        </template>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                    </main>
-                    <section id="litescan">
-
-                        <div id="lite-header">
-
-                            <div class="row">
-                                <div class="col-lg-4 lite-dash-card">
-                                    <p><span class="translate" data-key="crawlID">Crawl ID</span>: {{ scan.ID }}</p>
-                                    <p><span class="translate" data-key="startURL">Starting URL</span>: {{ scan.starturl }}</p>
-                                    <p><span class="translate" data-key="ScanInit">Scan initiated</span>: {{ scan.crawl_time_end.toISOString().split('T')[0] }}</p>
-                                    <p><span class="translate" data-key="pdfFilesFound">PDF files scanned</span>: {{ files.length }}</p>
-                                    <button id="exportCSV-lite" onclick="exportCsv(liteScan.scan.ID)" data-key="Exportcsv" class="translate btn btn-outline-dark">Export CSV</button>
-                                </div>
-                                <div id="lite-fileCounts" class="col-lg-7 lite-dash-card">
-                                    <div class="row legend-data">
-                                        <div class="col-4">
-                                            <div class="color-legend" style="background-color: #3CC945"></div>
-                                            <!--<div class="color-legend" style="background-color: #9ed0f6"></div>-->
-                                            <p class="translate" data-key="compliant">Compliant</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="color-legend" style="background-color: #FFC64C"></div>
-                                            <!--<div class="color-legend" style="background-color: #0a78c2"></div>-->
-                                            <p class="translate" data-key="nonComp">Non&#8209;Compliant</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="color-legend" style="background-color: #FA483A"></div>
-                                            <!--<div class="color-legend" style="background-color: #242056"></div>-->
-                                            <p class="translate" data-key="untagged">Untagged</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <p v-if="scan.compliant !== null" class="pdf-counter">{{ scan.compliant }}</p>
-                                            <p v-else class="pdf-counter">0</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <p v-if="scan.nonCompliant !== null" class="pdf-counter">{{ scan.nonCompliant }}</p>
-                                            <p v-else class="pdf-counter">0</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <p v-if="scan.untagged !== null" class="pdf-counter">{{ scan.untagged }}</p>
-                                            <p v-else class="pdf-counter">0</p>
-                                        </div>
-                                    </div>
-                                    <div class="row legend-data">
-                                        <div class="col-3">
-                                            <div class="color-legend" style="background-color: black"></div>
-                                            <p class="translate" data-key="offsite">Off Site</p>
-                                        </div>
-                                        <div class="col-3" style="padding-left: 15px !important;">
-                                            <p v-if="scan.offsiteFiles !== null" class="pdf-counter">{{ scan.offsiteFiles }}</p>
-                                            <p v-else class="pdf-counter">0</p>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="color-legend" style="background-color: white"></div>
-                                            <p class="translate" data-key="fileErrors">File Errors</p>
-                                        </div>
-                                        <div class="col-3" style="padding-left: 15px !important;">
-                                            <p class="pdf-counter">{{ scan.Files_Error }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="top-scroll-wrapper">
-                            <div id="top-scroll"></div>
-                        </div>
-                        <template>
-                            <ejs-grid :data-source="files" ref="liteGrid" :allow-paging="true" :page-settings='pageSettings' :allow-sorting='true' :action-begin="liteTableStateChange">
-                                <e-columns>
-                                    <e-column field='ID' header-txt='ID' :visible=false :is-primary-key='true'></e-column>
-                                    <e-column field="filename" header-text="Name" width=275 text-align="left" :template="filenameTemplate"></e-column>
-                                    <e-column field="UA_Index" header-text="UA Index" width=150 text-align="right" :template='uaTemplate'></e-column>
-                                    <e-column field="NumPages" header-text="Page Count" width=180 text-align="right"></e-column>
-                                    <e-column field="Tagged" header-text="Tagged" width=125 text-align="left" :template="taggedTemplate"></e-column>
-                                    <e-column field="Title" header-text="Tile" width=230 text-align="left"></e-column>
-                                    <e-column field="passed_check" header-text="Passed" width=110 text-align="right"></e-column>
-                                    <e-column field="warned_check" header-text="Warned" width=110 text-align="right"></e-column>
-                                    <e-column field="failed_check" header-text="Failed" width=110 text-align="right"></e-column>
-                                </e-columns>
-                            </ejs-grid>
-                        </template>
-
-                    </section>
+                    </div>
                 </div>
+                <!-- ProScan End -->
+
+                <!-- Lite Start -->
+                <div class="container" id="litescan">
+                    <div class="row" id="lite-header">
+                        <!-- CRAWLS Details -->
+                        <div class="col-lg-12">
+                            <div class="main-dash-card">
+                                <div class="card-top">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="details">
+                                                <h5>
+                                                    <span class="translate" data-key="crawlID">Crawl ID</span>: {{ scan.ID }}
+                                                </h5>
+                                                <h6><span class="translate" data-key="startURL">Starting URL</span>: {{ scan.starturl }}</h6>
+                                                <h6>
+                                                    <span class="translate" data-key="ScanInit">Scan initiated</span>: {{ scan.crawl_time_end.toISOString().split('T')[0] }}
+                                                </h6>
+                                                <h6>
+                                                    <span class="translate" data-key="pdfFilesFound">PDF files scanned</span>: {{ files.length }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <br>
+                                            <h5>
+                                                Search results for:
+                                            </h5>
+                                            <div class="show-urls">
+                                                <select name="" id="" class="form-control">
+                                                    <option value="">xn--brnepasning-ggb.esbjerg.dk</option>
+                                                </select>
+                                                <div class="dropdoen-btn">
+                                                    Show all URL'S
+                                                    <i class="fa fa-arrow-right"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="result-section">
+                                    <div class="result-top" id="overall-header">
+                                        <div>
+                                            <button class="translate btn btn-export" id="exportCSV-lite" onclick="exportCsv(liteScan.scan.ID)">
+                                                <span class="translate" data-key="Exportcsv"> Export results </span> <i class="fa fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12" id="data-row">
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <div class="Compliant">
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="content">
+                                                                    <h5>
+                                                                        <div class="dott" style="background-color:#00568E;">
+                                                                        </div>
+                                                                        <span class="translate" data-key="compliant">
+                                                                            Compliant
+                                                                        </span>
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ scan.compliant ? scan.compliant : 0 }}
+                                                                    </h1>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="content">
+                                                                    <h5>
+                                                                        <div class="dott" style="background-color:#BA0068;">
+                                                                        </div>
+                                                                        <span class="translate" data-key="nonComp">
+                                                                            Non-Compliant
+                                                                        </span>
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ scan.nonCompliant ? scan.nonCompliant : 0 }}
+                                                                    </h1>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <div class="content">
+                                                                    <h5>
+                                                                        <div class="dott" style="background-color:#55AFC7;">
+                                                                        </div>
+                                                                        <span class="translate" data-key="untagged">
+                                                                            Untagged
+                                                                        </span>
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ scan.untagged ? scan.untagged : 0 }}
+                                                                    </h1>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="Errors">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <div class="content">
+                                                                    <h5 class="translate" data-key="offsite">
+                                                                        Off Side Files
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ scan.offsiteFiles ? scan.offsiteFiles : 0 }}
+                                                                    </h1>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="content">
+                                                                    <h5 class="translate" data-key="fileErrors">
+                                                                        File Errors
+                                                                    </h5>
+                                                                    <h1>
+                                                                        {{ scan.Files_Error }}
+                                                                    </h1>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- CRAWLS Details -->
+
+                        <!-- Table -->
+                        <div class="col-lg-12" id="file-viewer">
+                            <div class="latest-scan-card">
+                                <div class="result-top">
+                                    <div>
+                                        <h5>
+                                            <b class="translate" data-key="results">Results: </b> {{ status }}
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="top-filter">
+                                    <div class="filter-box">
+                                        <!-- <button class="btn filter-btn">
+                                            <i class="fa fa-plus"></i> Add filter
+                                        </button>
+                                        <button class="btn pills-btn">
+                                            Date <i class="fa fa-close"></i>
+                                        </button>
+                                        <button class="btn pills-btn">
+                                            Compliant <i class="fa fa-close"></i>
+                                        </button> -->
+                                    </div>
+                                    <div class="right-btns">
+                                        <div class="dropdown">
+                                            <button class="btn btn-export dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Choose an action
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">Action</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                            </div>
+                                        </div>
+
+                                        <button class="translate btn btn-export" id="exportCSV-lite" onclick="exportCsv(liteScan.scan.ID)">
+                                            <span class="translate" data-key="Exportcsv"> Export results </span> <i class="fa fa-download"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <template>
+                                        <ejs-grid :data-source="files" ref="liteGrid" :allow-paging="true" :page-settings='pageSettings' :allow-sorting='true' :action-begin="liteTableStateChange">
+                                            <e-columns>
+                                                <e-column field='ID' header-txt='ID' :visible=false :is-primary-key='true'></e-column>
+                                                <e-column field="filename" header-text="Name" width=275 text-align="left" :template="filenameTemplate"></e-column>
+                                                <e-column field="UA_Index" header-text="UA Index" width=150 text-align="right" :template='uaTemplate'></e-column>
+                                                <e-column field="NumPages" header-text="Page Count" width=180 text-align="right"></e-column>
+                                                <e-column field="Tagged" header-text="Tagged" width=125 text-align="left" :template="taggedTemplate"></e-column>
+                                                <e-column field="Title" header-text="Tile" width=230 text-align="left"></e-column>
+                                                <e-column field="passed_check" header-text="Passed" width=110 text-align="right"></e-column>
+                                                <e-column field="warned_check" header-text="Warned" width=110 text-align="right"></e-column>
+                                                <e-column field="failed_check" header-text="Failed" width=110 text-align="right"></e-column>
+                                            </e-columns>
+                                        </ejs-grid>
+                                    </template>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Table -->
+                    </div>
+                </div>
+                <!-- Lite End -->
+
+            </div>
         </div>
-    </div>
     </div>
     <!-- contains Vue instances -->
     <script src="js/dashboard.js" defer></script>
-    <!-- Ensures the page loads in the correct language -->
-    <script>
-        $(document).ready(function() {
-            // ensure theres no gap at the bottom
-            $("aside").css('height', 'auto');
-            changeLang(currentLang);
-        });
-    </script>
-
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <!-- Popper.JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#sidebarCollapse').on('click', function() {
-                $('#sidebar').toggleClass('active');
-            });
-        });
-    </script>
-
 </body>
 
 </html>
