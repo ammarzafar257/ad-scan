@@ -473,12 +473,6 @@ let scanHistoryTable = new Vue({
             }
             showScanData(scan.starturl, index);
         },
-        getSacnAgainstCRAWL: () => {
-            return JSON.parse(sessionStorage.getItem('scanHistoryPage')) ? JSON.parse(sessionStorage.getItem('scanHistoryPage')) : [];
-        },
-        scanHistoryDate: (scan) => {
-            return scan.crawl_time_end.split('T')[0];
-        },
     }
 });
 
