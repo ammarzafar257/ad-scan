@@ -43,10 +43,17 @@
 
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="js/jszip/Stuk-jszip-7bbcb38/dist/jszip.min.js"></script>
     <script src="js/actionMenu.js"></script>
     <script src="js/lang.js"></script>
     <script src="https://cdn.syncfusion.com/ej2/19.2.46/ej2-vue-es5/dist/ej2-vue.min.js"></script>
     <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css">
+
+    <script>
+    const URL = window.location?.href.split('/');
+    const pageName = URL[4] ? URL[4] : null;
+    </script>
 </head>
 
 <body>
@@ -70,7 +77,7 @@
                 </div>
                 <div class="list-unstyled">
                     <!-- My Dashboard -->
-                    <div class="collapse-outer">
+                    <div class="collapse-outer" v-if="showAllSideMenu">
                         <div class="collapse-head" onclick="SwitchOverallDash()">
                             <div class="side-icon">
                                 <img src="images/Group1101.png" alt="my-dashboard">
@@ -82,7 +89,7 @@
                         </div>
                     </div>
                     <!-- My URL List -->
-                    <div class="collapse-outer">
+                    <div class="collapse-outer" v-if="showAllSideMenu">
                         <div class="collapse-head" data-toggle="collapse" data-target="#collapseExample2">
                             <div class="side-icon">
                                 <img src="images/Group1113.png" alt="my-url-list">

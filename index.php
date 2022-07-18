@@ -62,7 +62,6 @@ if (
     <script src="https://cdn.syncfusion.com/ej2/19.2.46/ej2-vue-es5/dist/ej2-vue.min.js"></script>
     <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css">
 
-
     <?php
     echo '<script>';
     // check if lang is set in a cookie
@@ -85,9 +84,6 @@ if (
     ?>
 
     <script>
-        let resChart = null;
-        let historyChart = null;
-
         const client = {
             userID: <?php echo $_SESSION['userID'] ?>,
             clientId: <?php echo $_SESSION["userCompanyId"] ?>,
@@ -99,6 +95,9 @@ if (
             lang: "<?php echo $_SESSION["lang"] ?>",
             isOwner: "<?php echo $_SESSION["isOwner"] ?>" === "1"
         };
+
+        let resChart = null;
+        let historyChart = null;
 
         // check if abledocs loggin in as client
         if (sessionStorage.getItem('clientID') !== null && client.companyName === "AbleDocs") {
@@ -186,6 +185,11 @@ if (
                 scanHistory = scans.find(c => c.ID === parseInt(sessionStorage.getItem('fromMaster')));
             }
         }
+        if (scanURLS.length > 0) {
+            sessionStorage.setItem('scanURLS',  JSON.stringify(scanURLS));
+        } else {
+            sessionStorage.setItem('scanURLS',  JSON.stringify([]));
+        }
 
         // get the files from scans
         let files = [];
@@ -198,8 +202,8 @@ if (
             // colours for the charts w/ patter
 
             let untaggedColor = "#55afc7";
-            let taggedColor = "#FFC64C";
-            let compliantColor = "#ba0068";
+            let taggedColor = "#ba0068";
+            let compliantColor = "#00568e";
 
             resChart = new Chart(scanResultChart, {
                 type: 'doughnut',
@@ -517,18 +521,19 @@ if (
                         <!-- CRAWLS Details -->
 
                         <!-- Table -->
-                        <div class="col-lg-12" id="file-viewer">
-                            <div class="latest-scan-card">
-                                <div class="result-top">
-                                    <div>
-                                        <h5>
-                                            <b class="translate" data-key="results">Results: </b>{{ status }}
-                                        </h5>
+                        <div id="file-viewer" v-if="status != ''">
+                            <div class="col-lg-12">
+                                <div class="latest-scan-card">
+                                    <div class="result-top">
+                                        <div>
+                                            <h5>
+                                                <b class="translate" data-key="results">Results: </b>{{ status }}
+                                            </h5>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="top-filter">
-                                    <div class="filter-box">
-                                        <!-- <button class="btn filter-btn">
+                                    <div class="top-filter">
+                                        <div class="filter-box">
+                                            <!-- <button class="btn filter-btn">
                                             <i class="fa fa-plus"></i> Add filter
                                         </button>
                                         <button class="btn pills-btn">
@@ -537,53 +542,54 @@ if (
                                         <button class="btn pills-btn">
                                             Compliant <i class="fa fa-close"></i>
                                         </button> -->
-                                    </div>
-                                    <div class="right-btns">
-                                        <div class="dropdown">
-                                            <button data-key="chooseAction" class="translate btn btn-export dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Choose an action
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a role="button" tabindex="1" class="dropdown-item translate" data-key="sendToAble" onclick="sendForRemediation(fileViewer.$refs.grid.getSelectedRecords(), client)" href="javascript:void(0);">Send to AbleDocs</a>
-                                                <a role="button" tabindex="1" data-key="downloadSelect" class="dropdown-item translate" onclick="downloadMultiplePDF(fileViewer.$refs.grid.getSelectedRecords())">Download Selected Files</a>
-                                                <a role="button" tabindex="1" data-key="Exportcsv" class="dropdown-item translate" onclick="exportCsv(topData.scanID)">Export to .csv</a>
-                                            </div>
                                         </div>
+                                        <div class="right-btns">
+                                            <div class="dropdown">
+                                                <button data-key="chooseAction" class="translate btn btn-export dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Choose an action
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a role="button" tabindex="1" class="dropdown-item translate" data-key="sendToAble" onclick="sendForRemediation(fileViewer.$refs.grid.getSelectedRecords(), client)" href="javascript:void(0);">Send to AbleDocs</a>
+                                                    <a role="button" tabindex="1" data-key="downloadSelect" class="dropdown-item translate" onclick="downloadMultiplePDF(fileViewer.$refs.grid.getSelectedRecords())">Download Selected Files</a>
+                                                    <a role="button" tabindex="1" data-key="Exportcsv" class="dropdown-item translate" onclick="exportCsv(topData.scanID)">Export to .csv</a>
+                                                </div>
+                                            </div>
 
-                                        <button class="btn btn-export" onclick="exportCsv(crawlInfo.ID)">
-                                            <span class="translate" data-key="Exportcsv"> Export results </span> <i class="fa fa-download"></i>
-                                        </button>
+                                            <button class="btn btn-export" onclick="exportCsv(crawlInfo.ID)">
+                                                <span class="translate" data-key="Exportcsv"> Export results </span> <i class="fa fa-download"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <div class="col-lg-3" style="display: flex; margin-bottom: 5px; padding: 0px !important">
-                                        <b-button style="max-width: 115px !important; margin-right: 5px" size="sm" id="selectall" data-key="selectAll" class="translate" variant="outline-secondary w-50" @click="selectAllRows">Select all</b-button>
-                                        <b-button style="max-width: 115px !important;" size="sm" id="clearall" data-key="clearAll" class="translate" variant="outline-secondary w-50" @click="clearSelected">Clear selected</b-button>
+                                    <div>
+                                        <div class="col-lg-3" style="display: flex; margin-bottom: 5px; padding: 0px !important">
+                                            <b-button style="max-width: 115px !important; margin-right: 5px" size="sm" id="selectall" data-key="selectAll" class="translate" variant="outline-secondary w-50" @click="selectAllRows">Select all</b-button>
+                                            <b-button style="max-width: 115px !important;" size="sm" id="clearall" data-key="clearAll" class="translate" variant="outline-secondary w-50" @click="clearSelected">Clear selected</b-button>
+                                        </div>
+                                        <template>
+                                            <ejs-grid id="files-table-pro" :data-source="files" :allow-paging="true" :page-settings='pageSettings' ref='grid' :allow-sorting="true" :allow-selection="true" :selection-settings='selectionOptions' :allow-resizing='true' :resize-stop="resizeColumn" :show-column-chooser='true' :toolbar='toolbarOptions' :allow-filtering="true" :filter-settings='filterOptions' :action-begin="dataStateChange" :header-cell-info="headerCellInfoEvent" :locale='lang'>
+                                                <e-columns>
+                                                    <e-column type='checkbox' width='50'></e-column>
+                                                    <e-column field='ID' header-text='ID' :show-in-column-chooser=false :visible=false :is-primary-key='true'></e-column>
+                                                    <e-column field='filename' header-text='Name' type="string" :template="nameTemplate" width="450"></e-column>
+                                                    <e-column field='UA_Index' header-text='UA Index' :sort-comparer='sortNullAtBottom' text-align='Right' type="number" :template='uaTemplate' width="180"></e-column>
+                                                    <e-column field='url' header-text='URL' :filter="urlFilter" width="350"></e-column>
+                                                    <e-column field='NumPages' header-text='Page Count' text-align='Right' type="number" :sort-comparer='sortNullAtBottom' width="200"></e-column>
+                                                    <e-column field='Tagged' header-text='Tagged' :template="taggedTemplate" :filter="taggedFilter" width="170"></e-column>
+                                                    <e-column field='Title' header-text='Title' type="string" :sort-comparer='sortNullAtBottom' width="200"></e-column>
+                                                    <e-column field='Creator' header-text='Application' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                    <e-column field='Producer' header-text='Producer' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                    <e-column field='CreationDate' header-text='Creation Date' :format='dateFormat' :filter="createdDateFilter" width="150"></e-column>
+                                                    <e-column field='ModDate' header-text='Last Modified' :format='dateFormat' :filter="modDateFilter" width="200"></e-column>
+                                                    <e-column field='Lang' header-text='Language' width="190" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                    <e-column field='FileSize' header-text='File Size' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                    <e-column field='offsite' header-text='Off Site' text-align='Right' :filter="offsiteFilter" :template="offsiteTemplate" width="150"></e-column>
+                                                    <e-column field='passed' header-text='Passed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                    <e-column field='Warnings' header-text='Warnings' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                    <e-column field='failed' header-text='Failed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                </e-columns>
+                                            </ejs-grid>
+                                        </template>
                                     </div>
-                                    <template>
-                                        <ejs-grid id="files-table-pro" :data-source="files" :allow-paging="true" :page-settings='pageSettings' ref='grid' :allow-sorting="true" :allow-selection="true" :selection-settings='selectionOptions' :allow-resizing='true' :resize-stop="resizeColumn" :show-column-chooser='true' :toolbar='toolbarOptions' :allow-filtering="true" :filter-settings='filterOptions' :action-begin="dataStateChange" :header-cell-info="headerCellInfoEvent" :locale='lang'>
-                                            <e-columns>
-                                                <e-column type='checkbox' width='50'></e-column>
-                                                <e-column field='ID' header-text='ID' :show-in-column-chooser=false :visible=false :is-primary-key='true'></e-column>
-                                                <e-column field='filename' header-text='Name' type="string" :template="nameTemplate" width="450"></e-column>
-                                                <e-column field='UA_Index' header-text='UA Index' :sort-comparer='sortNullAtBottom' text-align='Right' type="number" :template='uaTemplate' width="180"></e-column>
-                                                <e-column field='url' header-text='URL' :filter="urlFilter" width="350"></e-column>
-                                                <e-column field='NumPages' header-text='Page Count' text-align='Right' type="number" :sort-comparer='sortNullAtBottom' width="200"></e-column>
-                                                <e-column field='Tagged' header-text='Tagged' :template="taggedTemplate" :filter="taggedFilter" width="170"></e-column>
-                                                <e-column field='Title' header-text='Title' type="string" :sort-comparer='sortNullAtBottom' width="200"></e-column>
-                                                <e-column field='Creator' header-text='Application' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                <e-column field='Producer' header-text='Producer' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                <e-column field='CreationDate' header-text='Creation Date' :format='dateFormat' :filter="createdDateFilter" width="150"></e-column>
-                                                <e-column field='ModDate' header-text='Last Modified' :format='dateFormat' :filter="modDateFilter" width="200"></e-column>
-                                                <e-column field='Lang' header-text='Language' width="190" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                <e-column field='FileSize' header-text='File Size' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                <e-column field='offsite' header-text='Off Site' text-align='Right' :filter="offsiteFilter" :template="offsiteTemplate" width="150"></e-column>
-                                                <e-column field='passed' header-text='Passed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                <e-column field='Warnings' header-text='Warnings' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                <e-column field='failed' header-text='Failed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                            </e-columns>
-                                        </ejs-grid>
-                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -795,15 +801,15 @@ if (
                         <!-- CRAWLS Details -->
 
                         <!-- Table -->
-                        <div class="col-lg-12" id="file-viewer">
+                        <div class="col-lg-12">
                             <div class="latest-scan-card">
-                                <div class="result-top">
+                                <!-- <div class="result-top">
                                     <div>
                                         <h5>
                                             <b class="translate" data-key="results">Results: </b> {{ status }}
                                         </h5>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="top-filter">
                                     <div class="filter-box">
                                         <!-- <button class="btn filter-btn">
