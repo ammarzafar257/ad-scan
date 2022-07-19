@@ -295,12 +295,7 @@ nav > ul > li:nth-child(1) {
 #document-counter > div:nth-child(1) > a {  /*show all files link*/
     margin-bottom: 16px;
 }
-#data-row {
-    padding-bottom: 1em;
-    padding-top: 1em;
-    margin-top: 30px;
-    background-color: white;
-}
+
 #new-scan-btn {
     background-color: var(--text-dark-blue);
     font-family: 'Montserrat', sans-serif;

@@ -7,6 +7,7 @@
  * Handels the the dropdown for the users menu
  * @global
  */
+
 function usersDropdown() {
     let userOptions = $(".dropdown-users");
     let userBtn = $("#users-btn")
@@ -24,7 +25,7 @@ function usersDropdown() {
  * Closes the dropdown menus when clicked outside of them
  * @param event
  */
-window.onclick = function (event) {
+window.onclick = function(event) {
     // close the user dropdown menu
     if (!event.target.matches('#users-btn')) {
         let userOptions = $(".dropdown-users");
@@ -47,7 +48,7 @@ if (sessionStorage.getItem('viewStatus') !== null) {
     viewStatus = JSON.parse(sessionStorage.getItem('viewStatus'));
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     if (viewStatus === null) {
         // if coming in from crawls list use that scan instead
         let startingScan = null;
@@ -80,7 +81,7 @@ $(document).ready(function () {
         // Hide the main dashboard if scan is lite
         let proScans = 0;
         let liteScans = 0;
-        for (let i = 0; i < scans.length; i++) {
+        for (let i=0;i<scans.length;i++) {
             // get the number for scantypes
             (scans[i].ScanType === "Lite") ? liteScans++ : proScans++;
         }
@@ -101,16 +102,16 @@ $(document).ready(function () {
             }
         }
         if (liteScans === 0 && scans.length === 1) {
-            function waitForUAList() {
-                if (avgUaList !== null) {
+            function waitForUAList(){
+                if(avgUaList !== null){
                     showScanData(startingScan.starturl, 0);
                     // remove the active link from old spot
-                    for (let i = 0; i < document.querySelector("#sideNav > nav > ul").children.length; i++) {
+                    for (let i=0;i<document.querySelector("#sideNav > nav > ul").children.length;i++) {
                         document.querySelector("#sideNav > nav > ul").children[i].classList.remove("nav-active");
                     }
                     $("#sidenav-0").parent().addClass("nav-active");
                 }
-                else {
+                else{
                     setTimeout(waitForUAList, 100);
                 }
             }
@@ -131,8 +132,8 @@ $(document).ready(function () {
             SwitchOverallDash();
             $("#litescan").hide();
         } else {
-            function waitForUAList() {
-                if (avgUaList !== null) {
+            function waitForUAList(){
+                if(avgUaList !== null){
                     showScanData(viewStatus.url, 0);
                     // show files if needed
                     if (viewStatus.isShowingFiles) {
@@ -147,7 +148,7 @@ $(document).ready(function () {
                         }
                     }
                 }
-                else {
+                else{
                     setTimeout(waitForUAList, 100);
                 }
             }
@@ -163,7 +164,7 @@ $(document).ready(function () {
 function loadFromMaster() {
     // function to wait for avgUaList to not be null, showScanData() fails if it is null, waits on get req to scanAPI.php?action=getAvgUA
     function waitForUAScores() {
-        if (avgUaList !== null) {
+        if(avgUaList !== null) {
             // check to see if came from master.php and if so select that scan
             if (sessionStorage.getItem('fromMaster') !== null) {
                 try {
@@ -177,7 +178,7 @@ function loadFromMaster() {
 
                     // get the index of that crawl in scansHash
                     let index = 0;
-                    for (let i = 0; i < scansHash[clickedCrawl.starturl].length; i++) {
+                    for (let i=0;i<scansHash[clickedCrawl.starturl].length;i++) {
                         if (scansHash[clickedCrawl.starturl][i].ID === clickedCrawl.ID) {
                             index = i;
                             break;
@@ -188,7 +189,7 @@ function loadFromMaster() {
                     showScanData(clickedCrawl.starturl, index);
 
                     // show that has been selected in the menu
-                    for (let i = 0; i < document.querySelector("#sideNav > nav > ul").children.length; i++) {
+                    for (let i=0;i<document.querySelector("#sideNav > nav > ul").children.length;i++) {
                         document.querySelector("#sideNav > nav > ul").children[i].classList.remove("nav-active");
                     }
                     let navItem = $("a:contains('" + clickedCrawl.starturl.split('//')[1] + "')").parent();
@@ -289,7 +290,7 @@ allScanMostRecent.forEach((scan) => {
     recentScanIDs.push(scan.ID);
 });
 let filesNewestScan = files.filter(file => {
-    return recentScanIDs.includes(file.crawl_id);
+    return  recentScanIDs.includes(file.crawl_id);
 });
 
 /**
@@ -299,13 +300,13 @@ let filesNewestScan = files.filter(file => {
 let sideNav = new Vue({
     el: "#sidebar",
     data: {
-        client: client,
+        client:client,
         companyName: client.companyName,
         username: client.firstName + " " + client.lastName,
-        urls: scanURLS,
+        urls : scanURLS
     },
     methods: {
-        clickedDomain(event, url) {
+        clickedDomain(event , url) {
             // show the data for said crawl
             if (url === "Overview") {
                 SwitchOverallDash();
@@ -338,23 +339,23 @@ let dashHeader = new Vue({
  * @type {Vue}
  */
 let overallStatHeader = new Vue({
-    el: "#overall-header",
-    data: {
-        date: allScanByDate[0].crawl_time_end.toISOString().split('T')[0]
+    el : "#overall-header",
+    data : {
+        date : allScanByDate[0].crawl_time_end.toISOString().split('T')[0]
     }
 });
 
 let crawlInfo = new Vue({
-    el: '#crawl-info',
-    data: {
+    el : '#crawl-info',
+    data : {
         ID: null,
         start: "",
         date: null,
         total: 0,
         allUrls: scanURLS,
     },
-    methods: {
-        crawlInfoUpdate: (crawl) => {
+    methods : {
+        crawlInfoUpdate : (crawl) => {
             crawlInfo.ID = crawl.ID;
             crawlInfo.start = crawl.starturl;
             crawlInfo.date = crawl.crawl_time_end.toISOString().split('T')[0];
@@ -376,14 +377,14 @@ let topData = new Vue({
         offsite: overviewStats.offsite,
         errors: overviewStats.errors,
         averageUA: overviewStats.averageUA,
-        scanID: null,
+        scanID : null
     },
-    methods: {
+    methods : {
         /**
          * Changes the files displayed in the file viewer table
          * @param {string} type the type of files to see ('all', 'compliant', 'nonCompliant', 'untagged', 'offsite')
          */
-        showFiles: (type) => {
+        showFiles : (type) => {
             // set the scans in file viewer the desired ones
             switch (type) {
                 case 'compliant':
@@ -416,7 +417,7 @@ let topData = new Vue({
                         return file.UA_Index === null && !file.offsite;
                     });
                     break;
-                case 'all':
+                case 'all' :
                 default:
                     fileViewer.files = files;
                     fileViewer.status = arrLang[currentLang]["allFiles"];
@@ -435,7 +436,6 @@ let topData = new Vue({
     }
 });
 
-
 /**
  * Bottom section of the dash board, has info on all scans
  */
@@ -453,9 +453,9 @@ let worstScanPrecent = Math.round((worstScan.compliant /
  */
 let scanHistoryTable = new Vue({
     el: "#scan-history-table-container",
-    data: {
-        scans: allScanByDate,
-        langLabel: "View Results",
+    data : {
+        scans : allScanByDate,
+        langLabel : "View Results"
     },
     methods: {
         getDate: (scan) => {
@@ -468,7 +468,7 @@ let scanHistoryTable = new Vue({
             // TODO: needs updated
             $("#url-select").val(scan.starturl);
             let index = 0;
-            for (let i = 0; i < scansHash[scan.starturl].length; i++) {
+            for (let i=0;i<scansHash[scan.starturl].length;i++) {
                 if (scansHash[scan.starturl][i].ID === scan.ID) { index = i; }
             }
             showScanData(scan.starturl, index);
@@ -555,24 +555,24 @@ jsonFiles.forEach(file => {
  * @type {Vue}
  */
 let fileViewer = new Vue({
-    el: "#file-viewer",
+    el : "#file-viewer",
     data: {
-        files: filesNewestScan,
-        status: '',
+        files : filesNewestScan,
+        status : '',
         lang: currentLang,
         pageSettings: { pageSize: 15 },
-        selectionOptions: { enableToggle: true, persistSelection: true },
+        selectionOptions: { enableToggle: true, persistSelection: true},
         arrLang: arrLang,
         dateValue: null,
         moddateValue: null,
         endDate: null,
         modEndDate: null,
-        toolbarOptions: ['Search', 'ColumnChooser'],
-        searchOptions: { fields: ['url'] },
+        toolbarOptions: ['Search','ColumnChooser'],
+        searchOptions: {fields: ['url','filename','UA_Index','NumPages','Tagged','Title','Creator','Producer','CreationDate','ModDate','Lang','FileSize','offsite']},
         filterOptions: {
-            type: 'Menu'
+            type: 'menu'
         },
-        filterCheckBox: {
+        filterCheckBox : {
             type: 'CheckBox'
         },
         urlFilter: {
@@ -598,12 +598,12 @@ let fileViewer = new Vue({
                     // dropInstance.value = [...new Set(fileViewer.$refs.grid.getCurrentViewRecords().map(item => item.url.split('/')[0] + "//" +  item.url.split('/')[2]))];
                     setTimeout(() => { dropInstance.showPopup(); }, 40);
                 },
-                read: function (args) {
+                read: function(args) {
                     urlFilterSelections = dropInstance.value;
                     fileViewer.$refs.grid.clearFiltering(['url']);
                     fileViewer.$refs.grid.filterByColumn(args.column.field, "startsWith", dropInstance.value);
                 },
-                update: function () {
+                update: function() {
                     try {
                         dropInstance.dataSource = getDomainsForCrawl(false);
                     } catch (e) {
@@ -618,15 +618,15 @@ let fileViewer = new Vue({
         },
         offsiteFilter: {
             ui: {
-                create: function (args) {
+                create: function(args) {
                     args.getOptrInstance.dropOptr.element.parentElement.parentElement.style.display =
                         "none";
                     let flValInput = document.createElement("input", { className: "flm-input" });
                     args.target.appendChild(flValInput);
-                    offsitedropInstance = new ejs.dropdowns.DropDownList({
+                    offsitedropInstance =  new ejs.dropdowns.DropDownList({
                         dataSource: [
-                            { text: arrLang[currentLang]['yes'], value: 'Yes' },
-                            { text: arrLang[currentLang]['no'], value: 'No' },
+                            {text: arrLang[currentLang]['yes'], value: 'Yes'},
+                            {text: arrLang[currentLang]['no'], value: 'No'},
                         ],
                         fields: { text: "text", value: "value" },
                         popupHeight: '200px',
@@ -636,10 +636,10 @@ let fileViewer = new Vue({
                     offsitedropInstance.appendTo(flValInput);
                     setTimeout(() => { offsitedropInstance.showPopup(); }, 10);
                 },
-                write: function (args) {
+                write: function(args) {
                     offsitedropInstance.value = args.filteredValue;
                 },
-                read: function (args) {
+                read: function(args) {
                     args.fltrObj.filterByColumn(
                         args.column.field,
                         "contains",
@@ -650,16 +650,16 @@ let fileViewer = new Vue({
         },
         taggedFilter: {
             ui: {
-                create: function (args) {
+                create: function(args) {
                     args.getOptrInstance.dropOptr.element.parentElement.parentElement.style.display =
                         "none";
                     let flValInput = document.createElement("input", { className: "flm-input" });
                     args.target.appendChild(flValInput);
-                    taggedDropInstance = new ejs.dropdowns.DropDownList({
+                    taggedDropInstance =  new ejs.dropdowns.DropDownList({
                         dataSource: [
-                            { text: arrLang[currentLang]['yes'], value: 'Yes' },
-                            { text: arrLang[currentLang]['no'], value: 'No' },
-                            { text: arrLang[currentLang]['unknown'], value: 'Unknown' }
+                            {text: arrLang[currentLang]['yes'], value: 'Yes'},
+                            {text: arrLang[currentLang]['no'], value: 'No'},
+                            {text: arrLang[currentLang]['unknown'], value: 'Unknown'}
                         ],
                         fields: { text: "text", value: "value" },
                         popupHeight: '200px',
@@ -669,10 +669,10 @@ let fileViewer = new Vue({
                     taggedDropInstance.appendTo(flValInput);
                     setTimeout(() => { offsitedropInstance.showPopup(); }, 10);
                 },
-                write: function (args) {
+                write: function(args) {
                     taggedDropInstance.value = args.filteredValue;
                 },
-                read: function (args) {
+                read: function(args) {
                     args.fltrObj.filterByColumn(
                         args.column.field,
                         "equal",
@@ -683,7 +683,7 @@ let fileViewer = new Vue({
         },
         createdDateFilter: {
             ui: {
-                create: function (args) {
+                create: function(args) {
                     args.getOptrInstance.dropOptr.element.parentElement.parentElement.style.display =
                         "none";
                     let isFiltered = event.target.classList.contains("e-filtered");
@@ -693,8 +693,8 @@ let fileViewer = new Vue({
                     createDateInstance = new ejs.calendars.DateRangePicker({
                         value: isFiltered ? fileViewer.dateValue : null,
                         openOnFocus: true,
-                        locale: fileViewer.lang,
-                        change: function (e) {
+                        locale : fileViewer.lang,
+                        change: function(e) {
                             fileViewer.dateValue = e.value;
                             let grid = fileViewer.$refs.grid;
                             if (e.value) {
@@ -714,7 +714,7 @@ let fileViewer = new Vue({
         },
         modDateFilter: {
             ui: {
-                create: function (args) {
+                create: function(args) {
                     args.getOptrInstance.dropOptr.element.parentElement.parentElement.style.display =
                         "none";
                     let isFiltered = event.target.classList.contains("e-filtered");
@@ -724,8 +724,8 @@ let fileViewer = new Vue({
                     modDateInstance = new ejs.calendars.DateRangePicker({
                         value: isFiltered ? fileViewer.dateValue : null,
                         openOnFocus: true,
-                        locale: fileViewer.lang,
-                        change: function (e) {
+                        locale : fileViewer.lang,
+                        change: function(e) {
                             fileViewer.moddateValue = e.value;
                             let grid = fileViewer.$refs.grid;
                             if (e.value) {
@@ -747,7 +747,7 @@ let fileViewer = new Vue({
             type: 'date',
             format: 'yyyy/MM/dd'
         },
-        uaTemplate: function () {
+        uaTemplate: function() {
             return {
                 template: Vue.component("columntemplate", {
                     template: '<div v-if="data.UA_Index === null">---</div>\n' +
@@ -755,7 +755,7 @@ let fileViewer = new Vue({
                 })
             }
         },
-        nameTemplate: function () {
+        nameTemplate: function() {
             return {
                 template: Vue.component("columntemplate", {
                     template: '<div><a v-bind:href="\'fileview.php?id=\' + data.ID" >{{ data.filename }}</a></div>'
@@ -849,15 +849,15 @@ let fileViewer = new Vue({
             setTimeout(() => {
                 $(".translate[data-key='yes']").each((index) => {
                     let elem = $($(".translate[data-key='yes']")[index]);
-                    elem.text(arrLang[currentLang][elem.attr('data-key')]);
+                    elem.text( arrLang[currentLang][elem.attr('data-key')] );
                 });
                 $(".translate[data-key='no']").each((index) => {
                     let elem = $($(".translate[data-key='no']")[index]);
-                    elem.text(arrLang[currentLang][elem.attr('data-key')]);
+                    elem.text( arrLang[currentLang][elem.attr('data-key')] );
                 });
                 $(".translate[data-key='unknown']").each((index) => {
                     let elem = $($(".translate[data-key='unknown']")[index]);
-                    elem.text(arrLang[currentLang][elem.attr('data-key')]);
+                    elem.text( arrLang[currentLang][elem.attr('data-key')] );
                 });
                 // when the columns change, resize the top scroll bar
                 if (args.requestType === "columnstate" && args.name === "actionBegin") {
@@ -868,7 +868,7 @@ let fileViewer = new Vue({
         /**
          * This function adds a tooltip over any header that overflows its bounds
          */
-        headerCellInfoEvent: function (args) {
+        headerCellInfoEvent: function(args) {
             try {
                 // wait 200 milliseconds so table has time to populate, needed to function
                 setTimeout(() => {
@@ -907,13 +907,13 @@ let fileViewer = new Vue({
          * @param args
          * @see headerCellInfoEvent
          */
-        resizeColumn: function (args) {
+        resizeColumn: function(args) {
             // get the column being resized
             let columnName = args.column.headerText;
             let columnIndex = args.column.index;
             let columnHeader = fileViewer.$refs.grid.getColumnHeaderByIndex(columnIndex);
             // Run headerCellInfoEvent() to add the tooltip
-            this.headerCellInfoEvent({ node: columnHeader, cell: { column: { headerText: columnName } } });
+            this.headerCellInfoEvent({ node: columnHeader, cell : { column: { headerText: columnName } } });
             // resize the top scroll bar if needed
             resizeScrollPro();
         },
@@ -1021,10 +1021,10 @@ function showScanData(url, index) {
     let newfiles = [];
     let filesReq = new XMLHttpRequest()
     filesReq.open("GET", "scanAPI.php?action=getFiles&crawl=" + thisScan.ID, true);
-    filesReq.onreadystatechange = function () {
+    filesReq.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             newfiles = JSON.parse(this.responseText);
-            for (let i = 0; i < newfiles.length; i++) {
+            for (let i=0;i<newfiles.length;i++) {
                 // update the UA index to be a float
                 if (newfiles[i].UA_Index !== null) {
                     newfiles[i].UA_Index = parseFloat(newfiles[i].UA_Index);
@@ -1045,7 +1045,7 @@ function showScanData(url, index) {
             }
             files = newfiles;
 
-            switch (viewStatus.fileCategory) {
+            switch(viewStatus.fileCategory) {
                 case 'compliant':
                 case 'nonCompliant':
                 case 'untagged':
@@ -1106,21 +1106,20 @@ function showScanData(url, index) {
     // have the scan history change to  so show scans under that url
     scanHistoryTable.scans = scansHash[url];
     sessionStorage.setItem('scanHistoryPage', JSON.stringify(scansHash[url]));
-
     // update the compliance history chart
     let scansCount = scansHash[url].length
     let compliantBar = [];
-    let non_compliantBar = [];
-    let untaggedBar = [];
-    let labels = [];
-    for (let i = 0; i < scansCount; i++) {
+    let non_compliantBar=[];
+    let untaggedBar=[];
+    let labels=[];
+    for (let i=0;i<scansCount;i++) {
         if (i === 4) {  // stop and 4 most recent scans
             break;
         }
         let total = scansHash[url][i].compliant + scansHash[url][i].nonCompliant + scansHash[url][i].untagged;
-        compliantBar.unshift(parseFloat((scansHash[url][i].compliant / total) * 100).toFixed(2));
-        non_compliantBar.unshift(parseFloat((scansHash[url][i].nonCompliant / total) * 100).toFixed(2))
-        untaggedBar.unshift(parseFloat((scansHash[url][i].untagged / total) * 100).toFixed(2))
+        compliantBar.unshift(parseFloat((scansHash[url][i].compliant / total)*100).toFixed(2));
+        non_compliantBar.unshift(parseFloat((scansHash[url][i].nonCompliant / total)*100).toFixed(2))
+        untaggedBar.unshift(parseFloat((scansHash[url][i].untagged / total)*100).toFixed(2))
         labels.unshift(scansHash[url][i].crawl_time_end.toISOString().split('T')[0]);
     }
     historyChart.data.datasets[0].data = untaggedBar;
@@ -1147,7 +1146,7 @@ let liteScan = new Vue({
         pageSettings: {
             pageSize: 50
         },
-        uaTemplate: function () {
+        uaTemplate: function() {
             return {
                 template: Vue.component("columntemplate", {
                     template: '<div v-if="data.UA_Index === null">---</div>\n' +
@@ -1155,7 +1154,7 @@ let liteScan = new Vue({
                 })
             }
         },
-        filenameTemplate: function () {
+        filenameTemplate: function() {
             return {
                 template: Vue.component("columntemplate", {
                     template: '<div v-if="data.UA_Index === null || data.UA_Index === \'NaN\'"><span class="error">&#9888;</span> {{ data.filename }}</div>\n' +
@@ -1163,7 +1162,7 @@ let liteScan = new Vue({
                 })
             }
         },
-        taggedTemplate: function () {
+        taggedTemplate: function() {
             return {
                 template: Vue.component("columntemplate", {
                     template: '<div v-if="data.Tagged === \'Unknown\'" class="translate" data-key="unknown"></div>\n' +
@@ -1178,15 +1177,15 @@ let liteScan = new Vue({
             setTimeout(() => {
                 $(".translate[data-key='yes']").each((index) => {
                     let elem = $($(".translate[data-key='yes']")[index]);
-                    elem.text(arrLang[currentLang][elem.attr('data-key')]);
+                    elem.text( arrLang[currentLang][elem.attr('data-key')] );
                 });
                 $(".translate[data-key='no']").each((index) => {
                     let elem = $($(".translate[data-key='no']")[index]);
-                    elem.text(arrLang[currentLang][elem.attr('data-key')]);
+                    elem.text( arrLang[currentLang][elem.attr('data-key')] );
                 });
                 $(".translate[data-key='unknown']").each((index) => {
                     let elem = $($(".translate[data-key='unknown']")[index]);
-                    elem.text(arrLang[currentLang][elem.attr('data-key')]);
+                    elem.text( arrLang[currentLang][elem.attr('data-key')] );
                 });
             }, 50)
         }
@@ -1216,10 +1215,10 @@ function showLiteScan(url, index) {
     let filesLite = [];
     let filesReqLite = new XMLHttpRequest()
     filesReqLite.open("GET", "scanAPI.php?action=getFilesForLite&crawl=" + thisScan.ID, true);
-    filesReqLite.onreadystatechange = function () {
+    filesReqLite.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             filesLite = JSON.parse(this.responseText);
-            for (let i = 0; i < filesLite.length; i++) {
+            for (let i=0; i<filesLite.length;i++) {
                 // update the tagged value to have its string value
                 if (filesLite[i].offsite || filesLite[i].UA_Index === null) {
                     filesLite[i].Tagged = "Unknown";
@@ -1334,7 +1333,7 @@ function SwitchOverallDash() {
  * Gets the overall stats for the client
  */
 function getOverviewStats() {
-    for (let i = 0; i < allScanMostRecent.length; i++) {
+    for (let i=0;i<allScanMostRecent.length;i++) {
         overviewStats.compliant += allScanMostRecent[i].compliant;
         overviewStats.nonCompliant += allScanMostRecent[i].nonCompliant;
         overviewStats.untagged += allScanMostRecent[i].untagged;
@@ -1349,7 +1348,7 @@ function getAverageUAforCrawls() {
         // if we don't know the scores, go get them
         let uaGetReq = new XMLHttpRequest();
         uaGetReq.open('GET', 'scanAPI.php?action=getAvgUA&id=' + client.clientId, true)
-        uaGetReq.onreadystatechange = function () {
+        uaGetReq.onreadystatechange = function() {
             if (this.readyState === 4 && this.status !== 200) {
                 console.error("Average UA scores for crawls couldn't be found. HTTP Status: " + this.status);
                 avgUaList = [];
@@ -1381,7 +1380,7 @@ function uaListCallback(avgUaList) {
     topData.averageUA = overviewStats.averageUA;
 
     // find the best and worst scans
-    for (let i = 0; i < allScanMostRecent.length; i++) {
+    for (let i=0;i<allScanMostRecent.length;i++) {
         // check if best scan
         if (getAvgUaForCrawl(allScanMostRecent[i].ID) > getAvgUaForCrawl(bestScan.ID)) {
             bestScan = allScanMostRecent[i];
@@ -1400,16 +1399,16 @@ function uaListCallback(avgUaList) {
         el: "#preformance-ranges",
         data: {
             overallStats: overviewStats,
-            bestScanURL: bestScan.starturl.split("/")[2],
+            bestScanURL : bestScan.starturl.split("/")[2],
             bestScanPreformance: bestScanPrecent,
-            bestScanUA: getAvgUaForCrawl(bestScan.ID),
+            bestScanUA:  getAvgUaForCrawl(bestScan.ID),
             bestScanComp: bestScan.compliant,
             bestScanNonComp: bestScan.nonCompliant,
             bestScanUntagged: bestScan.untagged,
             bestScanOffsite: bestScan.offsite,
-            worstScanURL: worstScan.starturl.split("/")[2],
+            worstScanURL : worstScan.starturl.split("/")[2],
             worstScanPreformance: worstScanPrecent,
-            worstScanUA: getAvgUaForCrawl(worstScan.ID),
+            worstScanUA:  getAvgUaForCrawl(worstScan.ID),
             worstScanComp: worstScan.compliant,
             worstScanNonComp: worstScan.nonCompliant,
             worstScanUntagged: worstScan.untagged,
@@ -1459,7 +1458,7 @@ function showOverallHistory() {
     if (months > 12) {
         months = 12;
     }
-    for (let i = 0; i < months; i++) {
+    for (let i=0;i<months;i++) {
         // get date
         let date = new Date();
         date.setMonth((date.getMonth() + 1) - (months - i));
@@ -1489,9 +1488,9 @@ function showOverallHistory() {
             stats.total = stats.compliant + stats.nonCompliant + stats.untagged;
         });
         // convert to percentages
-        stats.compliant = ((stats.compliant / stats.total) * 100).toFixed(3)
-        stats.nonCompliant = ((stats.nonCompliant / stats.total) * 100).toFixed(3)
-        stats.untagged = ((stats.untagged / stats.total) * 100).toFixed(3)
+        stats.compliant =  ((stats.compliant / stats.total) * 100).toFixed(3)
+        stats.nonCompliant =  ((stats.nonCompliant / stats.total) * 100).toFixed(3)
+        stats.untagged =  ((stats.untagged / stats.total) * 100).toFixed(3)
         // add to array
         if (stats.total !== 0) {
             statsByMonth.push(stats);
@@ -1499,9 +1498,9 @@ function showOverallHistory() {
     }
     // update the bar graph
     let compliantBar = [];
-    let non_compliantBar = [];
-    let untaggedBar = [];
-    let labels = [];
+    let non_compliantBar=[];
+    let untaggedBar=[];
+    let labels=[];
     statsByMonth.forEach(stat => {
         compliantBar.push(stat.compliant);
         non_compliantBar.push(stat.nonCompliant);
@@ -1567,15 +1566,23 @@ function resizeScrollPro() {
         $('#top-scroll-pro').css('width', tableWidth + 16); // 16 for 1em of spacing
         // set the listeners for scrolling if needed
         if (!listenersSet) {
-            outerScroll.onscroll = function () {
+            outerScroll.onscroll = function() {
                 filesTablePro.scrollLeft = outerScroll.scrollLeft;
             }
-            filesTablePro.onscroll = function () {
+            filesTablePro.onscroll = function() {
                 outerScroll.scrollLeft = filesTablePro.scrollLeft;
             }
             listenersSet = true;
         }
     }, 500);
+}
+
+function logout() {
+    window.location.href = "login/login.php";
+}
+
+function backToAdmin() {
+    window.location.href = "master.php"
 }
 
 /**
@@ -1585,7 +1592,3 @@ function resizeScrollPro() {
 let avgUaList = null
 
 getAverageUAforCrawls();
-
-function logout() {
-    window.location.href = "login/login.php";
-}
