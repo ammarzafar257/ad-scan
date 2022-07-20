@@ -932,6 +932,10 @@ html {
   overflow-y: scroll !important;
 }
 
+.sidebar-container{
+  padding: 0px
+}
+
 
 div.e-gridheader.e-lib.e-droppable > div > table > thead > tr.e-columnheader > th{ /* Dark theme for the headers */
   background-color: var(--lily-white);
