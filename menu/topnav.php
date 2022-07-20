@@ -8,19 +8,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ADScan</title>
 
-    <!-- Recently Added Start -->
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Our Custom CSS -->
 
     <link rel="stylesheet" href="css/sidebar/style.css">
 
     <!-- Font Awesome JS -->
     <link media="all" type="text/css" rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
-
-    <!-- Recently Added End -->
 
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
 
@@ -38,7 +34,6 @@
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- production version, optimized for size and speed -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>-->
 
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
@@ -69,46 +64,33 @@
 </head>
 
 <body>
-    <div class="top-nav" id="main-app-header">
-        <div class="topbar">
-            <img src="images/esbjerg.png" alt="">
-            <div class="dropdown">
-                <div class=" dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Esbjerg.dk
-                </div>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+<div class="top-nav" id="main-app-header">
+    <nav class="navbar navbar-expand-lg navbar-light ">
+        <div class="container-fluid">
+            <a class="navbar-brand translate" href="#" id="pageTitle" data-key="mainDashboard">Main dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link translate" id="main-dashboard" aria-current="page" data-key="mainDashboard" href="index.php">Main dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link translate" href="scanhistory.php" data-key="scanHist" id="scan-history">Scan history
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link translate" data-key="help" href="#">Help</a>
+                    </li>
+                    <li class="nav-item"  onclick="logout()">
+                        <a class="nav-link translate" data-key="logout" href="#">Logout</a>
+                    </li>
                 </ul>
             </div>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light ">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#" id="pageTitle">Main Dashboard</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" id="main-dashboard" aria-current="page" href="index.php">Main Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="scanhistory.php" id="scan-history">Scan History
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Help</a>
-                        </li>
-                        <li class="nav-item" onclick="logout()">
-                            <a class="nav-link" href="#">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
+    </nav>
+</div>
 </body>
 
 </html>

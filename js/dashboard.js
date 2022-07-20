@@ -74,8 +74,7 @@ $(document).ready(function() {
 
         // show the dashboard if Pro scan is first
         if (viewStatus.isPro) {
-            $(".dash-card").show();
-            $("aside").show();
+            $(".details").show();
         }
 
         // Hide the main dashboard if scan is lite
@@ -1006,8 +1005,7 @@ function showScanData(url, index) {
     changeViewStatus('url', url);
 
     // ensure the scans are shown again
-    $(".dash-card").show();
-    $("aside").show();
+    $(".details").show();
     $("#litescan").hide();
 
     // hide all showfiles links
@@ -1201,8 +1199,7 @@ let liteScan = new Vue({
  */
 function showLiteScan(url, index) {
     // hide the dashboard
-    $(".dash-card").hide();
-    $("aside").hide();
+    $("#proscan").hide();
     $("#litescan").show();
 
     // get the current showScan
@@ -1283,8 +1280,7 @@ function showLiteScan(url, index) {
 function SwitchOverallDash() {
 
     // make sure dash is showing
-    $(".dash-card").show();
-    $("aside").show();
+    $(".details").show();
 
     // select overview in url-selector
     $("#url-select").val("Overview");
