@@ -1,10 +1,5 @@
 h1, h2, h3, h4, h5, h6, p, a, span, b, small, strong {
-  font-family: roboto;
-}
-
-:root {
-  --blue-button-colortop-area: #e6efff;
-  --text-color-black: #000000;
+  font-family: var(--font-family-roboto);
 }
 
 textarea {
@@ -32,11 +27,11 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: white;
+  background: var(--white);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #707070;
+  background: var(--dove-gray);
 }
 
 .main-dash-card {
@@ -46,21 +41,21 @@ html {
 .main-dash-card .card-top {
   padding: 20px;
   min-height: 150px;
-  background-color: #e6efff;
+  background-color: var(--lily-white);
   width: 100%;
   border-radius: 8px 8px 0px 0px;
-  border: 1px solid #bac6da;
+  border: 1px solid var(--blue-haze);
   border-bottom: none;
 }
 
 .main-dash-card .card-top .details h5 {
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   font-weight: bold;
   margin-bottom: 15px;
 }
 
 .main-dash-card .card-top .details h6 {
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   font-weight: normal;
 }
 
@@ -68,7 +63,7 @@ html {
   position: relative;
   height: 45px;
   cursor: pointer;
-  background-color: white !important;
+  background-color: var(--white) !important;
   border-radius: 4px;
 }
 
@@ -82,7 +77,7 @@ html {
   z-index: 1 !important;
   background-color: transparent;
   border-radius: 4px;
-  border: 1px solid #7088b3 !important;
+  border: 1px solid var(--wild-blue-yonder) !important;
 }
 
 .main-dash-card .card-top .show-urls .dropdoen-btn {
@@ -91,14 +86,14 @@ html {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  border: 1px solid #707070;
+  border: 1px solid var(--dove-gray);
   border-radius: 0px 4px 4px 0px;
   cursor: pointer;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
   z-index: 0;
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
@@ -109,13 +104,13 @@ html {
 }
 
 .main-dash-card .card-top .show-urls .dropdoen-btn .fa {
-  font-size: 12px;
+  font-size: var(--font-size-xxs);
   margin-left: 8px;
 }
 
 .main-dash-card .result-section {
   padding: 20px 20px 20px;
-  border: 1px solid #bac6da;
+  border: 1px solid var(--blue-haze);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top: none;
@@ -136,7 +131,7 @@ html {
 }
 
 .main-dash-card .result-section .result-top h5 {
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   font-weight: normal;
 }
 
@@ -152,8 +147,8 @@ html {
   height: 34px;
   width: 155px;
   border: 1px solid #8d8d8d;
-  background-color: #ffffff;
-  font-size: 14px;
+  background-color: var(--white);
+  font-size: var(--font-size-xs);
   padding: 0px;
 }
 
@@ -187,7 +182,7 @@ html {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  color: #000000;
+  color: var(--black);
 }
 
 .main-dash-card .result-section .content h5 .dott {
@@ -195,11 +190,11 @@ html {
   width: 15px;
   margin-right: 5px;
   border-radius: 100px;
-  background-color: white;
+  background-color: var(--white);
 }
 
 .main-dash-card .result-section .content h1 {
-  font-size: 24px !important;
+  font-size: var(--font-size-xxl) !important;
   margin: 5px 0px 15px;
   font-weight: 800;
 }
@@ -207,12 +202,12 @@ html {
 .main-dash-card .result-section .content .btn {
   height: 25px;
   width: 70px !important;
-  font-size: 12px;
+  font-size: var(--font-size-xxs);
   text-align: center;
   border-radius: 100px;
   padding: 0px !important;
-  border: 1px solid #538cf4 !important;
-  background-color: #e6efff !important;
+  border: 1px solid var(--blueberry) !important;
+  background-color: var(--lily-white) !important;
 }
 
 .main-dash-card .result-section .graph {
@@ -236,7 +231,7 @@ html {
   padding: 20px;
   width: 100%;
   border-radius: 8px;
-  border: 1px solid #bac6da;
+  border: 1px solid var(--blue-haze);
 }
 
 .main-dash-card .result-section .Compliant {
@@ -254,7 +249,7 @@ html {
   width: 100%;
   border-radius: 8px;
   border: 1px solid #fcc4e2;
-  background-color: #fff2f9;
+  background-color: var(--fail-background);
 }
 
 .main-dash-card .result-section .result-footer {
@@ -263,7 +258,7 @@ html {
 
 .main-dash-card .result-section .result-footer a {
   text-align: center;
-  font-size: 14px;
+  font-size: var(--font-size-xs);
 }
 
 .main-dash-card .result-section .result-footer .footer-link {
@@ -288,7 +283,7 @@ html {
 
 .main-dash-card .result-section .footer-groth .f-content h5 {
   font-weight: 400;
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   font-weight: lighter;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -296,7 +291,7 @@ html {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  color: #000000;
+  color: var(--black);
 }
 
 .main-dash-card .result-section .footer-groth .f-content h5 .dott {
@@ -304,7 +299,7 @@ html {
   width: 15px;
   margin-right: 10px;
   border-radius: 100px;
-  background-color: white;
+  background-color: var(--white);
 }
 
 .main-dash-card .result-section .footer-groth .f-content h5 b {
@@ -317,7 +312,7 @@ html {
   margin-bottom: 20px;
   width: 100%;
   min-height: 300px;
-  border: 1px solid #bac6da;
+  border: 1px solid var(--blue-haze);
 }
 
 .Compliance-card .result-top {
@@ -335,7 +330,7 @@ html {
 }
 
 .Compliance-card .result-top h5 {
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   font-weight: normal;
 }
 
@@ -351,8 +346,8 @@ html {
   height: 34px;
   width: 155px;
   border: 1px solid #8d8d8d;
-  background-color: #ffffff;
-  font-size: 14px;
+  background-color: var(--white);
+  font-size: var(--font-size-xs);
   padding: 0px;
 }
 
@@ -366,7 +361,7 @@ html {
 
 .Compliance-card .result-footer a {
   text-align: center;
-  font-size: 14px;
+  font-size: var(--font-size-xs);
 }
 
 .Compliance-card .result-footer .footer-link {
@@ -391,7 +386,7 @@ html {
 
 .Compliance-card .footer-groth .f-content h5 {
   font-weight: 400;
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   font-weight: lighter;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -399,7 +394,7 @@ html {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  color: #000000;
+  color: var(--black);
 }
 
 .Compliance-card .footer-groth .f-content h5 .dott {
@@ -407,7 +402,7 @@ html {
   width: 15px;
   margin-right: 10px;
   border-radius: 100px;
-  background-color: white;
+  background-color: var(--white);
 }
 
 .Compliance-card .footer-groth .f-content h5 b {
@@ -434,7 +429,7 @@ html {
   margin-bottom: 30px;
   width: 100%;
   min-height: 300px;
-  border: 1px solid #bac6da;
+  border: 1px solid var(--blue-haze);
 }
 
 .latest-scan-card .result-top {
@@ -452,7 +447,7 @@ html {
 }
 
 .latest-scan-card .result-top h5 {
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   font-weight: normal;
 }
 
@@ -480,7 +475,7 @@ html {
 }
 
 .latest-scan-card .table-box tr:hover {
-  background-color: #e6efff;
+  background-color: var(--lily-white);
 }
 
 /*# sourceMappingURL=style.css.map */
@@ -501,9 +496,9 @@ html {
 .latest-scan-card .filter-btn {
   height: 34px;
   padding: 0px 8px;
-  border: 1px solid #7088b3;
-  background-color: #ffffff;
-  font-size: 14px;
+  border: 1px solid var(--wild-blue-yonder);
+  background-color: var(--white);
+  font-size: var(--font-size-xs);
 }
 
 .latest-scan-card .filter-btn .fa {
@@ -514,8 +509,8 @@ html {
   height: 34px;
   padding: 0px 8px;
   margin-left: 10px;
-  font-size: 14px;
-  background-color: #e6efff;
+  font-size: var(--font-size-xs);
+  background-color: var(--lily-white);
 }
 
 .latest-scan-card .pills-btn .fa {
@@ -525,9 +520,9 @@ html {
 .latest-scan-card .btn-export {
   height: 34px;
   padding: 0px 8px;
-  border: 1px solid #7088b3;
-  background-color: #ffffff;
-  font-size: 14px;
+  border: 1px solid var(--wild-blue-yonder);
+  background-color: var(--white);
+  font-size: var(--font-size-xs);
 }
 
 .latest-scan-card .btn-export .fa {
@@ -549,10 +544,10 @@ html {
 
 
 div.e-gridheader.e-lib.e-droppable > div > table > thead > tr.e-columnheader > th{ /* Dark theme for the headers */
-  background-color: var(--blue-button-colortop-area);
+  background-color: var(--lily-white);
 }
 .e-grid .e-headertext { /* Makes the headers in the grid more readable */
-  color: var(--text-color-black) !important;
+  color: var(--black) !important;
   font-weight: 500 !important;
   line-height: 31px;
 }

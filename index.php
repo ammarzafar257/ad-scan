@@ -27,8 +27,8 @@ if (
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <link rel="stylesheet" href="css/sidebar/style.css">
-    <link rel="stylesheet" href="css/main-dashboard/style.css">
-    <link rel="stylesheet" href="css/dash.css">
+    <link rel="stylesheet" href="css/styleguide.css">
+    <!-- <link rel="stylesheet" href="css/dash.css"> -->
 
     <!-- Font Awesome JS -->
     <link media="all" type="text/css" rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
