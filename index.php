@@ -28,7 +28,7 @@ if (
 
     <link rel="stylesheet" href="css/sidebar/style.css">
     <link rel="stylesheet" href="css/styleguide.css">
-    <!-- <link rel="stylesheet" href="css/dash.css"> -->
+    <link rel="stylesheet" href="css/dash.css">
 
     <!-- Font Awesome JS -->
     <link media="all" type="text/css" rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
@@ -64,10 +64,12 @@ if (
     echo '<script>';
     // check if lang is set in a cookie
     if (isset($_COOKIE['lang'])) {
-        echo "let currentLang = '" . $_COOKIE["lang"] . "';";
-    } elseif (isset($_SESSION["lang"])) {  // if not use the lang set in the profile
-        echo "let currentLang = '" . $_SESSION["lang"] . "';";
-    } else {
+        echo "let currentLang = '". $_COOKIE["lang"] ."';";
+    }
+    elseif (isset($_SESSION["lang"])) {  // if not use the lang set in the profile
+        echo "let currentLang = '". $_SESSION["lang"] ."';";
+    }
+    else {
         // if lang cant be found in a cookie or session use the system default, english if that fails
         echo "let currentLang = 'en' // default
                     try {
@@ -142,7 +144,7 @@ if (
         let scanHistory = [];
 
         // go through every scan
-        for (let i = 0; i < scans.length; i++) {
+        for (let i=0;i<scans.length;i++) {
             // convert the startdate into and actual date
 
             let date = new Date();
@@ -165,15 +167,15 @@ if (
         }
 
         // sort the scan by their date
-        let allScanByDate = scans.sort((a, b) => (a.crawl_time_end < b.crawl_time_end) ? 1 :
+        let allScanByDate = scans.sort((a,b) => (a.crawl_time_end < b.crawl_time_end) ? 1 :
             ((b.crawl_time_end < a.crawl_time_end) ? -1 : 0));
 
         // go through each scan
-        for (let i = 0; i < scanURLS.length; i++) {
+        for (let i=0;i<scanURLS.length;i++) {
             // sort the url the have multiple scans by crawl end time in DESC order
             // Note: they should already come in order, this is just in case
-            if (Object.keys(scansHash[scanURLS[i]]).length > 1) {
-                scansHash[scanURLS[i]].sort((a, b) =>
+            if ( Object.keys(scansHash[scanURLS[i]]).length > 1 ) {
+                scansHash[scanURLS[i]].sort((a,b) =>
                     (a.crawl_time_end < b.crawl_time_end) ? 1 : ((b.crawl_time_end < a.crawl_time_end) ? -1 : 0));
             }
             // add the most recent scan to allScanMostRecent
@@ -188,16 +190,15 @@ if (
         let files = [];
     </script>
     <script id="charts">
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             let scanResultChart = document.querySelector("#scan-result-chart").getContext('2d');
 
             // colours for the charts w/ patter
-
-            let untaggedColor = "#55afc7";
-            let taggedColor = "#ba0068";
-            let compliantColor = "#00568e";
-
+            let untaggedColor = "#34a2b7";
+            let taggedColor = "#d31b79";
+            let compliantColor = "#1c6ba1";
+            
             resChart = new Chart(scanResultChart, {
                 type: 'doughnut',
                 data: {
@@ -222,23 +223,24 @@ if (
             historyChart = new Chart(compHistoryChart, {
                 type: 'bar',
                 data: {
-                    datasets: [{
+                    datasets: [
+                        {
                             label: "Untagged",
-                            data: [],
+                            data : [],
                             order: 1,
                             backgroundColor: untaggedColor,
                             borderColor: graphBorder
                         },
                         {
                             label: "Non-Compliant",
-                            data: [],
+                            data : [],
                             order: 2,
                             backgroundColor: taggedColor,
                             borderColor: graphBorder
                         },
                         {
                             label: "Compliant",
-                            data: [],
+                            data : [],
                             order: 3,
                             backgroundColor: compliantColor,
                             borderColor: graphBorder
@@ -262,7 +264,7 @@ if (
                         }],
                         xAxes: [{
                             stacked: true,
-                            ticks: {
+                            ticks : {
                                 fontColor: 'black'
                             }
                         }]
@@ -289,30 +291,29 @@ if (
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-1 sidebar-container">
-                <div class="sidenav">
-                    <div class=" wrapper">
-                        <!-- Sidebar  -->
-                        <?php
-                        include 'menu/sidebar.php';
-                        ?>
-                    </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-1 sidebar-container">
+            <div class="sidenav">
+                <div class=" wrapper">
+                    <!-- Sidebar  -->
+                    <?php
+                    include 'menu/sidebar.php';
+                    ?>
                 </div>
             </div>
+        </div>
 
-            <!-- Main Content -->
-            <div class="col-lg-11">
-                <?php
-                include 'menu/topnav.php';
-                ?>
+        <!-- Main Content -->
+        <div class="col-lg-11">
+            <?php
+            include 'menu/topnav.php';
+            ?>
 
-                <!-- ProScan Start -->
-                <div class="container" id="proscan">
-                    <div class="row">
-                        <!-- CRAWLS Details -->
-                        <div class="col-lg-12">
+            <!-- Pro Scan Start -->
+            <main id="proscan">
+                <div class="row">
+                <div class="col-lg-12">
                             <div class="main-dash-card">
                                 <div class="card-top">
                                     <div class="row">
@@ -330,14 +331,14 @@ if (
                                                 </h6>
                                             </div>
                                         </div>
-                                        <div class="col-lg-8">
+                                        <div class="col-lg-8" id="search-result-for">
                                             <br>
                                             <h5>
                                                 Search results for:
                                             </h5>
                                             <div class="show-urls">
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">xn--brnepasning-ggb.esbjerg.dk</option>
+                                                <select name="searchResult" id="searchResult" aria-label="search result" class="form-control">
+                                                    <option v-for="(url, index) in urls" value="url">{{ url.split("//")[1] }}</option>
                                                 </select>
                                                 <div class="dropdoen-btn">
                                                     Show all URL'S
@@ -389,7 +390,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#00568E;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-blue);">
                                                                         </div>
                                                                         <span class="translate" data-key="compliant">
                                                                             Compliant
@@ -406,7 +407,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#BA0068;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-hot-pink);">
                                                                         </div>
                                                                         <span class="translate" data-key="nonComp">
                                                                             Non-Compliant
@@ -423,7 +424,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#55AFC7;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-turquoise);">
                                                                         </div>
                                                                         <span class="translate" data-key="untagged">
                                                                             Untagged
@@ -462,7 +463,7 @@ if (
                                                                         File Errors
                                                                     </h5>
                                                                     <h1>
-                                                                        {{ errors }}
+                                                                        {{ errors ? errors : 0 }}
                                                                     </h1>
                                                                     <button class="translate btn" id="showerrorfiles" data-key="showFiles" @click="showFiles('errors')">
                                                                         Show Files
@@ -488,20 +489,20 @@ if (
                                                 <div class="footer-groth">
                                                     <div class="f-content">
                                                         <h5>
-                                                            <div class="dott" style="background-color:#00568E;"></div>
-                                                            <span class="translate" data-key="compliant">Compliant</span> <!-- <b>48%</b> -->
+                                                            <div class="dott" style="background-color:var(--abledocs-blue);"></div>
+                                                            <span class="translate" data-key="compliant">Compliant</span>
                                                         </h5>
                                                     </div>
                                                     <div class="f-content">
                                                         <h5>
-                                                            <div class="dott" style="background-color:#BA0068;"></div>
-                                                            <span class="translate" data-key="nonComp">Non-Compliant</span> <!-- <b>23%</b> -->
+                                                            <div class="dott" style="background-color:var(--abledocs-hot-pink);"></div>
+                                                            <span class="translate" data-key="nonComp">Non-Compliant</span>
                                                         </h5>
                                                     </div>
                                                     <div class="f-content">
                                                         <h5>
-                                                            <div class="dott" style="background-color:#55AFC7;"></div>
-                                                            <span class="translate" data-key="untagged">Untagged</span> <!-- <b>39%</b> -->
+                                                            <div class="dott" style="background-color:var(--abledocs-turquoise);"></div>
+                                                            <span class="translate" data-key="untagged">Untagged</span>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -511,242 +512,215 @@ if (
                                 </div>
                             </div>
                         </div>
-                        <!-- CRAWLS Details -->
+                </div>
+                <div id="bottom-data-section" class="row">
+                    <div id="history-graph-container" class="col-md-7">
+                        <!-- compliance history graph -->
+                        <div class="dash-card">
+                            <div class="row content-header">
+                                <p class="translate" data-key="compHistory">Compliance History</p><span id="historyGraphURL"></span>
+                            </div>
+                            <canvas id="comp-history-chart"></canvas>
+                        </div>
+                    </div>
+                    <div id="bottom-data-right-side" class="col-md-5">
+                        <div class="row">
+                            <!-- performance ranges -->
+                            <div id="preformance-ranges" style="width: 100%;" class="dash-card">
+                                <div style="width:100%" class="content-header">
+                                    <p class="translate" data-key="prefRange">Performance Ranges</p>
+                                </div>
+                                <div class="row" id="performers-data">
+                                    <div class="col-6">
+                                        <p style="text-decoration: underline;font-weight: bold" class="translate" data-key="bestPref">Best Performer</p>
+                                        <p tabindex="0" v-on:click="showThisScan(true)" style="color: #6161FF;cursor: pointer;">{{ bestScanURL }}</p>
+                                        <br />
 
-                        <!-- Table -->
-                        <div class="col-lg-12" id="file-viewer">
-                            <div class="latest-scan-card">
-                                <div class="result-top">
-                                    <div>
-                                        <h5>
-                                            <b class="translate" data-key="results">Results: </b>{{ status }}
-                                        </h5>
+                                        <p v-if="bestScanUA !== null" style="font-weight: bold"><span class="translate" data-key="index">Index</span>: {{ bestScanUA }}</p>
+                                        <p v-else style="font-weight: bold"><span class="translate" data-key="index">Index</span>: 0</p>
+
+                                        <p><span class="translate" data-key="compliant">Compliant</span>: {{ bestScanComp }}</p>
+                                        <p><span class="translate" data-key="nonComp">Non Compliant</span>: {{ bestScanNonComp }}</p>
+                                        <p><span class="translate" data-key="untagged">Untagged</span>: {{ bestScanUntagged }}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p style="text-decoration: underline;font-weight: bold" class="translate" data-key="worstPref">Worst Performer</p>
+                                        <p tabindex="0" v-on:click="showThisScan(false)" style="color: #6161FF; cursor: pointer;">{{ worstScanURL }}</p>
+                                        <br />
+
+                                        <p v-if="worstScanUA !== null" style="font-weight: bold"><span class="translate" data-key="index">Index</span>: {{ worstScanUA }}</p>
+                                        <p v-else style="font-weight: bold"><span class="translate" data-key="index">Index</span>: 0</p>
+
+                                        <p><span class="translate" data-key="compliant">Compliant</span>: {{ worstScanComp }}</p>
+                                        <p><span class="translate" data-key="nonComp">Non Compliant</span>: {{ worstScanNonComp }}</p>
+                                        <p><span class="translate" data-key="untagged">Untagged</span>: {{ worstScanUntagged }}</p>
                                     </div>
                                 </div>
-                                <div class="top-filter">
-                                    <div class="filter-box">
-                                        <!-- <button class="btn filter-btn">
-                                            <i class="fa fa-plus"></i> Add filter
-                                        </button>
-                                        <button class="btn pills-btn">
-                                            Date <i class="fa fa-close"></i>
-                                        </button>
-                                        <button class="btn pills-btn">
-                                            Compliant <i class="fa fa-close"></i>
-                                        </button> -->
+                            </div>
+                        </div>
+                        <div id="scan-history-table-container" class="row">
+                            <!-- Scan history -->
+                            <div style="width: 100%" class="dash-card">
+                                <div class="content-header">
+                                    <p class="translate" data-key="scanHist" style="display: inline-block !important;">Scan History</p>
+                                </div>
+                                <table id="scan-history-table" class="table table-hover">
+                                    <tr v-for="scan in scans">
+                                        <td>{{ getDate(scan) }}</td>
+                                        <td>{{ getURL(scan) }}</td>
+                                        <td><a style="color: #006ADB" href="#" @click="viewResults(scan)"><span class="translate" data-key="viewResults">{{ langLabel }}</span></a></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="file-viewer" class="row">
+                        <div class="dash-card">
+                            <div class="row" style="padding-top: 8px;">
+                                <div class="col-md-4" style="padding: 8px;">
+                                    <div class="btn-group btn-block">
+                                        <b-button size="sm" id="selectall" data-key="selectAll" class="translate" variant="outline-secondary w-50" @click="selectAllRows">Select all</b-button>
+                                        <b-button size="sm" id="clearall" data-key="clearAll" class="translate" variant="outline-secondary w-50" @click="clearSelected">Clear selected</b-button>
                                     </div>
-                                    <div class="right-btns">
-                                        <div class="dropdown">
-                                            <button data-key="chooseAction" class="translate btn btn-export dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Choose an action
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a role="button" tabindex="1" class="dropdown-item translate" data-key="sendToAble" onclick="sendForRemediation(fileViewer.$refs.grid.getSelectedRecords(), client)" href="javascript:void(0);">Send to AbleDocs</a>
-                                                <a role="button" tabindex="1" data-key="downloadSelect" class="dropdown-item translate" onclick="downloadMultiplePDF(fileViewer.$refs.grid.getSelectedRecords())">Download Selected Files</a>
-                                                <a role="button" tabindex="1" data-key="Exportcsv" class="dropdown-item translate" onclick="exportCsv(topData.scanID)">Export to .csv</a>
-                                            </div>
-                                        </div>
-
-                                        <button class="btn btn-export" onclick="exportCsv(crawlInfo.ID)">
-                                            <span class="translate" data-key="Exportcsv"> Export results </span> <i class="fa fa-download"></i>
-                                        </button>
+                                    <div class="btn-group btn-block">
+                                        <b-button size="sm" variant="outline-secondary w-50" @click="clearFilters">Clear Filters</b-button>
+                                        <b-button size="sm" data-key="showNon" class="translate w-50" variant="outline-secondary" @click="showNonCompAndUntagged">Show Non-compliant and Untagged</b-button>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="col-lg-3" style="display: flex; margin-bottom: 5px; padding: 0px !important">
-                                        <b-button style="max-width: 115px !important; margin-right: 5px" size="sm" id="selectall" data-key="selectAll" class="translate" variant="outline-secondary w-50" @click="selectAllRows">Select all</b-button>
-                                        <b-button style="max-width: 115px !important;" size="sm" id="clearall" data-key="clearAll" class="translate" variant="outline-secondary w-50" @click="clearSelected">Clear selected</b-button>
-                                    </div>
+                                <div class="col-md-4">
+                                    <span id="fileShowingStatus"><span class="translate" data-key="showing">Showing</span>: {{ status }}</span>
+                                    <br />
+                                </div>
+                                <div class="col-md-4">
                                     <template>
-                                        <ejs-grid id="files-table-pro" :data-source="files" :allow-paging="true" :page-settings='pageSettings' ref='grid' :allow-sorting="true" :allow-selection="true" :selection-settings='selectionOptions' :allow-resizing='true' :resize-stop="resizeColumn" :show-column-chooser='true' :toolbar='toolbarOptions' :allow-filtering="true" :filter-settings='filterOptions' :action-begin="dataStateChange" :header-cell-info="headerCellInfoEvent" :locale='lang'>
-                                            <e-columns>
-                                                <e-column type='checkbox' width='50'></e-column>
-                                                <e-column field='ID' header-text='ID' :show-in-column-chooser=false :visible=false :is-primary-key='true'></e-column>
-                                                <e-column field='filename' header-text='Name' type="string" :template="nameTemplate" width="450"></e-column>
-                                                <e-column field='UA_Index' header-text='UA Index' :sort-comparer='sortNullAtBottom' text-align='Right' type="number" :template='uaTemplate' width="180"></e-column>
-                                                <e-column field='url' header-text='URL' :filter="urlFilter" width="350"></e-column>
-                                                <e-column field='NumPages' header-text='Page Count' text-align='Right' type="number" :sort-comparer='sortNullAtBottom' width="200"></e-column>
-                                                <e-column field='Tagged' header-text='Tagged' :template="taggedTemplate" :filter="taggedFilter" width="170"></e-column>
-                                                <e-column field='Title' header-text='Title' type="string" :sort-comparer='sortNullAtBottom' width="200"></e-column>
-                                                <e-column field='Creator' header-text='Application' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                <e-column field='Producer' header-text='Producer' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                <e-column field='CreationDate' header-text='Creation Date' :format='dateFormat' :filter="createdDateFilter" width="150"></e-column>
-                                                <e-column field='ModDate' header-text='Last Modified' :format='dateFormat' :filter="modDateFilter" width="200"></e-column>
-                                                <e-column field='Lang' header-text='Language' width="190" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                <e-column field='FileSize' header-text='File Size' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                <e-column field='offsite' header-text='Off Site' text-align='Right' :filter="offsiteFilter" :template="offsiteTemplate" width="150"></e-column>
-                                                <e-column field='passed' header-text='Passed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                <e-column field='Warnings' header-text='Warnings' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                <e-column field='failed' header-text='Failed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                            </e-columns>
-                                        </ejs-grid>
+                                        <ejs-dropdownbutton ref="chooseActionDropdown" :items='dropdownItems' :select="actionSelect"><span class="translate" data-key="chooseAction">Choose an Action</span></ejs-dropdownbutton>
                                     </template>
+
                                 </div>
                             </div>
-                        </div>
-                        <!-- Table -->
-
-                        <!-- History Graph -->
-                        <div class="col-lg-5" id="history-graph-container">
-                            <div class="Compliance-card">
-                                <div class="result-top">
-                                    <div>
-                                        <h5>
-                                            <b>Compliance History:</b><a href=""> Show full Compliance History</a>
-                                        </h5>
-                                    </div>
+                            <div class="row">
+                                <div id="top-scroll-wrapper-pro">
+                                    <div id="top-scroll-pro"></div>
                                 </div>
-                                <div class="graph-box">
-                                    <canvas id="comp-history-chart"></canvas>
-                                </div>
-                                <div class="result-footer">
-                                    <div class="footer-groth">
-                                        <div class="f-content">
-                                            <h5>
-                                                <div class="dott" style="background-color:#00568E;"></div>
-                                                Compliant
-                                            </h5>
-                                        </div>
-                                        <div class="f-content">
-                                            <h5>
-                                                <div class="dott" style="background-color:#BA0068;"></div>
-                                                Non-Compliant
-                                            </h5>
-                                        </div>
-                                        <div class="f-content">
-                                            <h5>
-                                                <div class="dott" style="background-color:#55AFC7;"></div>
-                                                Untagged
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Scan History Table -->
-                        <div class="col-lg-7" id="scan-history-table-container">
-                            <div class="latest-scan-card">
-                                <div class="result-top">
-                                    <div>
-                                        <h5>
-                                            <b>Latest Scan History:</b><a href=""> Show full Scan History</a>
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="table-box">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Url's</th>
-                                                <th scope="col">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="scan in scans">
-                                                <td>{{ getDate(scan) }}</td>
-                                                <td>{{ getURL(scFan) }}</td>
-                                                <td><a style="color: #006ADB" href="#" @click="viewResults(scan)"><span class="translate" data-key="viewResults">{{ langLabel }}</span></a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
+                                <template>
+                                    <ejs-grid id="files-table-pro" :data-source="files" :allow-paging="true" :page-settings='pageSettings' ref='grid' :allow-sorting="true" :allow-selection="true" :selection-settings='selectionOptions' :allow-resizing='true' :resize-stop="resizeColumn" :show-column-chooser='true' :toolbar='toolbarOptions' :allow-filtering="true" :filter-settings='filterOptions' :action-begin="dataStateChange" :header-cell-info="headerCellInfoEvent" :locale='lang'>
+                                        <e-columns>
+                                            <e-column type='checkbox' width='50'></e-column>
+                                            <e-column field='ID' header-text='ID' :show-in-column-chooser=false :visible=false :is-primary-key='true'></e-column>
+                                            <e-column field='filename' header-text='Name' type="string" :template="nameTemplate" width="450"></e-column>
+                                            <e-column field='UA_Index' header-text='UA Index' :sort-comparer='sortNullAtBottom' text-align='Right' type="number" :template='uaTemplate' width="180"></e-column>
+                                            <e-column field='url' header-text='URL' :filter="urlFilter" width="350"></e-column>
+                                            <e-column field='NumPages' header-text='Page Count' text-align='Right' type="number" :sort-comparer='sortNullAtBottom' width="200"></e-column>
+                                            <e-column field='Tagged' header-text='Tagged' :template="taggedTemplate" :filter="taggedFilter" width="170"></e-column>
+                                            <e-column field='Title' header-text='Title' type="string" :sort-comparer='sortNullAtBottom' width="200"></e-column>
+                                            <e-column field='Creator' header-text='Application' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                            <e-column field='Producer' header-text='Producer' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                            <e-column field='CreationDate' header-text='Creation Date' :format='dateFormat' :filter="createdDateFilter" width="150"></e-column>
+                                            <e-column field='ModDate' header-text='Last Modified' :format='dateFormat' :filter="modDateFilter" width="200"></e-column>
+                                            <e-column field='Lang' header-text='Language' width="190" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                            <e-column field='FileSize' header-text='File Size' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                            <e-column field='offsite' header-text='Off Site' text-align='Right' :filter="offsiteFilter" :template="offsiteTemplate" width="150"></e-column>
+                                            <e-column field='passed' header-text='Passed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                            <e-column field='Warnings' header-text='Warnings' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                            <e-column field='failed' header-text='Failed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                        </e-columns>
+                                    </ejs-grid>
+                                </template>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- ProScan End -->
+            </main>
+            <!-- Pro Scan End -->
 
-                <!-- Lite Start -->
-                <section id="litescan">
-                    <div id="lite-header">
+            <!-- Lite Start -->
+            <section id="litescan">
+                <div id="lite-header">
 
-                        <div class="row">
-                            <div class="col-lg-4 lite-dash-card">
-                                <p><span class="translate" data-key="crawlID">Crawl ID</span>: {{ scan.ID }}</p>
-                                <p><span class="translate" data-key="startURL">Starting URL</span>: {{ scan.starturl }}</p>
-                                <p><span class="translate" data-key="ScanInit">Scan initiated</span>: {{ scan.crawl_time_end.toISOString().split('T')[0] }}</p>
-                                <p><span class="translate" data-key="pdfFilesFound">PDF files scanned</span>: {{ files.length }}</p>
-                                <button id="exportCSV-lite" onclick="exportCsv(liteScan.scan.ID)" data-key="Exportcsv" class="translate btn btn-outline-dark">Export CSV</button>
+                    <div class="row">
+                        <div class="col-lg-4 lite-dash-card">
+                            <p><span class="translate" data-key="crawlID">Crawl ID</span>: {{ scan.ID }}</p>
+                            <p><span class="translate" data-key="startURL">Starting URL</span>: {{ scan.starturl }}</p>
+                            <p><span class="translate" data-key="ScanInit">Scan initiated</span>: {{ scan.crawl_time_end.toISOString().split('T')[0] }}</p>
+                            <p><span class="translate" data-key="pdfFilesFound">PDF files scanned</span>: {{ files.length }}</p>
+                            <button id="exportCSV-lite" onclick="exportCsv(liteScan.scan.ID)" data-key="Exportcsv" class="translate btn btn-outline-dark">Export CSV</button>
+                        </div>
+                        <div id="lite-fileCounts" class="col-lg-7 lite-dash-card">
+                            <div class="row legend-data">
+                                <div class="col-4">
+                                    <div class="color-legend" style="background-color: #3CC945"></div>
+                                    <p class="translate" data-key="compliant">Compliant</p>
+                                </div>
+                                <div class="col-4">
+                                    <div class="color-legend" style="background-color: #FFC64C"></div>
+                                    <p class="translate" data-key="nonComp">Non&#8209;Compliant</p>
+                                </div>
+                                <div class="col-4">
+                                    <div class="color-legend" style="background-color: #FA483A"></div>
+                                    <p class="translate" data-key="untagged">Untagged</p>
+                                </div>
                             </div>
-                            <div id="lite-fileCounts" class="col-lg-7 lite-dash-card">
-                                <div class="row legend-data">
-                                    <div class="col-4">
-                                        <div class="color-legend" style="background-color: #3CC945"></div>
-                                        <p class="translate" data-key="compliant">Compliant</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="color-legend" style="background-color: #FFC64C"></div>
-                                        <p class="translate" data-key="nonComp">Non&#8209;Compliant</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="color-legend" style="background-color: #FA483A"></div>
-                                        <p class="translate" data-key="untagged">Untagged</p>
-                                    </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p v-if="scan.compliant !== null" class="pdf-counter">{{ scan.compliant }}</p>
+                                    <p v-else class="pdf-counter">0</p>
                                 </div>
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p v-if="scan.compliant !== null" class="pdf-counter">{{ scan.compliant }}</p>
-                                        <p v-else class="pdf-counter">0</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <p v-if="scan.nonCompliant !== null" class="pdf-counter">{{ scan.nonCompliant }}</p>
-                                        <p v-else class="pdf-counter">0</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <p v-if="scan.untagged !== null" class="pdf-counter">{{ scan.untagged }}</p>
-                                        <p v-else class="pdf-counter">0</p>
-                                    </div>
+                                <div class="col-4">
+                                    <p v-if="scan.nonCompliant !== null" class="pdf-counter">{{ scan.nonCompliant }}</p>
+                                    <p v-else class="pdf-counter">0</p>
                                 </div>
-                                <div class="row legend-data">
-                                    <div class="col-3">
-                                        <div class="color-legend" style="background-color: black"></div>
-                                        <p class="translate" data-key="offsite">Off Site</p>
-                                    </div>
-                                    <div class="col-3" style="padding-left: 15px !important;">
-                                        <p v-if="scan.offsiteFiles !== null" class="pdf-counter">{{ scan.offsiteFiles }}</p>
-                                        <p v-else class="pdf-counter">0</p>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="color-legend" style="background-color: white"></div>
-                                        <p class="translate" data-key="fileErrors">File Errors</p>
-                                    </div>
-                                    <div class="col-3" style="padding-left: 15px !important;">
-                                        <p class="pdf-counter">{{ scan.Files_Error }}</p>
-                                    </div>
+                                <div class="col-4">
+                                    <p v-if="scan.untagged !== null" class="pdf-counter">{{ scan.untagged }}</p>
+                                    <p v-else class="pdf-counter">0</p>
+                                </div>
+                            </div>
+                            <div class="row legend-data">
+                                <div class="col-3">
+                                    <div class="color-legend" style="background-color: black"></div>
+                                    <p class="translate" data-key="offsite">Off Site</p>
+                                </div>
+                                <div class="col-3" style="padding-left: 15px !important;">
+                                    <p v-if="scan.offsiteFiles !== null" class="pdf-counter">{{ scan.offsiteFiles }}</p>
+                                    <p v-else class="pdf-counter">0</p>
+                                </div>
+                                <div class="col-3">
+                                    <div class="color-legend" style="background-color: white"></div>
+                                    <p class="translate" data-key="fileErrors">File Errors</p>
+                                </div>
+                                <div class="col-3" style="padding-left: 15px !important;">
+                                    <p class="pdf-counter">{{ scan.Files_Error }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="top-scroll-wrapper">
-                        <div id="top-scroll"></div>
-                    </div>
-                    <template>
-                        <ejs-grid :data-source="files" ref="liteGrid" :allow-paging="true" :page-settings='pageSettings' :allow-sorting='true' :action-begin="liteTableStateChange">
-                            <e-columns>
-                                <e-column field='ID' header-txt='ID' :visible=false :is-primary-key='true'></e-column>
-                                <e-column field="filename" header-text="Name" width=275 text-align="left" :template="filenameTemplate"></e-column>
-                                <e-column field="UA_Index" header-text="UA Index" width=150 text-align="right" :template='uaTemplate'></e-column>
-                                <e-column field="NumPages" header-text="Page Count" width=180 text-align="right"></e-column>
-                                <e-column field="Tagged" header-text="Tagged" width=125 text-align="left" :template="taggedTemplate"></e-column>
-                                <e-column field="Title" header-text="Tile" width=230 text-align="left"></e-column>
-                                <e-column field="passed_check" header-text="Passed" width=110 text-align="right"></e-column>
-                                <e-column field="warned_check" header-text="Warned" width=110 text-align="right"></e-column>
-                                <e-column field="failed_check" header-text="Failed" width=110 text-align="right"></e-column>
-                            </e-columns>
-                        </ejs-grid>
-                    </template>
+                </div>
+                <div id="top-scroll-wrapper">
+                    <div id="top-scroll"></div>
+                </div>
+                <template>
+                    <ejs-grid :data-source="files" ref="liteGrid" :allow-paging="true" :page-settings='pageSettings' :allow-sorting='true' :action-begin="liteTableStateChange">
+                        <e-columns>
+                            <e-column field='ID' header-txt='ID' :visible=false :is-primary-key='true'></e-column>
+                            <e-column field="filename" header-text="Name" width=275 text-align="left" :template="filenameTemplate"></e-column>
+                            <e-column field="UA_Index" header-text="UA Index" width=150 text-align="right" :template='uaTemplate'></e-column>
+                            <e-column field="NumPages" header-text="Page Count" width=180 text-align="right"></e-column>
+                            <e-column field="Tagged" header-text="Tagged" width=125 text-align="left" :template="taggedTemplate"></e-column>
+                            <e-column field="Title" header-text="Tile" width=230 text-align="left"></e-column>
+                            <e-column field="passed_check" header-text="Passed" width=110 text-align="right"></e-column>
+                            <e-column field="warned_check" header-text="Warned" width=110 text-align="right"></e-column>
+                            <e-column field="failed_check" header-text="Failed" width=110 text-align="right"></e-column>
+                        </e-columns>
+                    </ejs-grid>
+                </template>
 
-                </section>
-                <!-- Lite End -->
+            </section>
+            <!-- Lite End -->
 
-            </div>
         </div>
     </div>
-    <!-- contains Vue instances -->
-    <script src="js/dashboard.js" defer></script>
+</div>
+<!-- contains Vue instances -->
+<script src="js/dashboard.js" defer></script>
 </body>
 
 </html>
