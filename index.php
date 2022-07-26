@@ -29,7 +29,7 @@ if (
     <!-- Our Custom CSS -->
 
     <link rel="stylesheet" href="css/sidebar/style.css">
-    <link rel="stylesheet" href="css/main-dashboard/style.css">
+    <link rel="stylesheet" href="css/styleguide.css">
 
     <!-- Font Awesome JS -->
     <link media="all" type="text/css" rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
@@ -200,10 +200,15 @@ if (
             let scanResultChart = document.querySelector("#scan-result-chart").getContext('2d');
 
             // colours for the charts w/ patter
+            let untaggedColor = "#34a2b7";
+            let taggedColor = "#d31b79";
+            let compliantColor = "#1c6ba1";
 
-            let untaggedColor = "#55afc7";
-            let taggedColor = "#ba0068";
-            let compliantColor = "#00568e";
+            // const docStyle = getComputedStyle(document.documentElement);
+            
+            // const untaggedColor = docStyle.getPropertyValue('--abledocs-turquoise');
+            // const taggedColor = docStyle.getPropertyValue('--abledocs-hot-pink');
+            // const compliantColor = docStyle.getPropertyValue('--abledocs-blue');
 
             resChart = new Chart(scanResultChart, {
                 type: 'doughnut',
@@ -337,17 +342,19 @@ if (
                                                 </h6>
                                             </div>
                                         </div>
-                                        <div class="col-lg-8">
+                                        <div class="col-lg-8" id="search-result-for">
                                             <br>
                                             <h5>
                                                 Search results for:
                                             </h5>
                                             <div class="show-urls">
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">xn--brnepasning-ggb.esbjerg.dk</option>
+                                                <select @change="searchResultClickedDomain()" name="searchResult" id="searchResult" aria-label="search result" class="form-control">
+                                                    <option v-for="(url, index) in urls" :value="url">
+                                                    {{ url.split("//")[1] }}
+                                                    </option>
                                                 </select>
-                                                <div class="dropdoen-btn">
-                                                    Show all URL'S
+                                                <div class="dropdown-btn">
+                                                    Show all URLs
                                                     <i class="fa fa-arrow-right"></i>
                                                 </div>
                                             </div>
@@ -368,12 +375,14 @@ if (
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-2">
                                             <div class="graph">
                                                 <canvas id="scan-result-chart"></canvas>
+                                                <span style="position: absolute" v-if="averageUA !== null" id="scan-ua"><span class="translate" data-key="index">UA Index</span>: {{ averageUA }}</span>
+                                                <span style="position: absolute" v-else id="scan-ua">UA <span class="translate" data-key="index">Index</span>: N/A</span>
                                             </div>
                                         </div>
-                                        <div class="col-lg-9">
+                                        <div class="col-lg-10">
                                             <div class="row">
                                                 <div class="col-lg-2">
                                                     <div class="total">
@@ -384,7 +393,7 @@ if (
                                                             <h1>
                                                                 ({{ compliant + nonCompliant + untagged + offsite }})
                                                             </h1>
-                                                            <button class="translate btn" id="showallfiles" @click="showFiles('all')" data-key="showFiles">
+                                                            <button class="translate btn showFiles" id="showallfiles" @click="showFiles('all')" data-key="showFiles">
                                                                 Show Files
                                                             </button>
                                                         </div>
@@ -396,7 +405,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#00568E;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-blue);">
                                                                         </div>
                                                                         <span class="translate" data-key="compliant">
                                                                             Compliant
@@ -405,7 +414,7 @@ if (
                                                                     <h1>
                                                                         {{ compliant ? compliant : 0 }}
                                                                     </h1>
-                                                                    <button class="translate btn" id="showcompfiles" data-key="showFiles" @click="showFiles('compliant')">
+                                                                    <button class="translate btn showFiles" id="showcompfiles" data-key="showFiles" @click="showFiles('compliant')">
                                                                         Show Files
                                                                     </button>
                                                                 </div>
@@ -413,7 +422,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#BA0068;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-hot-pink);">
                                                                         </div>
                                                                         <span class="translate" data-key="nonComp">
                                                                             Non-Compliant
@@ -422,7 +431,7 @@ if (
                                                                     <h1>
                                                                         {{ nonCompliant ? nonCompliant : 0 }}
                                                                     </h1>
-                                                                    <button class="translate btn" id="shownoncompfiles" data-key="showFiles" @click="showFiles('nonCompliant')">
+                                                                    <button class="translate btn showFiles" id="shownoncompfiles" data-key="showFiles" @click="showFiles('nonCompliant')">
                                                                         Show Files
                                                                     </button>
                                                                 </div>
@@ -430,7 +439,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#55AFC7;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-turquoise);">
                                                                         </div>
                                                                         <span class="translate" data-key="untagged">
                                                                             Untagged
@@ -439,7 +448,7 @@ if (
                                                                     <h1>
                                                                         {{ untagged ? untagged : 0 }}
                                                                     </h1>
-                                                                    <button class="translate btn" id="showuntaggedfiles" data-key="showFiles" @click="showFiles('untagged')">
+                                                                    <button class="translate btn showFiles" id="showuntaggedfiles" data-key="showFiles" @click="showFiles('untagged')">
                                                                         Show Files
                                                                     </button>
                                                                 </div>
@@ -458,7 +467,7 @@ if (
                                                                     <h1>
                                                                         {{ offsite ? offsite : 0 }}
                                                                     </h1>
-                                                                    <button class="translate btn" id="showoffsitefiles" data-key="showFiles" @click="showFiles('offsite')">
+                                                                    <button class="translate btn showFiles" id="showoffsitefiles" data-key="showFiles" @click="showFiles('offsite')">
                                                                         Show Files
                                                                     </button>
                                                                 </div>
@@ -471,7 +480,7 @@ if (
                                                                     <h1>
                                                                         {{ errors }}
                                                                     </h1>
-                                                                    <button class="translate btn" id="showerrorfiles" data-key="showFiles" @click="showFiles('errors')">
+                                                                    <button class="translate btn showFiles" id="showerrorfiles" data-key="showFiles" @click="showFiles('errors')">
                                                                         Show Files
                                                                     </button>
                                                                 </div>
@@ -495,20 +504,20 @@ if (
                                                 <div class="footer-groth">
                                                     <div class="f-content">
                                                         <h5>
-                                                            <div class="dott" style="background-color:#00568E;"></div>
-                                                            <span class="translate" data-key="compliant">Compliant</span> <!-- <b>48%</b> -->
+                                                            <div class="dott" style="background-color:var(--abledocs-blue);"></div>
+                                                            <span class="translate" data-key="compliant">Compliant</span>
                                                         </h5>
                                                     </div>
                                                     <div class="f-content">
                                                         <h5>
-                                                            <div class="dott" style="background-color:#BA0068;"></div>
-                                                            <span class="translate" data-key="nonComp">Non-Compliant</span> <!-- <b>23%</b> -->
+                                                            <div class="dott" style="background-color:var(--abledocs-hot-pink);"></div>
+                                                            <span class="translate" data-key="nonComp">Non-Compliant</span>
                                                         </h5>
                                                     </div>
                                                     <div class="f-content">
                                                         <h5>
-                                                            <div class="dott" style="background-color:#55AFC7;"></div>
-                                                            <span class="translate" data-key="untagged">Untagged</span> <!-- <b>39%</b> -->
+                                                            <div class="dott" style="background-color:var(--abledocs-turquoise);"></div>
+                                                            <span class="translate" data-key="untagged">Untagged</span>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -612,19 +621,19 @@ if (
                                     <div class="footer-groth">
                                         <div class="f-content">
                                             <h5>
-                                                <div class="dott" style="background-color:#00568E;"></div>
+                                                <div class="dott" style="background-color:var(--abledocs-blue);"></div>
                                                 Compliant
                                             </h5>
                                         </div>
                                         <div class="f-content">
                                             <h5>
-                                                <div class="dott" style="background-color:#BA0068;"></div>
+                                                <div class="dott" style="background-color:var(--abledocs-hot-pink);"></div>
                                                 Non-Compliant
                                             </h5>
                                         </div>
                                         <div class="f-content">
                                             <h5>
-                                                <div class="dott" style="background-color:#55AFC7;"></div>
+                                                <div class="dott" style="background-color:var(--abledocs-turquoise);"></div>
                                                 Untagged
                                             </h5>
                                         </div>
@@ -696,11 +705,13 @@ if (
                                                 Search results for:
                                             </h5>
                                             <div class="show-urls">
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">xn--brnepasning-ggb.esbjerg.dk</option>
+                                                <select @change="searchResultClickedDomain()" name="liteScanSearchResult" id="liteScanSearchResult" aria-label="search result" class="form-control">
+                                                    <option v-for="(url, index) in urls" :value="url">
+                                                    {{ url.split("//")[1] }}
+                                                    </option>
                                                 </select>
-                                                <div class="dropdoen-btn">
-                                                    Show all URL'S
+                                                <div class="dropdown-btn">
+                                                    Show all URLs
                                                     <i class="fa fa-arrow-right"></i>
                                                 </div>
                                             </div>
@@ -724,7 +735,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#00568E;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-blue);">
                                                                         </div>
                                                                         <span class="translate" data-key="compliant">
                                                                             Compliant
@@ -738,7 +749,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#BA0068;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-hot-pink);">
                                                                         </div>
                                                                         <span class="translate" data-key="nonComp">
                                                                             Non-Compliant
@@ -752,7 +763,7 @@ if (
                                                             <div class="col-lg-4">
                                                                 <div class="content">
                                                                     <h5>
-                                                                        <div class="dott" style="background-color:#55AFC7;">
+                                                                        <div class="dott" style="background-color:var(--abledocs-turquoise);">
                                                                         </div>
                                                                         <span class="translate" data-key="untagged">
                                                                             Untagged

@@ -43,7 +43,7 @@ $(document).ready(function () {
 
         // show the dashboard if Pro scan is first
         if (viewStatus.isPro) {
-            $(".details").show();
+            $("#proscan").show();
         }
 
         // Hide the main dashboard if scan is lite
@@ -56,11 +56,9 @@ $(document).ready(function () {
         // if all lite
         if (liteScans > 0 && proScans === 0) {
             $("#litescan").show();
-            $("#dashboardLink").hide();
         } else if (proScans > 0 && liteScans === 0) {  // if all pro scans
             $("#litescan").hide();
         } else {    // if both
-            $("#dashboardLink").hide();
             if (startingScan.ScanType === "Pro") {
                 $("#litescan").hide();
             } else {
@@ -266,7 +264,27 @@ let sideNav = new Vue({
             if (url === "Overview") {
                 SwitchOverallDash();
                 changeViewStatus('url', 'overview');
+            } else {
+                showScanData(url, 0);
+                fileViewer.status = arrLang[currentLang]["allFiles"];
+                changeViewStatus('url', url);
+            }
+        }
+    }
+});
 
+let searchResultFor = new Vue({
+    el: "#search-result-for",
+    data: {
+        urls: scanURLS,
+    },
+    methods: {
+        searchResultClickedDomain() {
+            const url = document.getElementById("searchResult").value;
+            // show the data for said crawl
+            if (url === "Overview") {
+                SwitchOverallDash();
+                changeViewStatus('url', 'overview');
             } else {
                 showScanData(url, 0);
                 fileViewer.status = arrLang[currentLang]["allFiles"];
@@ -383,8 +401,6 @@ let topData = pageName === 'index.php' ? new Vue({
             // update the viewStatus
             changeViewStatus('isShowingFiles', true);
             changeViewStatus('fileCategory', type);
-            // resize scroll bar
-            resizeScrollPro()
         }
     }
 }) : null;
@@ -802,10 +818,6 @@ let fileViewer = pageName === 'index.php' ? new Vue({
                     let elem = $($(".translate[data-key='unknown']")[index]);
                     elem.text(arrLang[currentLang][elem.attr('data-key')]);
                 });
-                // when the columns change, resize the top scroll bar
-                if (args.requestType === "columnstate" && args.name === "actionBegin") {
-                    resizeScrollPro();
-                }
             }, 50)
         },
         /**
@@ -857,8 +869,6 @@ let fileViewer = pageName === 'index.php' ? new Vue({
             let columnHeader = fileViewer.$refs.grid.getColumnHeaderByIndex(columnIndex);
             // Run headerCellInfoEvent() to add the tooltip
             this.headerCellInfoEvent({ node: columnHeader, cell: { column: { headerText: columnName } } });
-            // resize the top scroll bar if needed
-            resizeScrollPro();
         },
         showNonCompAndUntagged() {
             // update status
@@ -938,7 +948,6 @@ let fileViewer = pageName === 'index.php' ? new Vue({
  * @static
  */
 function showScanData(url, index) {
-    if (pageName === 'index.php') {
         let thisScan = scansHash[url][index];
 
         if (thisScan.ScanType !== "Pro") {
@@ -950,7 +959,7 @@ function showScanData(url, index) {
         changeViewStatus('url', url);
 
         // ensure the scans are shown again
-        $(".details").show();
+        $("#proscan").show();
         $("#litescan").hide();
 
         // hide all showfiles links
@@ -1015,8 +1024,6 @@ function showScanData(url, index) {
                 newfiles = [];
                 fileViewer.files = newfiles;
             }
-            // resize the scroll bar
-            resizeScrollPro()
         };
         filesReq.send();
         // change the date in the overall stats header
@@ -1061,7 +1068,6 @@ function showScanData(url, index) {
         historyChart.data.datasets[2].data = compliantBar;
         historyChart.data.labels = labels;
         historyChart.update();
-    }
 }
 
 // check if coming from crawls list, if so start with that scan instead
@@ -1077,6 +1083,7 @@ let liteScan = pageName === 'index.php' ? new Vue({
     data: {
         scan: startScan,
         files: [],
+        urls: scanURLS,
         pageSettings: {
             pageSize: 50
         },
@@ -1122,6 +1129,19 @@ let liteScan = pageName === 'index.php' ? new Vue({
                     elem.text(arrLang[currentLang][elem.attr('data-key')]);
                 });
             }, 50)
+        },
+
+        searchResultClickedDomain() {
+            const url = document.getElementById("liteScanSearchResult").value;
+            // show the data for said crawl
+            if (url === "Overview") {
+                SwitchOverallDash();
+                changeViewStatus('url', 'overview');
+            } else {
+                showScanData(url, 0);
+                fileViewer.status = arrLang[currentLang]["allFiles"];
+                changeViewStatus('url', url);
+            }
         }
     }
 }) : null;
@@ -1201,7 +1221,7 @@ function showLiteScan(url, index) {
  * @global
  */
 function SwitchOverallDash() {
-    if (pageName === 'index.php') {
+    if (pageName == 'index.php') {
         // make sure dash is showing
         $(".details").show();
 
