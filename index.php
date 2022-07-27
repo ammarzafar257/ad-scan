@@ -186,9 +186,9 @@ if (
             }
         }
         if (scanURLS.length > 0) {
-            sessionStorage.setItem('scanURLS',  JSON.stringify(scanURLS));
+            sessionStorage.setItem('scanURLS', JSON.stringify(scanURLS));
         } else {
-            sessionStorage.setItem('scanURLS',  JSON.stringify([]));
+            sessionStorage.setItem('scanURLS', JSON.stringify([]));
         }
 
         // get the files from scans
@@ -205,7 +205,7 @@ if (
             let compliantColor = "#1c6ba1";
 
             // const docStyle = getComputedStyle(document.documentElement);
-            
+
             // const untaggedColor = docStyle.getPropertyValue('--abledocs-turquoise');
             // const taggedColor = docStyle.getPropertyValue('--abledocs-hot-pink');
             // const compliantColor = docStyle.getPropertyValue('--abledocs-blue');
@@ -320,7 +320,7 @@ if (
                 include 'menu/topnav.php';
                 ?>
 
-                <!-- ProScan Start -->
+                <!-- Pro Scan Start -->
                 <div class="container" id="proscan">
                     <div class="row">
                         <!-- CRAWLS Details -->
@@ -344,17 +344,17 @@ if (
                                         </div>
                                         <div class="col-lg-8" id="search-result-for">
                                             <br>
-                                            <h5>
+                                            <h5 class="translate" data-key="searchResult">
                                                 Search results for:
                                             </h5>
                                             <div class="show-urls">
                                                 <select @change="searchResultClickedDomain()" name="searchResult" id="searchResult" aria-label="search result" class="form-control">
                                                     <option v-for="(url, index) in urls" :value="url">
-                                                    {{ url.split("//")[1] }}
+                                                        {{ url.split("//")[1] }}
                                                     </option>
                                                 </select>
                                                 <div class="dropdown-btn">
-                                                    Show all URLs
+                                                    <span class="translate" data-key="showAllURL">Show all URLs</span>
                                                     <i class="fa fa-arrow-right"></i>
                                                 </div>
                                             </div>
@@ -365,7 +365,7 @@ if (
                                     <div class="result-top" id="overall-header">
                                         <div>
                                             <h5>
-                                                <b> Compliance results:</b> {{ date }} <a href=""> Show full scan history</a>
+                                                <b class="translate" data-key="complianceResults"> Compliance results:</b> {{ date }} <a href="scanhistory.php"> Show full scan history</a>
                                             </h5>
                                         </div>
                                         <div>
@@ -461,9 +461,9 @@ if (
                                                         <div class="row">
                                                             <div class="col-lg-6">
                                                                 <div class="content">
-                                                                    <h5 class="translate" data-key="offsite">
-                                                                        Off Side Files
-                                                                    </h5>
+                                                                    <h1 class="translate" data-key="offsite">
+                                                                        Off-site files
+                                                                    </h1>
                                                                     <h1>
                                                                         {{ offsite ? offsite : 0 }}
                                                                     </h1>
@@ -474,11 +474,11 @@ if (
                                                             </div>
                                                             <div class="col-lg-6">
                                                                 <div class="content">
-                                                                    <h5 class="translate" data-key="fileErrors">
+                                                                    <h1 class="translate" data-key="fileErrors">
                                                                         File Errors
-                                                                    </h5>
+                                                                    </h1>
                                                                     <h1>
-                                                                        {{ errors }}
+                                                                        {{ errors ? errors : 0 }}
                                                                     </h1>
                                                                     <button class="translate btn showFiles" id="showerrorfiles" data-key="showFiles" @click="showFiles('errors')">
                                                                         Show Files
@@ -496,7 +496,7 @@ if (
                                             <div class="col-lg-3">
                                                 <div class="footer-link">
                                                     <a href="">
-                                                        What is the UA index?
+                                                        UA index
                                                     </a>
                                                 </div>
                                             </div>
@@ -530,7 +530,7 @@ if (
                         <!-- CRAWLS Details -->
 
                         <!-- Table -->
-                        <div id="file-viewer" v-if="status != ''">
+                        <div id="file-viewer">
                             <div class="col-lg-12">
                                 <div class="latest-scan-card">
                                     <div class="result-top">
@@ -542,15 +542,6 @@ if (
                                     </div>
                                     <div class="top-filter">
                                         <div class="filter-box">
-                                            <!-- <button class="btn filter-btn">
-                                            <i class="fa fa-plus"></i> Add filter
-                                        </button>
-                                        <button class="btn pills-btn">
-                                            Date <i class="fa fa-close"></i>
-                                        </button>
-                                        <button class="btn pills-btn">
-                                            Compliant <i class="fa fa-close"></i>
-                                        </button> -->
                                         </div>
                                         <div class="right-btns">
                                             <div class="dropdown">
@@ -574,30 +565,35 @@ if (
                                             <b-button style="max-width: 115px !important; margin-right: 5px" size="sm" id="selectall" data-key="selectAll" class="translate" variant="outline-secondary w-50" @click="selectAllRows">Select all</b-button>
                                             <b-button style="max-width: 115px !important;" size="sm" id="clearall" data-key="clearAll" class="translate" variant="outline-secondary w-50" @click="clearSelected">Clear selected</b-button>
                                         </div>
-                                        <template>
-                                            <ejs-grid id="files-table-pro" :data-source="files" :allow-paging="true" :page-settings='pageSettings' ref='grid' :allow-sorting="true" :allow-selection="true" :selection-settings='selectionOptions' :allow-resizing='true' :resize-stop="resizeColumn" :show-column-chooser='true' :toolbar='toolbarOptions' :allow-filtering="true" :filter-settings='filterOptions' :action-begin="dataStateChange" :header-cell-info="headerCellInfoEvent" :locale='lang'>
-                                                <e-columns>
-                                                    <e-column type='checkbox' width='50'></e-column>
-                                                    <e-column field='ID' header-text='ID' :show-in-column-chooser=false :visible=false :is-primary-key='true'></e-column>
-                                                    <e-column field='filename' header-text='Name' type="string" :template="nameTemplate" width="450"></e-column>
-                                                    <e-column field='UA_Index' header-text='UA Index' :sort-comparer='sortNullAtBottom' text-align='Right' type="number" :template='uaTemplate' width="180"></e-column>
-                                                    <e-column field='url' header-text='URL' :filter="urlFilter" width="350"></e-column>
-                                                    <e-column field='NumPages' header-text='Page Count' text-align='Right' type="number" :sort-comparer='sortNullAtBottom' width="200"></e-column>
-                                                    <e-column field='Tagged' header-text='Tagged' :template="taggedTemplate" :filter="taggedFilter" width="170"></e-column>
-                                                    <e-column field='Title' header-text='Title' type="string" :sort-comparer='sortNullAtBottom' width="200"></e-column>
-                                                    <e-column field='Creator' header-text='Application' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                    <e-column field='Producer' header-text='Producer' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                    <e-column field='CreationDate' header-text='Creation Date' :format='dateFormat' :filter="createdDateFilter" width="150"></e-column>
-                                                    <e-column field='ModDate' header-text='Last Modified' :format='dateFormat' :filter="modDateFilter" width="200"></e-column>
-                                                    <e-column field='Lang' header-text='Language' width="190" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
-                                                    <e-column field='FileSize' header-text='File Size' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                    <e-column field='offsite' header-text='Off Site' text-align='Right' :filter="offsiteFilter" :template="offsiteTemplate" width="150"></e-column>
-                                                    <e-column field='passed' header-text='Passed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                    <e-column field='Warnings' header-text='Warnings' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                    <e-column field='failed' header-text='Failed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
-                                                </e-columns>
-                                            </ejs-grid>
-                                        </template>
+                                        <div class="row">
+                                            <div id="top-scroll-wrapper-pro">
+                                                <div id="top-scroll-pro"></div>
+                                            </div>
+                                            <template>
+                                                <ejs-grid id="files-table-pro" :data-source="files" :allow-paging="true" :page-settings='pageSettings' ref='grid' :allow-sorting="true" :allow-selection="true" :selection-settings='selectionOptions' :allow-resizing='true' :resize-stop="resizeColumn" :show-column-chooser='true' :toolbar='toolbarOptions' :allow-filtering="true" :filter-settings='filterOptions' :action-begin="dataStateChange" :header-cell-info="headerCellInfoEvent" :locale='lang'>
+                                                    <e-columns>
+                                                        <e-column type='checkbox' width='50'></e-column>
+                                                        <e-column field='ID' header-text='ID' :show-in-column-chooser=false :visible=false :is-primary-key='true'></e-column>
+                                                        <e-column field='filename' header-text='Name' type="string" :template="nameTemplate" width="450"></e-column>
+                                                        <e-column field='UA_Index' header-text='UA Index' :sort-comparer='sortNullAtBottom' text-align='Right' type="number" :template='uaTemplate' width="180"></e-column>
+                                                        <e-column field='url' header-text='URL' :filter="urlFilter" width="350"></e-column>
+                                                        <e-column field='NumPages' header-text='Page Count' text-align='Right' type="number" :sort-comparer='sortNullAtBottom' width="200"></e-column>
+                                                        <e-column field='Tagged' header-text='Tagged' :template="taggedTemplate" :filter="taggedFilter" width="170"></e-column>
+                                                        <e-column field='Title' header-text='Title' type="string" :sort-comparer='sortNullAtBottom' width="200"></e-column>
+                                                        <e-column field='Creator' header-text='Application' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                        <e-column field='Producer' header-text='Producer' width="200" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                        <e-column field='CreationDate' header-text='Creation Date' :format='dateFormat' :filter="createdDateFilter" width="150"></e-column>
+                                                        <e-column field='ModDate' header-text='Last Modified' :format='dateFormat' :filter="modDateFilter" width="200"></e-column>
+                                                        <e-column field='Lang' header-text='Language' width="190" :filter="filterCheckBox" :sort-comparer='sortNullAtBottom'></e-column>
+                                                        <e-column field='FileSize' header-text='File Size' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                        <e-column field='offsite' header-text='Off Site' text-align='Right' :filter="offsiteFilter" :template="offsiteTemplate" width="150"></e-column>
+                                                        <e-column field='passed' header-text='Passed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                        <e-column field='Warnings' header-text='Warnings' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                        <e-column field='failed' header-text='Failed' type="number" text-align='Right' :sort-comparer='sortNullAtBottom' width="150"></e-column>
+                                                    </e-columns>
+                                                </ejs-grid>
+                                            </template>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -605,12 +601,12 @@ if (
                         <!-- Table -->
 
                         <!-- History Graph -->
-                        <div class="col-lg-5" id="history-graph-container">
+                        <div class="col-lg-7" id="history-graph-container">
                             <div class="Compliance-card">
                                 <div class="result-top">
                                     <div>
                                         <h5>
-                                            <b>Compliance History:</b><a href=""> Show full Compliance History</a>
+                                            <b class="translate" data-key="compHistory">Compliance History:</b><a href=""> Show full Compliance History</a>
                                         </h5>
                                     </div>
                                 </div>
@@ -643,12 +639,12 @@ if (
                         </div>
 
                         <!-- Scan History Table -->
-                        <div class="col-lg-7" id="scan-history-table-container">
+                        <div class="col-lg-5" id="scan-history-table-container">
                             <div class="latest-scan-card">
                                 <div class="result-top">
                                     <div>
                                         <h5>
-                                            <b>Latest Scan History:</b><a href=""> Show full Scan History</a>
+                                            <b>Latest Scan History:</b><a href="scanhistory.php"> Show full Scan History</a>
                                         </h5>
                                     </div>
                                 </div>
@@ -675,7 +671,7 @@ if (
                         </div>
                     </div>
                 </div>
-                <!-- ProScan End -->
+                <!-- Pro Scan End -->
 
                 <!-- Lite Start -->
                 <div class="container" id="litescan">
@@ -707,7 +703,7 @@ if (
                                             <div class="show-urls">
                                                 <select @change="searchResultClickedDomain()" name="liteScanSearchResult" id="liteScanSearchResult" aria-label="search result" class="form-control">
                                                     <option v-for="(url, index) in urls" :value="url">
-                                                    {{ url.split("//")[1] }}
+                                                        {{ url.split("//")[1] }}
                                                     </option>
                                                 </select>
                                                 <div class="dropdown-btn">

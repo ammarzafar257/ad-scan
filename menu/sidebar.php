@@ -51,8 +51,8 @@
     <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css">
 
     <script>
-    const URL = window.location?.href.split('/');
-    const pageName = URL[4] ? URL[4] : null;
+    const page_URL = window.location?.href.split('/');
+    const pageName = page_URL[4] ? page_URL[4] : null;
     </script>
 </head>
 
@@ -232,6 +232,11 @@
                 $('#sidebar').toggleClass('active');
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout($('#sidebar').toggleClass('active'), 2000);
+        });
+
     </script>
 
     <script>

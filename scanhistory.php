@@ -28,7 +28,7 @@ if (
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <link rel="stylesheet" href="css/scan-history/style.css">
+    <link rel="stylesheet" href="css/styleguide.css">
 
     <!-- Font Awesome JS -->
     <link media="all" type="text/css" rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
@@ -129,7 +129,7 @@ if (
                                     <h6>{{ getURL(scan) }}</h6>
                                 </div>
                                 <div class="right-content">
-                                    <span class="translate"  data-key="viewResults" data-toggle="collapse" :href="`#collapse_${index}`" role="button" aria-expanded="false" aria-controls="collapse" style="color: var(--text-light-blue)">View Results</span>
+                                    <span class="translate"  data-key="viewResults" data-toggle="collapse" :href="`#collapse_${index}`" role="button" aria-expanded="false" aria-controls="collapse" style="color: var(--abledocs-blue)">View Results</span>
                                 </div>
                             </div>
                             <div class="collapse coll-table" :id="`collapse_${index}`">

@@ -401,6 +401,8 @@ let topData = pageName === 'index.php' ? new Vue({
             // update the viewStatus
             changeViewStatus('isShowingFiles', true);
             changeViewStatus('fileCategory', type);
+            // resize scroll bar
+            resizeScrollPro()
         }
     }
 }) : null;
@@ -818,6 +820,10 @@ let fileViewer = pageName === 'index.php' ? new Vue({
                     let elem = $($(".translate[data-key='unknown']")[index]);
                     elem.text(arrLang[currentLang][elem.attr('data-key')]);
                 });
+                // when the columns change, resize the top scroll bar
+                if (args.requestType === "columnstate" && args.name === "actionBegin") {
+                    resizeScrollPro();
+                }
             }, 50)
         },
         /**
@@ -869,6 +875,8 @@ let fileViewer = pageName === 'index.php' ? new Vue({
             let columnHeader = fileViewer.$refs.grid.getColumnHeaderByIndex(columnIndex);
             // Run headerCellInfoEvent() to add the tooltip
             this.headerCellInfoEvent({ node: columnHeader, cell: { column: { headerText: columnName } } });
+            // resize the top scroll bar if needed
+            resizeScrollPro();
         },
         showNonCompAndUntagged() {
             // update status
@@ -1024,6 +1032,8 @@ function showScanData(url, index) {
                 newfiles = [];
                 fileViewer.files = newfiles;
             }
+            // resize the scroll bar
+            resizeScrollPro()
         };
         filesReq.send();
         // change the date in the overall stats header
@@ -1459,6 +1469,20 @@ function resizeScrollPro() {
         outerScroll.style.display = 'block';
     }
 
+    setTimeout(() => {
+        // set the width of the inner div to the width of the table
+        $('#top-scroll-pro').css('width', tableWidth + 16); // 16 for 1em of spacing
+        // set the listeners for scrolling if needed
+        if (!listenersSet) {
+            outerScroll.onscroll = function() {
+                filesTablePro.scrollLeft = outerScroll.scrollLeft;
+            }
+            filesTablePro.onscroll = function() {
+                outerScroll.scrollLeft = filesTablePro.scrollLeft;
+            }
+            listenersSet = true;
+        }
+    }, 500);
 }
 
 getAverageUAforCrawls();
