@@ -528,8 +528,8 @@ let fileViewer = pageName === 'index.php' ? new Vue({
         moddateValue: null,
         endDate: null,
         modEndDate: null,
-        toolbarOptions: ['Search', 'ColumnChooser'],
-        searchOptions: { fields: ['url'] },
+        toolbarOptions: ['Search','ColumnChooser'],
+        searchOptions: {fields: ['url','filename','UA_Index','NumPages','Tagged','Title','Creator','Producer','CreationDate','ModDate','Lang','FileSize','offsite']},
         filterOptions: {
             type: 'Menu'
         },
@@ -1223,6 +1223,13 @@ function showLiteScan(url, index) {
      * @type {int}
      */
     const liteTableHeight = 1290
+
+    topwrapper.onscroll = function () {
+        filestable.scrollLeft = topwrapper.scrollLeft;
+    };
+    filestable.onscroll = function () {
+        topwrapper.scrollLeft = filestable.scrollLeft;
+    };
     $("#top-scroll").css('width', liteTableHeight);
 }
 

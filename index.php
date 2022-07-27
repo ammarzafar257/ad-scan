@@ -27,8 +27,6 @@ if (
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Our Custom CSS -->
-
-    <link rel="stylesheet" href="css/sidebar/style.css">
     <link rel="stylesheet" href="css/styleguide.css">
 
     <!-- Font Awesome JS -->
@@ -806,69 +804,27 @@ if (
                             </div>
                         </div>
                         <!-- CRAWLS Details -->
-
-                        <!-- Table -->
-                        <div class="col-lg-12">
-                            <div class="latest-scan-card">
-                                <!-- <div class="result-top">
-                                    <div>
-                                        <h5>
-                                            <b class="translate" data-key="results">Results: </b> {{ status }}
-                                        </h5>
-                                    </div>
-                                </div> -->
-                                <div class="top-filter">
-                                    <div class="filter-box">
-                                        <!-- <button class="btn filter-btn">
-                                            <i class="fa fa-plus"></i> Add filter
-                                        </button>
-                                        <button class="btn pills-btn">
-                                            Date <i class="fa fa-close"></i>
-                                        </button>
-                                        <button class="btn pills-btn">
-                                            Compliant <i class="fa fa-close"></i>
-                                        </button> -->
-                                    </div>
-                                    <div class="right-btns">
-                                        <div class="dropdown">
-                                            <button class="btn btn-export dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Choose an action
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                            </div>
-                                        </div>
-
-                                        <button class="translate btn btn-export" id="exportCSV-lite" onclick="exportCsv(liteScan.scan.ID)">
-                                            <span class="translate" data-key="Exportcsv"> Export results </span> <i class="fa fa-download"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <template>
-                                        <ejs-grid :data-source="files" ref="liteGrid" :allow-paging="true" :page-settings='pageSettings' :allow-sorting='true' :action-begin="liteTableStateChange">
-                                            <e-columns>
-                                                <e-column field='ID' header-txt='ID' :visible=false :is-primary-key='true'></e-column>
-                                                <e-column field="filename" header-text="Name" width=275 text-align="left" :template="filenameTemplate"></e-column>
-                                                <e-column field="UA_Index" header-text="UA Index" width=150 text-align="right" :template='uaTemplate'></e-column>
-                                                <e-column field="NumPages" header-text="Page Count" width=180 text-align="right"></e-column>
-                                                <e-column field="Tagged" header-text="Tagged" width=125 text-align="left" :template="taggedTemplate"></e-column>
-                                                <e-column field="Title" header-text="Tile" width=230 text-align="left"></e-column>
-                                                <e-column field="passed_check" header-text="Passed" width=110 text-align="right"></e-column>
-                                                <e-column field="warned_check" header-text="Warned" width=110 text-align="right"></e-column>
-                                                <e-column field="failed_check" header-text="Failed" width=110 text-align="right"></e-column>
-                                            </e-columns>
-                                        </ejs-grid>
-                                    </template>
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- Table -->
                     </div>
+                    <!-- Table -->
+                    <div id="top-scroll-wrapper">
+                        <div id="top-scroll"></div>
+                    </div>
+                    <template>
+                        <ejs-grid :data-source="files" ref="liteGrid" :allow-paging="true" :page-settings='pageSettings' :allow-sorting='true' :action-begin="liteTableStateChange">
+                            <e-columns>
+                                <e-column field='ID' header-txt='ID' :visible=false :is-primary-key='true'></e-column>
+                                <e-column field="filename" header-text="Name" width=275 text-align="left" :template="filenameTemplate"></e-column>
+                                <e-column field="UA_Index" header-text="UA Index" width=150 text-align="right" :template='uaTemplate'></e-column>
+                                <e-column field="NumPages" header-text="Page Count" width=180 text-align="right"></e-column>
+                                <e-column field="Tagged" header-text="Tagged" width=125 text-align="left" :template="taggedTemplate"></e-column>
+                                <e-column field="Title" header-text="Tile" width=230 text-align="left"></e-column>
+                                <e-column field="passed_check" header-text="Passed" width=110 text-align="right"></e-column>
+                                <e-column field="warned_check" header-text="Warned" width=110 text-align="right"></e-column>
+                                <e-column field="failed_check" header-text="Failed" width=110 text-align="right"></e-column>
+                            </e-columns>
+                        </ejs-grid>
+                    </template>
+                    <!-- Table -->
                 </div>
                 <!-- Lite End -->
 
