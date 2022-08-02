@@ -81,16 +81,13 @@ if (
             isOwner: "<?php echo $_SESSION["isOwner"] ?>" === "1"
         };
 
-        let allScanMostRecent = [];
-        let scanURLS = [];
-        let allScanByDate = [];
-        let scansHash = [];
-
-        if(sessionStorage.getItem('scanURLS')){
-            scanURLS = JSON.parse(sessionStorage.getItem('scanURLS'));
-        }
-
-        let files = [];
+            let viewStatus = null;
+            if (sessionStorage.getItem('viewStatus') !== null) {
+                viewStatus = JSON.parse(sessionStorage.getItem('viewStatus'));
+                viewStatus.isShowingFiles = false;
+                viewStatus.fileCategory = "";
+                sessionStorage.setItem('viewStatus', JSON.stringify(viewStatus));
+            }
     </script>
 
 </head>
@@ -186,7 +183,7 @@ if (
         }
     })
     </script>
-    <script src="js/dashboard.js" defer></script>
+    <!-- <script src="js/dashboard.js" defer></script> -->
 </body>
 
 </html>

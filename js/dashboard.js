@@ -3,10 +3,9 @@
  * @author Colin Taylor
  */
 
-
 /**
- * Stores the average UA score for each scan
- * @type {object}
+ * Handels the the dropdown for the users menu
+ * @global
  */
 let avgUaList = null;
 
@@ -44,6 +43,7 @@ $(document).ready(function () {
         // show the dashboard if Pro scan is first
         if (viewStatus.isPro) {
             $("#proscan").show();
+            $("#file-viewer").hide();
         }
 
         // Hide the main dashboard if scan is lite
@@ -117,8 +117,8 @@ $(document).ready(function () {
 });
 
 /**
- * Loads a crawl if one has been selected from crawls list
- */
+* Loads a crawl if one has been selected from crawls list
+*/
 function loadFromMaster() {
     // function to wait for avgUaList to not be null, showScanData() fails if it is null, waits on get req to scanAPI.php?action=getAvgUA
     function waitForUAScores() {
@@ -145,7 +145,6 @@ function loadFromMaster() {
 
                     // open that scan, 0 means most recent for that url
                     showScanData(clickedCrawl.starturl, index);
-
                 } catch (err) {
                     // write error to console if that fails
                     console.error(err);
@@ -162,11 +161,11 @@ function loadFromMaster() {
 
 
 /**
- * Updates the 'viewStatus' object in sessionStorage
- * @param key of the object to change
- * @param value of the key
- * @static
- */
+* Updates the 'viewStatus' object in sessionStorage
+* @param key of the object to change
+* @param value of the key
+* @static
+*/
 function changeViewStatus(key, value) {
     if (typeof key !== 'string') {
         console.error('key for function changeViewStatus was not string');
@@ -216,9 +215,9 @@ function changeViewStatus(key, value) {
 
 
 /**
- * Stores the totals for all most recent scans by the client
- * @type {{offsite: number, averageUA: number, untagged: number, compliant: number, nonCompliant: number}}
- */
+* Stores the totals for all most recent scans by the client
+* @type {{offsite: number, averageUA: number, untagged: number, compliant: number, nonCompliant: number}}
+*/
 let overviewStats = {
     compliant: 0,
     nonCompliant: 0,
@@ -235,8 +234,8 @@ let worstScan = allScanMostRecent[0];
 
 
 /**
- * store all the most recent files in recentScanIDs
- */
+* store all the most recent files in recentScanIDs
+*/
 let recentScanIDs = [];
 allScanMostRecent.forEach((scan) => {
     recentScanIDs.push(scan.ID);
@@ -246,9 +245,9 @@ let filesNewestScan = files.filter(file => {
 });
 
 /**
- * Defines the vue comp for the aside section
- * @type {Vue}
- */
+* Defines the vue comp for the aside section
+* @type {Vue}
+*/
 let sideNav = new Vue({
     el: "#sidebar",
     data: {
@@ -256,20 +255,21 @@ let sideNav = new Vue({
         companyName: client.companyName,
         username: client.firstName + " " + client.lastName,
         urls: scanURLS,
-        showAllSideMenu: pageName === 'index.php' ? true : false,
     },
     methods: {
         clickedDomain(event, url) {
             // show the data for said crawl
             if (url === "Overview") {
                 SwitchOverallDash();
+
                 changeViewStatus('url', 'overview');
+
             } else {
                 showScanData(url, 0);
                 fileViewer.status = arrLang[currentLang]["allFiles"];
                 changeViewStatus('url', url);
             }
-        }
+        },
     }
 });
 
@@ -295,29 +295,29 @@ let searchResultFor = new Vue({
 });
 
 /**
- * The header section of the dashboard
- */
-let dashHeader = pageName === 'index.php' ? new Vue({
+* The header section of the dashboard
+*/
+let dashHeader = new Vue({
     el: "#main-app-header",
     data: {
         client: client,
         companyName: client.companyName,
         username: client.firstName + " " + client.lastName
     }
-}) : null;
+});
 
 /**
- * Vue instance containing the date for the overall compliant as of line
- * @type {Vue}
- */
-let overallStatHeader = pageName === 'index.php' ? new Vue({
+* Vue instance containing the date for the overall compliant as of line
+* @type {Vue}
+*/
+let overallStatHeader = new Vue({
     el: "#overall-header",
     data: {
         date: allScanByDate[0] ? allScanByDate[0].crawl_time_end.toISOString().split('T')[0] : null,
     }
-}) : null;
+});
 
-let crawlInfo = pageName === 'index.php' ? new Vue({
+let crawlInfo = new Vue({
     el: '#crawl-info',
     data: {
         ID: null,
@@ -334,13 +334,13 @@ let crawlInfo = pageName === 'index.php' ? new Vue({
             crawlInfo.total = crawl.compliant + crawl.nonCompliant + crawl.untagged + crawl.offsiteFiles
         }
     }
-}) : null;
+});
 
 /**
- * The the top section that shows file counters and doughnut chart
- * @type {Vue}
- */
-let topData = pageName === 'index.php' ? new Vue({
+* The the top section that shows file counters and doughnut chart
+* @type {Vue}
+*/
+let topData = new Vue({
     el: "#data-row",
     data: {
         compliant: overviewStats.compliant,
@@ -349,7 +349,7 @@ let topData = pageName === 'index.php' ? new Vue({
         offsite: overviewStats.offsite,
         errors: overviewStats.errors,
         averageUA: overviewStats.averageUA,
-        scanID: null,
+        scanID: null
     },
     methods: {
         /**
@@ -396,6 +396,7 @@ let topData = pageName === 'index.php' ? new Vue({
                     break;
             }
             // hide the other sections and show the file table
+            $("#scan-history-table-container").hide();
             $("#history-graph-container").css('display', 'none');
             $("#file-viewer").css('display', 'flex');
             // update the viewStatus
@@ -405,14 +406,14 @@ let topData = pageName === 'index.php' ? new Vue({
             resizeScrollPro()
         }
     }
-}) : null;
+});
 
 
 /**
- * Scan history instance
- * @type {Vue}
- */
-let scanHistoryTable = pageName === 'index.php' ? new Vue({
+* Scan history instance
+* @type {Vue}
+*/
+let scanHistoryTable = new Vue({
     el: "#scan-history-table-container",
     data: {
         scans: allScanByDate,
@@ -435,7 +436,7 @@ let scanHistoryTable = pageName === 'index.php' ? new Vue({
             showScanData(scan.starturl, index);
         },
     }
-}) : null;
+});
 
 let action;
 let dropInstance = null;
@@ -446,10 +447,10 @@ let modDateInstance = null;
 let urlFilterSelections = null;
 
 /**
- * Used for fileViewer.sortNullAtBottom() to determine if a value from the table is empty
- * @param reference either the reference or comparer for sorting
- * @returns {boolean} True if empty value
- */
+* Used for fileViewer.sortNullAtBottom() to determine if a value from the table is empty
+* @param reference either the reference or comparer for sorting
+* @returns {boolean} True if empty value
+*/
 function isValueEmpty(reference) {
     return reference === " " || reference === "" || reference === '\n  ' || reference === null;
 }
@@ -459,10 +460,10 @@ ejs.base.L10n.load(tableTranslations);
 
 
 /**
- * an array of json data needed for the data range picker translations.
- * Note: These files were taken from syncfusion vue node module
- * @type {string[]}
- */
+* an array of json data needed for the data range picker translations.
+* Note: These files were taken from syncfusion vue node module
+* @type {string[]}
+*/
 const jsonFiles = [
     "js/dateRangeLangJson/numberingSystems.json",
     "js/dateRangeLangJson/weekData.json",
@@ -511,11 +512,11 @@ jsonFiles.forEach(file => {
 
 
 /**
- * Controls the table for files,
- * Selected files are accessed through fileViewer.selected
- * @type {Vue}
- */
-let fileViewer = pageName === 'index.php' ? new Vue({
+* Controls the table for files,
+* Selected files are accessed through fileViewer.selected
+* @type {Vue}
+*/
+let fileViewer = new Vue({
     el: "#file-viewer",
     data: {
         files: filesNewestScan,
@@ -528,8 +529,8 @@ let fileViewer = pageName === 'index.php' ? new Vue({
         moddateValue: null,
         endDate: null,
         modEndDate: null,
-        toolbarOptions: ['Search','ColumnChooser'],
-        searchOptions: {fields: ['url','filename','UA_Index','NumPages','Tagged','Title','Creator','Producer','CreationDate','ModDate','Lang','FileSize','offsite']},
+        toolbarOptions: ['Search', 'ColumnChooser'],
+        searchOptions: { fields: ['url', 'filename', 'UA_Index', 'NumPages', 'Tagged', 'Title', 'Creator', 'Producer', 'CreationDate', 'ModDate', 'Lang', 'FileSize', 'offsite'] },
         filterOptions: {
             type: 'Menu'
         },
@@ -946,138 +947,145 @@ let fileViewer = pageName === 'index.php' ? new Vue({
             return 0;
         }
     }
-}) : null;
+});
 
 /**
- * Swaps the data in the dashboard to that of a new crawl
- * @param url {string} the URL of the crawl in the DB
- * @param index {int} that crawls position in scansHash (0 is  most recent crawl on that url)
- * @return undefined
- * @static
- */
+* Swaps the data in the dashboard to that of a new crawl
+* @param url {string} the URL of the crawl in the DB
+* @param index {int} that crawls position in scansHash (0 is  most recent crawl on that url)
+* @return undefined
+* @static
+*/
 function showScanData(url, index) {
-        let thisScan = scansHash[url][index];
+    let thisScan = scansHash[url][index];
 
-        if (thisScan.ScanType !== "Pro") {
-            showLiteScan(url, index);
-            return;
-        }
+    if (thisScan.ScanType !== "Pro") {
+        showLiteScan(url, index);
+        return;
+    }
+    changeViewStatus('isPro', true);
+    changeViewStatus('url', url);
+    
+    // ensure the scans are shown again
+    $("#proscan").show();
+    $("#file-viewer").hide();
+    $("#scan-history-table-container").show();
+    $("#history-graph-container").show();
+    $("#litescan").hide();
 
-        changeViewStatus('isPro', true);
-        changeViewStatus('url', url);
+    // hide all showfiles links
+    $(".showFiles").show();
 
-        // ensure the scans are shown again
-        $("#proscan").show();
-        $("#litescan").hide();
+    // show the crawl info card
+    $("#crawl-info-wrapper").show();
 
-        // hide all showfiles links
-        $(".showFiles").show();
-
-        // show the crawl info card
-        $("#crawl-info-wrapper").show();
-
-        // update the files browser
-        let newfiles = [];
-        let filesReq = new XMLHttpRequest()
-        filesReq.open("GET", "scanAPI.php?action=getFiles&crawl=" + thisScan.ID, true);
-        filesReq.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                newfiles = JSON.parse(this.responseText);
-                for (let i = 0; i < newfiles.length; i++) {
-                    // update the UA index to be a float
-                    if (newfiles[i].UA_Index !== null) {
-                        newfiles[i].UA_Index = parseFloat(newfiles[i].UA_Index);
-                    }
-                    // update creation date and last modified dates to be actaull dates instead of strings
-                    newfiles[i].CreationDate = new Date(newfiles[i].CreationDate);
-                    newfiles[i].ModDate = new Date(newfiles[i].ModDate);
-                    // update offsite to a proper boolean
-                    newfiles[i].offsite = newfiles[i].offsite === 1;
-                    // update the tagged value to have its string value
-                    if (newfiles[i].offsite || newfiles[i].UA_Index === null) {
-                        newfiles[i].Tagged = "Unknown";
-                    } else if (newfiles[i].Tagged === "1") {
-                        newfiles[i].Tagged = "Yes";
-                    } else {
-                        newfiles[i].Tagged = "No";
-                    }
+    // update the files browser
+    let newfiles = [];
+    let filesReq = new XMLHttpRequest()
+    filesReq.open("GET", "scanAPI.php?action=getFiles&crawl=" + thisScan.ID, true);
+    filesReq.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            newfiles = JSON.parse(this.responseText);
+            for (let i = 0; i < newfiles.length; i++) {
+                // update the UA index to be a float
+                if (newfiles[i].UA_Index !== null) {
+                    newfiles[i].UA_Index = parseFloat(newfiles[i].UA_Index);
                 }
-                files = newfiles;
-
-                switch (viewStatus.fileCategory) {
-                    case 'compliant':
-                    case 'nonCompliant':
-                    case 'untagged':
-                    case 'offsite':
-                        topData.showFiles(viewStatus.fileCategory);
-                        break;
-                    case 'File Errors':
-                        fileViewer.files = files.filter(file => {
-                            return file.UA_Index === null && !file.offsite;
-                        });
-                        break;
-                    case 'Non-compliant and untagged':
-                        fileViewer.files = files.filter(file => {
-                            return file.UA_Index !== 100 && file.UA_Index !== null;
-                        });
-                        break;
-                    default:   // show all files
-                        fileViewer.files = newfiles;
+                // update creation date and last modified dates to be actaull dates instead of strings
+                newfiles[i].CreationDate = new Date(newfiles[i].CreationDate);
+                newfiles[i].ModDate = new Date(newfiles[i].ModDate);
+                // update offsite to a proper boolean
+                newfiles[i].offsite = newfiles[i].offsite === 1;
+                // update the tagged value to have its string value
+                if (newfiles[i].offsite || newfiles[i].UA_Index === null) {
+                    newfiles[i].Tagged = "Unknown";
+                } else if (newfiles[i].Tagged === "1") {
+                    newfiles[i].Tagged = "Yes";
+                } else {
+                    newfiles[i].Tagged = "No";
                 }
-                // update & correct the files table
-                fileViewer.urlFilter.ui.update()
             }
-            if (this.readyState === 4 && this.status !== 200) {
-                console.error('Error: something went wrong getting files for crawl ' + thisScan.ID + '. HTTP Status: ' + this.status);
-                newfiles = [];
-                fileViewer.files = newfiles;
+            files = newfiles;
+
+            switch (viewStatus.fileCategory) {
+                case 'compliant':
+                case 'nonCompliant':
+                case 'untagged':
+                case 'offsite':
+                    topData.showFiles(viewStatus.fileCategory);
+                    break;
+                case 'File Errors':
+                    fileViewer.files = files.filter(file => {
+                        return file.UA_Index === null && !file.offsite;
+                    });
+                    break;
+                case 'Non-compliant and untagged':
+                    fileViewer.files = files.filter(file => {
+                        return file.UA_Index !== 100 && file.UA_Index !== null;
+                    });
+                    break;
+                default:   // show all files
+                    fileViewer.files = newfiles;
             }
-            // resize the scroll bar
-            resizeScrollPro()
-        };
-        filesReq.send();
-        // change the date in the overall stats header
-        overallStatHeader.date = thisScan.crawl_time_end.toISOString().split('T')[0];
-        // change the top data section to have stats for that scan
-        topData.compliant = thisScan.compliant;
-        topData.nonCompliant = thisScan.nonCompliant;
-        topData.untagged = thisScan.untagged;
-        topData.offsite = thisScan.offsiteFiles;
-        topData.errors = thisScan.Files_Error;
-        topData.averageUA = getAvgUaForCrawl(thisScan.ID);
-        topData.scanID = thisScan.ID;
-
-        // update the crawl info
-        crawlInfo.crawlInfoUpdate(thisScan);
-
-        // update the doughnut chart
-        resChart.data.datasets[0].data = [topData.compliant, topData.nonCompliant, topData.untagged];
-        resChart.update();
-        // have the scan history change to  so show scans under that url
-        scanHistoryTable.scans = scansHash[url];
-        sessionStorage.setItem('scanHistoryPage', JSON.stringify(scansHash[url]));
-
-        // update the compliance history chart
-        let scansCount = scansHash[url].length
-        let compliantBar = [];
-        let non_compliantBar = [];
-        let untaggedBar = [];
-        let labels = [];
-        for (let i = 0; i < scansCount; i++) {
-            if (i === 4) {  // stop and 4 most recent scans
-                break;
-            }
-            let total = scansHash[url][i].compliant + scansHash[url][i].nonCompliant + scansHash[url][i].untagged;
-            compliantBar.unshift(parseFloat((scansHash[url][i].compliant / total) * 100).toFixed(2));
-            non_compliantBar.unshift(parseFloat((scansHash[url][i].nonCompliant / total) * 100).toFixed(2))
-            untaggedBar.unshift(parseFloat((scansHash[url][i].untagged / total) * 100).toFixed(2))
-            labels.unshift(scansHash[url][i].crawl_time_end.toISOString().split('T')[0]);
+            // update & correct the files table
+            fileViewer.urlFilter.ui.update()
+            /*fileViewer.applicationTemplateOptions.update()
+            fileViewer.producerTemplateOptions.update()
+            fileViewer.languageTemplateOptions.update()
+            document.querySelector("#offsiteFilter > option:nth-child(2)").innerHTML = "Yes";
+            document.querySelector("#offsiteFilter > option:nth-child(3)").innerHTML = "No";*/
         }
-        historyChart.data.datasets[0].data = untaggedBar;
-        historyChart.data.datasets[1].data = non_compliantBar;
-        historyChart.data.datasets[2].data = compliantBar;
-        historyChart.data.labels = labels;
-        historyChart.update();
+        if (this.readyState === 4 && this.status !== 200) {
+            console.error('Error: something went wrong getting files for crawl ' + thisScan.ID + '. HTTP Status: ' + this.status);
+            newfiles = [];
+            fileViewer.files = newfiles;
+        }
+        // resize the scroll bar
+        resizeScrollPro()
+    };
+    filesReq.send();
+    // change the date in the overall stats header
+    overallStatHeader.date = thisScan.crawl_time_end.toISOString().split('T')[0];
+    // change the top data section to have stats for that scan
+    topData.compliant = thisScan.compliant;
+    topData.nonCompliant = thisScan.nonCompliant;
+    topData.untagged = thisScan.untagged;
+    topData.offsite = thisScan.offsiteFiles;
+    topData.errors = thisScan.Files_Error;
+    topData.averageUA = getAvgUaForCrawl(thisScan.ID);
+    topData.scanID = thisScan.ID;
+
+    // update the crawl info
+    crawlInfo.crawlInfoUpdate(thisScan);
+
+    // update the doughnut chart
+    resChart.data.datasets[0].data = [topData.compliant, topData.nonCompliant, topData.untagged];
+    resChart.update();
+    // have the scan history change to  so show scans under that url
+    scanHistoryTable.scans = scansHash[url];
+    sessionStorage.setItem('scanHistoryPage', JSON.stringify(scansHash[url]));
+    // update the compliance history chart
+    let scansCount = scansHash[url].length
+    let compliantBar = [];
+    let non_compliantBar = [];
+    let untaggedBar = [];
+    let labels = [];
+    for (let i = 0; i < scansCount; i++) {
+        if (i === 4) {  // stop and 4 most recent scans
+            break;
+        }
+        let total = scansHash[url][i].compliant + scansHash[url][i].nonCompliant + scansHash[url][i].untagged;
+        compliantBar.unshift(parseFloat((scansHash[url][i].compliant / total) * 100).toFixed(2));
+        non_compliantBar.unshift(parseFloat((scansHash[url][i].nonCompliant / total) * 100).toFixed(2))
+        untaggedBar.unshift(parseFloat((scansHash[url][i].untagged / total) * 100).toFixed(2))
+        labels.unshift(scansHash[url][i].crawl_time_end.toISOString().split('T')[0]);
+    }
+    historyChart.data.datasets[0].data = untaggedBar;
+    historyChart.data.datasets[1].data = non_compliantBar;
+    historyChart.data.datasets[2].data = compliantBar;
+    historyChart.data.labels = labels;
+    historyChart.update();
+    $("#historyGraphURL").text(" - " + thisScan.starturl);
 }
 
 // check if coming from crawls list, if so start with that scan instead
@@ -1088,15 +1096,15 @@ if (sessionStorage.getItem('fromMaster') !== null) {
     startScan = allScanMostRecent[0];
 }
 
-let liteScan = pageName === 'index.php' ? new Vue({
+let liteScan = new Vue({
     el: "#litescan",
     data: {
         scan: startScan,
         files: [],
-        urls: scanURLS,
         pageSettings: {
             pageSize: 50
         },
+        urls: scanURLS,
         uaTemplate: function () {
             return {
                 template: Vue.component("columntemplate", {
@@ -1124,6 +1132,19 @@ let liteScan = pageName === 'index.php' ? new Vue({
         },
     },
     methods: {
+        searchResultClickedDomain() {
+            const url = document.getElementById("liteScanSearchResult").value;
+            console.log(url, "URL");
+            // show the data for said crawl
+            if (url === "Overview") {
+                SwitchOverallDash();
+                changeViewStatus('url', 'overview');
+            } else {
+                showScanData(url, 0);
+                fileViewer.status = arrLang[currentLang]["allFiles"];
+                changeViewStatus('url', url);
+            }
+        },
         liteTableStateChange() {
             setTimeout(() => {
                 $(".translate[data-key='yes']").each((index) => {
@@ -1139,30 +1160,17 @@ let liteScan = pageName === 'index.php' ? new Vue({
                     elem.text(arrLang[currentLang][elem.attr('data-key')]);
                 });
             }, 50)
-        },
-
-        searchResultClickedDomain() {
-            const url = document.getElementById("liteScanSearchResult").value;
-            // show the data for said crawl
-            if (url === "Overview") {
-                SwitchOverallDash();
-                changeViewStatus('url', 'overview');
-            } else {
-                showScanData(url, 0);
-                fileViewer.status = arrLang[currentLang]["allFiles"];
-                changeViewStatus('url', url);
-            }
         }
     }
-}) : null;
+});
 
 /**
- * Shows the scan as a lite version scan
- * @param url {string} the url of the requested crawl
- * @param index {int} that crawls position in scansHash (0 is  most recent crawl on that url)
- * @return undefined
- * @static
- */
+* Shows the scan as a lite version scan
+* @param url {string} the url of the requested crawl
+* @param index {int} that crawls position in scansHash (0 is  most recent crawl on that url)
+* @return undefined
+* @static
+*/
 function showLiteScan(url, index) {
     // hide the dashboard
     $("#proscan").hide();
@@ -1192,11 +1200,17 @@ function showLiteScan(url, index) {
                 }
             }
             liteScan.files = filesLite
+            setInterval(() => {
+                $("#top-scroll").css('width', $("#filesTable").width() + 16);
+            }, 1000);
         }
         if (this.readyState === 4 && this.status !== 200) {
             console.error('Error: something went wrong getting files for crawl ' + thisScan.ID + '. HTTP Status: ' + this.status);
             filesLite = [];
             liteScan.files = filesLite
+            setInterval(() => {
+                $("#top-scroll").css('width', $("#filesTable").width() + 16);
+            }, 1000);
         }
     };
     filesReqLite.send();
@@ -1206,8 +1220,8 @@ function showLiteScan(url, index) {
 }
 
 /**
- * Creates the scroll bar for the top of lite scans
- */
+* Creates the scroll bar for the top of lite scans
+*/
 {
 
     const topwrapper = document.querySelector("#top-scroll-wrapper");
@@ -1234,68 +1248,68 @@ function showLiteScan(url, index) {
 }
 
 /**
- * Shows the data and graphs and hides the files list
- * @global
- */
+* Shows the data and graphs and hides the files list
+* @global
+*/
 function SwitchOverallDash() {
-    if (pageName == 'index.php') {
-        // make sure dash is showing
-        $(".details").show();
 
-        // hide the crawl info card
-        $("#crawl-info-wrapper").hide();
-        // $("#overall-compliance-wrapper").removeClass('col-md-9').addClass('col-12');
+    // make sure dash is showing
+    $("#scan-history-table-container").show();
 
-        // change the date in the overall stats header
-        overallStatHeader.date = allScanByDate[0].crawl_time_end.toISOString().split('T')[0]
+    // hide the crawl info card
+    $("#crawl-info-wrapper").hide();
+    // $("#overall-compliance-wrapper").removeClass('col-md-9').addClass('col-12');
 
-        // show the correct elements
-        $("#history-graph-container").css('display', 'block');
-        $("#file-viewer").css('display', 'none');
+    // change the date in the overall stats header
+    overallStatHeader.date = allScanByDate[0].crawl_time_end.toISOString().split('T')[0]
 
-        // update the top-data
-        topData.compliant = overviewStats.compliant;
-        topData.nonCompliant = overviewStats.nonCompliant;
-        topData.untagged = overviewStats.untagged;
-        topData.offsite = overviewStats.offsite;
-        topData.errors = overviewStats.errors;
-        topData.averageUA = overviewStats.averageUA;
-        topData.scanID = null;
+    // show the correct elements
+    $("#history-graph-container").css('display', 'block');
+    $("#file-viewer").css('display', 'none');
 
-        // update the doughnut chart
-        resChart.data.datasets[0].data = [topData.compliant, topData.nonCompliant, topData.untagged];
-        resChart.update();
+    // update the top-data
 
-        // update the history graph
-        showOverallHistory();
+    // update the top-data
+    topData.compliant = overviewStats.compliant;
+    topData.nonCompliant = overviewStats.nonCompliant;
+    topData.untagged = overviewStats.untagged;
+    topData.offsite = overviewStats.offsite;
+    topData.errors = overviewStats.errors;
+    topData.averageUA = overviewStats.averageUA;
+    topData.scanID = null;
 
-        // update the scan history to have all scans
-        scanHistoryTable.scans = allScanByDate;
+    // update the doughnut chart
+    resChart.data.datasets[0].data = [topData.compliant, topData.nonCompliant, topData.untagged];
+    resChart.update();
 
-        // hide all showfiles links
-        $(".showFiles").hide();
+    // update the history graph
+    showOverallHistory();
 
-        changeViewStatus('isPro', true);
-        changeViewStatus('url', 'overview');
-        changeViewStatus('isShowingFiles', false);
-    }
+    // update the scan history to have all scans
+    scanHistoryTable.scans = allScanByDate;
+
+    // hide all showfiles links
+    $(".showFiles").hide();
+
+    changeViewStatus('isPro', true);
+    changeViewStatus('url', 'overview');
+    changeViewStatus('isShowingFiles', false);
 }
 
 /**
- * Gets the overall stats for the client
- */
+* Gets the overall stats for the client
+*/
 function getOverviewStats() {
-    if (pageName === 'index.php') {
-        for (let i = 0; i < allScanMostRecent.length; i++) {
-            overviewStats.compliant += allScanMostRecent[i].compliant;
-            overviewStats.nonCompliant += allScanMostRecent[i].nonCompliant;
-            overviewStats.untagged += allScanMostRecent[i].untagged;
-            overviewStats.offsite += allScanMostRecent[i].offsiteFiles;
-            overviewStats.errors += allScanMostRecent[i].Files_Error;
-        }
+    for (let i = 0; i < allScanMostRecent.length; i++) {
+        overviewStats.compliant += allScanMostRecent[i].compliant;
+        overviewStats.nonCompliant += allScanMostRecent[i].nonCompliant;
+        overviewStats.untagged += allScanMostRecent[i].untagged;
+        overviewStats.offsite += allScanMostRecent[i].offsiteFiles;
+        overviewStats.errors += allScanMostRecent[i].Files_Error;
     }
 }
 
+let prefRanges = null;
 function getAverageUAforCrawls() {
     if (sessionStorage.getItem("uaList") === null || sessionStorage.getItem("uaList") === "null") {
         // if we don't know the scores, go get them
@@ -1346,10 +1360,10 @@ function uaListCallback(avgUaList) {
 }
 
 /**
- * Get the average UA for a crawl
- * @param crawlID {number}
- * @returns {null|number|string}
- */
+* Get the average UA for a crawl
+* @param crawlID {number}
+* @returns {null|number|string}
+*/
 function getAvgUaForCrawl(crawlID) {
     let bar = avgUaList.find(ua => {
         return ua.crawl_id === crawlID;
@@ -1429,14 +1443,14 @@ function showOverallHistory() {
     historyChart.data.datasets[2].data = compliantBar;
     historyChart.data.labels = labels;
     historyChart.update();
-    // $("#historyGraphURL").text("");
+    $("#historyGraphURL").text("");
 }
 
 /**
- * Gets a list of domains/subdomains of urls from the files of a crawl
- * @param {boolean} includeOffsite whether or not to include offsite files
- * @returns {string[]} list of domains/subdomains
- */
+* Gets a list of domains/subdomains of urls from the files of a crawl
+* @param {boolean} includeOffsite whether or not to include offsite files
+* @returns {string[]} list of domains/subdomains
+*/
 function getDomainsForCrawl(includeOffsite) {
     let domains = []
     files.forEach(file => {
@@ -1460,8 +1474,8 @@ function getDomainsForCrawl(includeOffsite) {
 }
 
 /**
- * Resizes the scroll bar for the pro files table
- */
+* Resizes the scroll bar for the pro files table
+*/
 function resizeScrollPro() {
     // grab the elements needs
     let outerScroll = document.querySelector("#top-scroll-wrapper-pro");
@@ -1481,10 +1495,10 @@ function resizeScrollPro() {
         $('#top-scroll-pro').css('width', tableWidth + 16); // 16 for 1em of spacing
         // set the listeners for scrolling if needed
         if (!listenersSet) {
-            outerScroll.onscroll = function() {
+            outerScroll.onscroll = function () {
                 filesTablePro.scrollLeft = outerScroll.scrollLeft;
             }
-            filesTablePro.onscroll = function() {
+            filesTablePro.onscroll = function () {
                 outerScroll.scrollLeft = filesTablePro.scrollLeft;
             }
             listenersSet = true;

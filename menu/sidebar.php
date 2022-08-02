@@ -63,10 +63,10 @@
             <nav id="sidebar" style="z-index: 1;">
                 <div class="sidebar-header">
                     <h3>
-                        <img src="images/logo.png" alt="logo">
+                        <img src="images/fav.png" alt="logo">
                     </h3>
                     <strong>
-                        <img src="images/fav.png" alt="logo">
+                        <img src="images/logo.png" alt="logo">
                     </strong>
                 </div>
                 <div class="line"></div>
@@ -77,7 +77,7 @@
                 </div>
                 <div class="list-unstyled">
                     <!-- My Dashboard -->
-                    <div class="collapse-outer" v-if="showAllSideMenu">
+                    <div class="collapse-outer" id="myDashboard">
                         <div class="collapse-head" onclick="SwitchOverallDash()">
                             <div class="side-icon">
                                 <img src="images/Group1101.png" alt="my-dashboard">
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <!-- My URL List -->
-                    <div class="collapse-outer" v-if="showAllSideMenu">
+                    <div class="collapse-outer" id="urlList">
                         <div class="collapse-head" data-toggle="collapse" data-target="#collapseExample2">
                             <div class="side-icon">
                                 <img src="images/Group1113.png" alt="my-url-list">
@@ -228,18 +228,17 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            if(pageName === 'scanhistory.php') {
+                $("#myDashboard").hide();
+                $("#urlList").hide();
+            }
+
             $('#sidebarCollapse').on('click', function() {
                 $('#sidebar').toggleClass('active');
             });
+
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
-            setTimeout($('#sidebar').toggleClass('active'), 2000);
-        });
-
-    </script>
-
-    <script>
         function backToAdmin() {
             window.location.href = "master.php"
         }

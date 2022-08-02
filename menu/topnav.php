@@ -65,6 +65,26 @@
                 }
             }
         }
+
+        function titleClicked() {
+            if (pageName === 'index.php') {
+                if (fileViewer.status != '') {
+                    $("#file-viewer").hide();
+                    $("#history-graph-container").show();
+                    $("#scan-history-table-container").show();
+                    fileViewer.status = '';
+                    let viewStatus = null;
+                    if (sessionStorage.getItem('viewStatus') !== null) {
+                        viewStatus = JSON.parse(sessionStorage.getItem('viewStatus'));
+                        viewStatus.isShowingFiles = false;
+                        viewStatus.fileCategory = "";
+                        sessionStorage.setItem('viewStatus', JSON.stringify(viewStatus));
+                    }
+                }
+            } else {
+                window.location.href = "index.php";
+            }
+        }
     </script>
 </head>
 
@@ -92,7 +112,7 @@
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" id="main-dashboard" aria-current="page" href="index.php">Main Dashboard</a>
+                            <a class="nav-link" id="main-dashboard" aria-current="page" href="javascript:void(0)" onclick="titleClicked()">Main Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="scanhistory.php" id="scan-history">Scan History

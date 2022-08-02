@@ -55,8 +55,8 @@
   .sidenav #sidebar {
     height: 100vh;
     position: fixed;
-    min-width: 360px;
-    max-width: 360px;
+    min-width: 80px;
+    max-width: 80px;
     background: white;
     border: 0.2px solid #CAD3E2;
     color: black;
@@ -70,9 +70,8 @@
   }
   
   .sidenav #sidebar.active {
-    min-width: 80px;
-    max-width: 80px;
-    text-align: center;
+    min-width: 360px;
+    max-width: 360px;
   }
   
   .sidenav #sidebar.active .sidebar-header h3,
@@ -89,8 +88,6 @@
   }
   
   .sidenav #sidebar.active ul li a {
-    padding: 20px 10px;
-    text-align: center;
     font-size: 0.85em;
   }
   
@@ -156,8 +153,8 @@
   .sidenav .close-btn .icon img {
     height: 16px;
   }
-  
-  .sidenav .wrapper .active .collapse {
+
+  .sidenav #sidebar:not(.active) .collapse {
     display: none !important;
   }
   
@@ -372,7 +369,7 @@
     border: 0.5px solid white;
   }
   
-  .sidenav .collapse-head:hover {
+  .sidenav #sidebar:is(.active) .collapse-head:hover {
     border-radius: 3px;
     background-color: #eff3fb;
     border: 0.5px solid #538cf4 !important;
